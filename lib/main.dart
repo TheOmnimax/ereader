@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'screens/selection_page.dart';
+import 'screens/custom_style.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,27 +14,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: Scaffold(
-        drawer: Drawer(),
-        appBar: AppBar(
-          title: Text('eReader'),
-          // leading: IconButton(
-          //   icon: Icons.more_vert,
-          // ),
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_vert,
-              ),
-            )
-          ],
-          backgroundColor: Color.fromARGB(255, 30, 1, 117),
-        ),
-        body: SafeArea(
-          child: Column(),
-        ),
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => DocSelection(),
+        '/color_selection': (context) => CustomStyle()
+      },
     );
   }
 }

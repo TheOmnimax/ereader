@@ -7,31 +7,32 @@ class SelectionPage extends StatelessWidget {
   const SelectionPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MainScaffold(child: ListView(), kebab: () {});
-  }
-}
+    void handleClick(String value) {
+      if (value == 'eReader style') {
+        Navigator.pushNamed(context, '/style_selection');
+      }
+    }
 
-class DocSelection extends StatefulWidget {
-  const DocSelection({Key? key}) : super(key: key);
-
-  @override
-  _DocSelectionState createState() => _DocSelectionState();
-}
-
-class _DocSelectionState extends State<DocSelection> {
-  @override
-  Widget build(BuildContext context) {
     return MainScaffold(
-        child: ListView(
-            /*
+      child: ListView(
+          /*
           children: ListTile.divideTiles(
             context: context,
             tiles: buildDocRows(getAllDocs()),
           ).toList(),
         */
-            ),
-        kebab: () {});
+          ),
+      popupMenuButton: PopupMenuButton<String>(
+        onSelected: handleClick,
+        itemBuilder: (BuildContext context) {
+          return {'eReader style'}.map((String choice) {
+            return PopupMenuItem<String>(
+              value: choice,
+              child: Text(choice),
+            );
+          }).toList();
+        },
+      ),
+    );
   }
 }
-
-// buildDocRows(getAllDocs())

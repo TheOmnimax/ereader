@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => SelectionPage(),
-        '/color_selection': (context) => CustomStyleScreen()
+        '/style_selection': (context) => CustomStyleMain()
       },
     );
   }

@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MainScaffold extends StatefulWidget {
+class MainScaffold extends StatelessWidget {
   final Widget child;
-  final Function kebab;
+  final PopupMenuButton popupMenuButton;
 
-  const MainScaffold({Key? key, required this.child, required this.kebab})
-      : super(key: key);
+  const MainScaffold({required this.child, required this.popupMenuButton});
 
-  @override
-  _MainScaffoldState createState() => _MainScaffoldState();
-}
-
-class _MainScaffoldState extends State<MainScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,17 +13,12 @@ class _MainScaffoldState extends State<MainScaffold> {
       appBar: AppBar(
         title: const Text('eReader'),
         actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.more_vert,
-            ),
-          ),
+          popupMenuButton,
         ],
         backgroundColor: const Color.fromARGB(255, 30, 1, 117),
       ),
       body: SafeArea(
-        child: widget.child,
+        child: child,
       ),
     );
   }

@@ -17,3 +17,12 @@ class ChangeBackgroundColor extends CustomStyleEvent {
   @override
   List<Object> get props => [newColor];
 }
+
+class LoadPreferences extends CustomStyleEvent {
+  LoadPreferences(this.preferencesString);
+
+  final String preferencesString;
+
+  @override
+  List<Object> get props => [preferencesString];
+}

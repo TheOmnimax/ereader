@@ -1,3 +1,4 @@
+import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../shared_widgets/color_selection.dart';
@@ -43,11 +44,24 @@ class CustomStyleScreen extends StatelessWidget {
             Row(
               children: <Widget>[
                 TextButton(
-                  onPressed: () {},
+                  // LOAD
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    final preferences = prefs.getString('preferences');
+                    print(preferences);
+                    context.read<CustomStyleBloc>().add(LoadPreferences(
+                        preferences ?? EreaderStyle().stringData()));
+                  },
                   child: const Text('Load'),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  // SAVE
+                  onPressed: () async {
+                    var preferenceString = ereaderStyle.stringData();
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('preferences',
+                        preferenceString); // Why is the "await" keyword needed"? It is not in the cookbook. https://docs.flutter.dev/cookbook/persistence/key-value
+                  },
                   child: const Text('Save'),
                 ),
               ],

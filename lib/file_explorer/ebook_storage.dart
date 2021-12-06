@@ -5,7 +5,7 @@ import 'package:epubx/epubx.dart';
 class EbookStorage {}
 
 class EbookRetrieval {
-  static Directory ebookDir = Directory(p.join(p.current, 'lib', 'ebooks'));
+  static Directory ebookDir = Directory(p.join(p.current, 'lib', 'ebook_files'));
   EbookRetrieval();
 
   Future<EpubBook> getEbook(String filePath) async {

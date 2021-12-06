@@ -7,8 +7,8 @@ class FileRetriever {
   FileRetriever({required this.path});
 
   File getFile() {
-    final file =
-        File('lib/ebooks/grimms_fairy_tales-jacob_grimm_wilhelm_grimm.epub');
+    final file = File(
+        'lib/ebook_files/grimms_fairy_tales-jacob_grimm_wilhelm_grimm.epub');
     return file;
   }
 }

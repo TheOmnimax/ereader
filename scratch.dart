@@ -4,7 +4,7 @@ import 'package:path/path.dart' as p;
 class EbookStorage {}
 
 class EbookRetrieval {
-  // static Directory ebookDir = Directory('../ebooks');
+  // static Directory ebookDir = Directory('../ebook_files');
   // EbookRetrieval();
   //
   // void getEbooks() {

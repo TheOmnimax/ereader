@@ -5,7 +5,7 @@ class EpubImplement {
   EpubImplement({required this.filePath});
   final String filePath;
 
-  EpubBook getEpub() async {
+  Future<EpubBook> getEpub() async {
     final targetFile = File(filePath);
     final List<int> bytes = await targetFile.readAsBytes();
     final epubBook = await EpubReader.readBook(bytes);

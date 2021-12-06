@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/selection_page.dart';
-import 'screens/custom_style.dart';
+import 'screens/custom_style/custom_style_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       initialRoute: '/',
       routes: {
-        '/': (context) => DocSelection(),
-        '/color_selection': (context) => CustomStyle()
+        '/': (context) => SelectionPage(),
+        '/color_selection': (context) => CustomStyleScreen()
       },
     );
   }

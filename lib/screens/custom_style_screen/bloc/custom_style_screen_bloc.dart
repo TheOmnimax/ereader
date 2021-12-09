@@ -14,11 +14,12 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
 
   void _backgroundChanged(
       ChangeBackgroundColor event, Emitter<CustomStyleState> emit) {
-    var newStyle = EreaderStyle(
-        // It says it prefers a const, but there is an error when I make it a const.
-        backgroundColor: event.newColor);
+    final newStyle = EreaderStyle(backgroundColor: event.newColor);
     emit(StyleAdjusted(ereaderStyle: newStyle));
   }
+
+  void _styleChanged(
+      ChangeBackgroundColor event, Emitter<CustomStyleState> emit) {}
 
   void _loadPreferences(LoadPreferences event, Emitter<CustomStyleState> emit) {
     var stringData = event.preferencesString;

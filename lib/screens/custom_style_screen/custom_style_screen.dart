@@ -2,7 +2,7 @@ import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../shared_widgets/color_selection.dart';
-import 'bloc/custom_style_bloc.dart';
+import 'bloc/custom_style_screen_bloc.dart';
 import 'bloc/custom_style_event.dart';
 import 'bloc/custom_style_state.dart';
 import '../../shared_widgets/main_scaffold.dart';

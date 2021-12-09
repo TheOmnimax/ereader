@@ -1,22 +1,34 @@
-import 'package:flutter/cupertino.dart';
-import 'color_slider.dart';
+import 'package:ereader/constants/constants.dart';
+import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_bloc.dart';
+import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_event.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
+import 'package:ereader/shared_widgets/custom_style/color_slider.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StyleModules extends StatelessWidget {
-  const StyleModules({required this.ereaderStyle});
+  // TODO: Hide modules based on StyleModules enum
+  const StyleModules({required this.visibleModule});
 
-  final EreaderStyle ereaderStyle;
+  final Module visibleModule;
 
   @override
   Widget build(BuildContext context) {
-    void updateStyle(
+    final ereaderStyle =
+        context.select((CustomStyleBloc bloc) => bloc.state.ereaderStyle);
+
+    void updateStyle({
       Color? backgroundColor,
       Color? fontColor,
       int? fontSize,
       String? fontFamily,
       List<int>? margins,
-    ) {
-      if (backgroundColor == null) {}
+    }) {
+      backgroundColor ??= ereaderStyle.backgroundColor;
+      fontColor ??= ereaderStyle.fontColor;
+      fontSize ??= ereaderStyle.fontSize;
+      fontFamily ??= ereaderStyle.fontFamily;
+      margins ??= ereaderStyle.margins;
 
       context.read<CustomStyleBloc>().add(
             UpdateStyle(
@@ -31,17 +43,20 @@ class StyleModules extends StatelessWidget {
 
     return Column(
       children: <Widget>[
-        ColorSelection(
-          onChange: (Color color) {
-            updateStyle(
-              backgroundColor: color,
-              fontColor: ereaderStyle.fontColor,
-              fontSize: ereaderStyle.fontSize,
-              fontFamily: ereaderStyle.fontFamily,
-              margins: ereaderStyle.margins,
-            );
-          },
-          color: ereaderStyle.backgroundColor,
+        Visibility(
+          visible: visibleModule == Module.backgroundColor,
+          child: ColorSelection(
+            onChange: (Color color) {
+              updateStyle(
+                backgroundColor: color,
+                fontColor: ereaderStyle.fontColor,
+                fontSize: ereaderStyle.fontSize,
+                fontFamily: ereaderStyle.fontFamily,
+                margins: ereaderStyle.margins,
+              );
+            },
+            color: ereaderStyle.backgroundColor,
+          ),
         ),
       ],
     );

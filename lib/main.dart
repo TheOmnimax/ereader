@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/selection_page.dart';
-import 'screens/custom_style/custom_style_screen.dart';
+import 'screens/custom_style_screen/custom_style_screen.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,12 +1,13 @@
+import 'package:ereader/constants/constants.dart';
+import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_bloc.dart';
+import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_event.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
+import 'package:ereader/shared_widgets/custom_style/custom_style.dart';
+import 'package:ereader/shared_widgets/custom_style/style_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../shared_widgets/color_selection.dart';
-import 'bloc/custom_style_screen_bloc.dart';
-import 'bloc/custom_style_event.dart';
-import 'bloc/custom_style_state.dart';
-import '../../shared_widgets/main_scaffold.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'style_modules.dart';
 
 class CustomStyleMain extends StatelessWidget {
   const CustomStyleMain({Key? key}) : super(key: key);
@@ -25,10 +26,27 @@ class CustomStyleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var ereaderStyle =
+    final ereaderStyle =
         context.select((CustomStyleBloc bloc) => bloc.state.ereaderStyle);
+    // TODO Add var to get currently selected module from bloc
 
-    void gatherColor() {}
+    void updateStyle({
+      Color backgroundColor = Colors.white,
+      Color fontColor = Colors.black,
+      int fontSize = 12,
+      String fontFamily = 'Arial',
+      List<int> margins = const [8, 8, 8, 8],
+    }) {
+      context.read<CustomStyleBloc>().add(
+            UpdateStyle(
+              backgroundColor: backgroundColor,
+              fontColor: fontColor,
+              fontSize: fontSize,
+              fontFamily: fontFamily,
+              margins: margins,
+            ),
+          );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -38,9 +56,14 @@ class CustomStyleScreen extends StatelessWidget {
         child: Column(
           children: [
             Container(
-                color: ereaderStyle.backgroundColor,
-                child: Text("The quick brown fox jumped over the lazy dog.")),
-            ColorSlider(workingColor: ereaderStyle.backgroundColor),
+              color: ereaderStyle.backgroundColor,
+              child: Text(kSampleText),
+              // width: double.infinity,
+            ),
+            const StyleSelector(),
+            StyleModules(
+              visibleModule: Module.backgroundColor,
+            ),
             Row(
               children: <Widget>[
                 TextButton(

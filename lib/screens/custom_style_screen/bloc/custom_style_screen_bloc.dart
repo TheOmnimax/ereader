@@ -1,25 +1,27 @@
-import 'package:ereader/screens/custom_style/bloc/custom_style_event.dart';
+import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_event.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 
-import 'custom_style_state.dart';
+import 'custom_style_screen_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
   CustomStyleBloc() : super(StyleInitial()) {
-    on<ChangeBackgroundColor>(_backgroundChanged);
+    on<UpdateStyle>(_styleChanged);
     on<LoadPreferences>(_loadPreferences);
   }
 
   EreaderStyle ereaderStyle = const EreaderStyle();
 
-  void _backgroundChanged(
-      ChangeBackgroundColor event, Emitter<CustomStyleState> emit) {
-    final newStyle = EreaderStyle(backgroundColor: event.newColor);
+  void _styleChanged(UpdateStyle event, Emitter<CustomStyleState> emit) {
+    final newStyle = EreaderStyle(
+      backgroundColor: event.backgroundColor,
+      fontColor: event.fontColor,
+      fontSize: event.fontSize,
+      fontFamily: event.fontFamily,
+      margins: event.margins,
+    );
     emit(StyleAdjusted(ereaderStyle: newStyle));
   }
-
-  void _styleChanged(
-      ChangeBackgroundColor event, Emitter<CustomStyleState> emit) {}
 
   void _loadPreferences(LoadPreferences event, Emitter<CustomStyleState> emit) {
     var stringData = event.preferencesString;

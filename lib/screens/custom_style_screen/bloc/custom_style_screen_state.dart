@@ -18,3 +18,7 @@ class StyleAdjusted extends CustomStyleState {
   const StyleAdjusted({required EreaderStyle ereaderStyle})
       : super(ereaderStyle: ereaderStyle);
 }
+
+// class ModuleChanged extends CustomStyleState {
+//
+// }

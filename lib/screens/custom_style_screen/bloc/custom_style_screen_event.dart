@@ -1,5 +1,6 @@
 import 'package:ereader/constants/constants.dart';
 import 'package:equatable/equatable.dart';
+import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -10,38 +11,58 @@ abstract class CustomStyleEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ChangeBackgroundColor extends CustomStyleEvent {
-  ChangeBackgroundColor(this.newColor);
-
-  final Color newColor;
-
-  @override
-  List<Object> get props => [newColor];
-}
-
 class UpdateStyle extends CustomStyleEvent {
-  const UpdateStyle(
-      {this.backgroundColor = Colors.white,
-      this.fontColor = Colors.black,
-      this.fontSize = 12,
-      this.fontFamily = 'Arial',
-      this.margins = const [8, 8, 8, 8]});
+  const UpdateStyle({
+    this.backgroundColor,
+    this.fontColor,
+    this.fontSize,
+    this.fontFamily,
+    this.margins,
+    this.name,
+  });
 
-  final Color backgroundColor;
-  final Color fontColor;
-  final int fontSize;
-  final String fontFamily;
-  final List<int> margins;
+  final Color? backgroundColor;
+  final Color? fontColor;
+  final int? fontSize;
+  final String? fontFamily;
+  final List<int>? margins;
+  final String? name;
 }
 
 class ModuleSelected extends CustomStyleEvent {
-  ModuleSelected({required this.selectedModule});
+  const ModuleSelected({required this.selectedModule});
 
   final Module selectedModule;
 }
 
+class SavePreferences extends CustomStyleEvent {
+  const SavePreferences({
+    required this.ereaderStyle,
+  });
+
+  final EreaderStyle ereaderStyle;
+}
+
+// class SavePreferences extends CustomStyleEvent {
+//   const SavePreferences({
+//     required this.backgroundColor,
+//     required this.fontColor,
+//     required this.fontSize,
+//     required this.fontFamily,
+//     required this.margins,
+//     required this.name,
+//   });
+//
+//   final Color backgroundColor;
+//   final Color fontColor;
+//   final int fontSize;
+//   final String fontFamily;
+//   final List<int> margins;
+//   final String name;
+// }
+
 class LoadPreferences extends CustomStyleEvent {
-  LoadPreferences(this.preferencesString);
+  const LoadPreferences(this.preferencesString);
 
   final String preferencesString;
 

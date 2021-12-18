@@ -4,4 +4,5 @@ enum Module {
   fontSize,
   fontFamily,
   margins,
+  name,
 }

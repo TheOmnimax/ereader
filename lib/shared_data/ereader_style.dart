@@ -1,24 +1,51 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class EreaderStyle {
-  const EreaderStyle(
-      {this.backgroundColor = Colors.white,
-      this.fontColor = Colors.black,
-      this.fontSize = 12,
-      this.fontFamily = 'Arial',
-      this.margins = const [8, 8, 8, 8]});
+  const EreaderStyle({
+    this.backgroundColor = Colors.white,
+    this.fontColor = Colors.black,
+    this.fontSize = 12,
+    this.fontFamily = 'Arial',
+    this.margins = const [8, 8, 8, 8],
+    this.name = 'Custom style',
+  });
+
+  EreaderStyle.fromJson(Map<String, dynamic> json)
+      : backgroundColor = json['backgroundColor'] as Color,
+        fontColor = json['fontColor'] as Color,
+        fontSize = json['fontSize'] as int,
+        fontFamily = json['fontFamily'] as String,
+        margins = json['margins'] as List<int>,
+        name = json['name'] as String;
 
   final Color backgroundColor;
   final Color fontColor;
   final int fontSize;
   final String fontFamily;
   final List<int> margins;
+  final String name;
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'backgroundColor': backgroundColor,
+        'fontColor': fontColor,
+        'fontSize': fontSize,
+        'fontFamily': fontFamily,
+        'margins': margins,
+        'name': name,
+      };
+
+  // String toString() {
+  //
+  // }
 
   String stringData() {
+    // Deprecated
     return '${backgroundColor.value},${fontColor.value},${fontSize},${fontFamily},${margins.join(' ')}';
   }
 
   static EreaderStyle fromStringData(String stringData) {
+    // Deprecated
     print('Parsing new data');
     var splitData = stringData.split(',');
     var backgroundColor = Color(int.parse(splitData[0]));

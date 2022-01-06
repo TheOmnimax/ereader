@@ -1,6 +1,7 @@
+import 'package:ereader/screens/custom_style_screen/custom_style_screen.dart';
+import 'package:ereader/screens/select_style_screen/select_style_screen.dart';
+import 'package:ereader/screens/selection_page.dart';
 import 'package:flutter/material.dart';
-import 'screens/selection_page.dart';
-import 'screens/custom_style_screen/custom_style_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => SelectionPage(),
-        '/style_selection': (context) => CustomStyleMain()
+        '/style_selection': (context) => SelectStyleMain(),
+        '/custom_style': (context) => CustomStyleMain(),
       },
     );
   }

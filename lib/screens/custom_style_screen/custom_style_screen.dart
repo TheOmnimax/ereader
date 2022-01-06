@@ -1,6 +1,5 @@
 import 'package:ereader/constants/constants.dart';
-import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_bloc.dart';
-import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_event.dart';
+import 'package:ereader/screens/custom_style_screen/bloc/bloc.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/shared_widgets/custom_style/custom_style.dart';
 import 'package:ereader/shared_widgets/custom_style/style_selector.dart';
@@ -27,78 +26,82 @@ class CustomStyleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ereaderStyle =
-        context.select((CustomStyleBloc bloc) => bloc.state.ereaderStyle);
-    final selectedModule =
-        context.select((CustomStyleBloc bloc) => bloc.state.selectedModule);
-    // TODO Add var to get currently selected module from bloc
-
-    void updateBackgroundColor(Color color) {
-      context.read<CustomStyleBloc>().add(UpdateStyle(
-            backgroundColor: color,
-          ));
-    }
-
-    void updateFontColor(Color color) {
-      context.read<CustomStyleBloc>().add(UpdateStyle(
-            fontColor: color,
-          ));
-    }
-
-    void updateFontSize(int size) {}
-
-    void updateFontFamily(String family) {}
-
-    void updateMargins(int top, int right, int bottom, int left) {}
-
-    void updateName(String name) {}
-
-    void moduleTapped(Module module) {
-      context
-          .read<CustomStyleBloc>()
-          .add(ModuleSelected(selectedModule: module));
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Custom ereader style'),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            StylePreview(
-              ereaderStyle: ereaderStyle,
-            ),
-            StyleSelector(
-              onTap: moduleTapped,
-              selectedModule: selectedModule,
-            ),
-            StyleModules(
-              ereaderStyle: ereaderStyle,
-              visibleModule: selectedModule,
-              onBackgroundColorChange: updateBackgroundColor,
-              onFontColorChange: updateFontColor,
-              onFontSizeChange: updateFontSize,
-              onFontFamilyChange: updateFontFamily,
-              onMarginsChange: updateMargins,
-              onNameChange: updateName,
-            ),
-            Row(
-              children: <Widget>[
-                TextButton(
-                  // SAVE
-                  onPressed: () {
-                    context
-                        .read<CustomStyleBloc>()
-                        .add(SavePreferences(ereaderStyle: ereaderStyle));
-                  },
-                  child: const Text('Save'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+      body: BlocBuilder<CustomStyleBloc, CustomStyleState>(
+          builder: (context, state) {
+        final ereaderStyle = state.ereaderStyle;
+        final selectedModule = state.selectedModule;
+        // TODO Add var to get currently selected module from bloc
+
+        void updateBackgroundColor(Color color) {
+          context.read<CustomStyleBloc>().add(UpdateStyle(
+                backgroundColor: color,
+              ));
+        }
+
+        void updateFontColor(Color color) {
+          context.read<CustomStyleBloc>().add(UpdateStyle(
+                fontColor: color,
+              ));
+        }
+
+        void updateFontSize(int size) {}
+
+        void updateFontFamily(String family) {}
+
+        void updateMargins(int top, int right, int bottom, int left) {}
+
+        void updateName(String name) {}
+
+        void moduleTapped(Module module) {
+          context
+              .read<CustomStyleBloc>()
+              .add(ModuleSelected(selectedModule: module));
+        }
+
+        return SafeArea(
+          child: Column(
+            children: [
+              StylePreview(
+                ereaderStyle: ereaderStyle,
+              ),
+              StyleSelector(
+                onTap: moduleTapped,
+                selectedModule: selectedModule,
+              ),
+              StyleModules(
+                ereaderStyle: ereaderStyle,
+                visibleModule: selectedModule,
+                onBackgroundColorChange: updateBackgroundColor,
+                onFontColorChange: updateFontColor,
+                onFontSizeChange: updateFontSize,
+                onFontFamilyChange: updateFontFamily,
+                onMarginsChange: updateMargins,
+                onNameChange: updateName,
+              ),
+              Row(
+                children: <Widget>[
+                  TextButton(
+                    // SAVE
+                    onPressed: () async {
+                      context.read<CustomStyleBloc>().add(
+                            SavePreferences(
+                              ereaderStyle: ereaderStyle,
+                              context: context,
+                            ),
+                          );
+                    },
+                    child: const Text('Save'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

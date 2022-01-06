@@ -38,9 +38,11 @@ class ModuleSelected extends CustomStyleEvent {
 class SavePreferences extends CustomStyleEvent {
   const SavePreferences({
     required this.ereaderStyle,
+    required this.context,
   });
 
   final EreaderStyle ereaderStyle;
+  final BuildContext context;
 }
 
 // class SavePreferences extends CustomStyleEvent {

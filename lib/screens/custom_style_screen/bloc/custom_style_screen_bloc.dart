@@ -1,8 +1,10 @@
 import 'dart:convert';
-
 import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_event.dart';
 import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_state.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
+import 'package:ereader/shared_widgets/show_popup.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +16,7 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
     // on<LoadPreferences>(_loadPreferences);
   }
 
-  EreaderStyle ereaderStyle = const EreaderStyle();
+  // EreaderStyle ereaderStyle = const EreaderStyle();
 
   void _styleChanged(UpdateStyle event, Emitter<CustomStyleState> emit) {
     final newStyle = EreaderStyle(
@@ -37,16 +39,49 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
     );
   }
 
+  Future<void> _savePreference(SharedPreferences prefs, List styleList) async {
+    final newPrefString = jsonEncode(styleList);
+    await prefs.setString('preferences', newPrefString);
+  }
+
   Future<void> _savePreferences(
       SavePreferences event, Emitter<CustomStyleState> emit) async {
-    final prefName = event.ereaderStyle.name;
+    final newName = event.ereaderStyle.name;
     final jsonData = event.ereaderStyle.toJson();
     final prefs = await SharedPreferences.getInstance();
-    final allPreferences = prefs.getString('preferences') ?? '{}';
-    final preferenceJson = jsonDecode(allPreferences) as Map<String, dynamic>;
-    preferenceJson[prefName] = jsonData;
-    final newPrefString = jsonEncode(preferenceJson);
-    await prefs.setString('preferences', newPrefString);
+    final allPreferences = prefs.getString('preferences') ?? '[]';
+    print('Preferences:');
+    print(allPreferences);
+    final styleList = jsonDecode(allPreferences) as List..add(jsonData);
+
+    for (final style in styleList) {
+      final styleName = style['name'] as String;
+      if (newName == styleName) {
+        await showPopup(
+          context: event.context,
+          title: 'Warning: Name already exists',
+          buttons: <Widget>[
+            TextButton(
+              child: const Text('Yes, delete'),
+              onPressed: () {
+                // TODO: Remove existing style with that name, and add this one.
+                Navigator.of(event.context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('No, continue editing'),
+              onPressed: () {
+                Navigator.of(event.context).pop();
+              },
+            ),
+          ],
+        );
+        emit(state.copyWith());
+        return;
+      }
+    }
+
+    await _savePreference(prefs, styleList);
     emit(state.copyWith());
   }
 

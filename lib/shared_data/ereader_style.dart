@@ -12,11 +12,11 @@ class EreaderStyle {
   });
 
   EreaderStyle.fromJson(Map<String, dynamic> json)
-      : backgroundColor = json['backgroundColor'] as Color,
-        fontColor = json['fontColor'] as Color,
+      : backgroundColor = Color(json['backgroundColor'] as int),
+        fontColor = Color(json['fontColor'] as int),
         fontSize = json['fontSize'] as int,
         fontFamily = json['fontFamily'] as String,
-        margins = json['margins'] as List<int>,
+        margins = List<int>.from(json['margins'] as List<dynamic>),
         name = json['name'] as String;
 
   final Color backgroundColor;
@@ -27,8 +27,8 @@ class EreaderStyle {
   final String name;
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'backgroundColor': backgroundColor,
-        'fontColor': fontColor,
+        'backgroundColor': backgroundColor.value,
+        'fontColor': fontColor.value,
         'fontSize': fontSize,
         'fontFamily': fontFamily,
         'margins': margins,

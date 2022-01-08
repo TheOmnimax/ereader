@@ -28,15 +28,6 @@ class ListBuilder extends StatelessWidget {
       ),
       itemCount: widgets.length,
     );
-
-    return ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(8),
-        itemCount: widgets.length,
-        itemBuilder: (BuildContext context, int index) {
-          return widgets[index];
-        });
   }
 }
 
@@ -49,7 +40,7 @@ class ListItem extends StatelessWidget {
 
   final Widget mainButton;
   final Color backgroundColor;
-  final Function kebabFunction;
+  final Function() kebabFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +55,7 @@ class ListItem extends StatelessWidget {
             style: TextButton.styleFrom(
                 // maximumSize: Size.fromWidth(10.0),
                 ),
-            onPressed: () {},
+            onPressed: kebabFunction,
             child: const Icon(
               Icons.more_vert,
             ),

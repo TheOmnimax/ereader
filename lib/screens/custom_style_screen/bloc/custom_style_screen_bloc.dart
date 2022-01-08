@@ -52,7 +52,7 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
     final allPreferences = prefs.getString('preferences') ?? '[]';
     print('Preferences:');
     print(allPreferences);
-    final styleList = jsonDecode(allPreferences) as List..add(jsonData);
+    final styleList = jsonDecode(allPreferences) as List;
 
     for (final style in styleList) {
       final styleName = style['name'] as String;
@@ -66,6 +66,9 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
               onPressed: () {
                 // TODO: Remove existing style with that name, and add this one.
                 Navigator.of(event.context).pop();
+                styleList
+                  ..remove(style)
+                  ..add(jsonData);
               },
             ),
             TextButton(
@@ -76,11 +79,14 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
             ),
           ],
         );
+        // Do these no matter what is selected in the popup
+        await _savePreference(prefs, styleList);
         emit(state.copyWith());
         return;
       }
     }
 
+    styleList.add(jsonData);
     await _savePreference(prefs, styleList);
     emit(state.copyWith());
   }

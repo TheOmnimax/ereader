@@ -48,13 +48,29 @@ class CustomStyleScreen extends StatelessWidget {
               ));
         }
 
-        void updateFontSize(int size) {}
+        void updateFontSize(int size) {
+          context.read<CustomStyleBloc>().add(UpdateStyle(
+                fontSize: size,
+              ));
+        }
 
-        void updateFontFamily(String family) {}
+        void updateFontFamily(String family) {
+          context.read<CustomStyleBloc>().add(UpdateStyle(
+                fontFamily: family,
+              ));
+        }
 
-        void updateMargins(int top, int right, int bottom, int left) {}
+        void updateMargins(int top, int right, int bottom, int left) {
+          context.read<CustomStyleBloc>().add(UpdateStyle(
+                margins: [top, right, bottom, left],
+              ));
+        }
 
-        void updateName(String name) {}
+        void updateName(String name) {
+          context.read<CustomStyleBloc>().add(UpdateStyle(
+                name: name,
+              ));
+        }
 
         void moduleTapped(Module module) {
           context

@@ -1,10 +1,8 @@
 import 'package:ereader/constants/constants.dart';
-import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_bloc.dart';
-import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_event.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/shared_widgets/custom_style/color_slider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 
 class StyleModules extends StatelessWidget {
   const StyleModules({
@@ -58,7 +56,15 @@ class StyleModules extends StatelessWidget {
         }
       case Module.name:
         {
-          return Container();
+          return Container(
+            child: TextField(
+              onChanged: onNameChange,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter a search term',
+              ),
+            ),
+          );
         }
       default:
         {

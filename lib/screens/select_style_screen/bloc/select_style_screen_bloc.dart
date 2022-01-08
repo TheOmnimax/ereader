@@ -16,6 +16,10 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
     final allStylesRaw =
         await SharedPreferenceTool.getListPreferences('preferences') as List;
 
+    // Use these to clear all preferences
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.setString('preferences', '[]');
+
     print('Retrieved raw data');
 
     final allStyles = <EreaderStyle>[];
@@ -29,7 +33,7 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
     return allStyles;
   }
 
-  void _styleSelected(
+  Future<void> _styleSelected(
       StyleSelected event, Emitter<SelectStyleScreenState> emit) async {
     final allStyles = await _getStyles();
 

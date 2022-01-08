@@ -1,9 +1,9 @@
 import 'package:ereader/screens/select_style_screen/bloc/bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/shared_widgets/custom_style/style_preview.dart';
 import 'package:ereader/shared_widgets/list_builder.dart';
-import 'package:ereader/screens/select_style_screen/bloc/bloc.dart';
-import 'package:ereader/shared_data/ereader_style.dart';
+import 'package:ereader/shared_widgets/shared_widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectStyleMain extends StatelessWidget {
@@ -25,7 +25,11 @@ class SelectStyleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     void popupItemSelected(String value) {
       if (value == 'Add new style') {
-        Navigator.pushNamed(context, '/custom_style');
+        Navigator.pushNamed(context, '/custom_style').then((_) {
+          context.read<SelectStyleBloc>().add(
+                const LoadPage(),
+              );
+        });
       }
     }
 
@@ -41,6 +45,12 @@ class SelectStyleScreen extends StatelessWidget {
                 .add(StyleSelected(ereaderStyle: value));
           },
           ereaderStyle: value,
+          popupItems: createPopupMenuList(
+            itemList: [
+              'Item 1',
+              'Item 2',
+            ],
+          ),
         );
         widgetList.add(listItem);
       }
@@ -53,17 +63,10 @@ class SelectStyleScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Select style'),
         actions: <Widget>[
-          PopupMenuButton<String>(
+          PopupMenu(
             onSelected: popupItemSelected,
-            itemBuilder: (BuildContext context) {
-              return {'Add new style'}.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
-            },
-          )
+            itemList: ['Add new style'],
+          ),
         ],
       ),
       body: BlocBuilder<SelectStyleBloc, SelectStyleScreenState>(
@@ -80,7 +83,11 @@ class SelectStyleScreen extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 StylePreview(ereaderStyle: ereaderStyle),
-                ListBuilder(widgets: styleListBuilder(state.allStyles)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child:
+                      ListBuilder(widgets: styleListBuilder(state.allStyles)),
+                ),
               ],
             ),
           );
@@ -94,10 +101,12 @@ class StyleListItem extends StatelessWidget {
   const StyleListItem({
     required this.onPressed,
     required this.ereaderStyle,
+    this.popupItems = const <PopupMenuEntry<String>>[],
   });
 
   final Function() onPressed;
   final EreaderStyle ereaderStyle;
+  final List<PopupMenuEntry<String>> popupItems;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +125,14 @@ class StyleListItem extends StatelessWidget {
           ),
         ),
       ),
-      kebabFunction: () {},
+      kebabFunction: () async {
+        print('Showing menu');
+        await showMenu(
+          context: context,
+          items: popupItems,
+          position: const RelativeRect.fromLTRB(0, 0, 0, 0),
+        );
+      },
     );
   }
 }

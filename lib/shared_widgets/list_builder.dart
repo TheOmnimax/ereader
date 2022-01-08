@@ -1,3 +1,4 @@
+import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 
 class ListBuilder extends StatelessWidget {
@@ -32,15 +33,19 @@ class ListBuilder extends StatelessWidget {
 }
 
 class ListItem extends StatelessWidget {
-  ListItem({
+  const ListItem({
     required this.mainButton,
     required this.backgroundColor,
     required this.kebabFunction,
+    required this.itemList,
+    this.kebabColor = Colors.black,
   });
 
   final Widget mainButton;
   final Color backgroundColor;
-  final Function() kebabFunction;
+  final Function(String) kebabFunction;
+  final List<String> itemList;
+  final Color kebabColor;
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +56,10 @@ class ListItem extends StatelessWidget {
           Expanded(
             child: mainButton,
           ),
-          TextButton(
-            style: TextButton.styleFrom(
-                // maximumSize: Size.fromWidth(10.0),
-                ),
-            onPressed: kebabFunction,
-            child: const Icon(
-              Icons.more_vert,
-            ),
+          PopupMenu(
+            color: kebabColor,
+            onSelected: kebabFunction,
+            itemList: itemList,
           ),
         ],
       ),

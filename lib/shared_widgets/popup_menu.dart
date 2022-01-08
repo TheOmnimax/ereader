@@ -4,15 +4,21 @@ class PopupMenu extends StatelessWidget {
   const PopupMenu({
     required this.onSelected,
     required this.itemList,
+    this.color = Colors.black,
   });
 
   final Function(String) onSelected;
   final List<String> itemList;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       onSelected: onSelected,
+      icon: Icon(
+        Icons.more_vert,
+        color: color,
+      ),
       itemBuilder: (BuildContext context) {
         return createPopupMenuList(
           itemList: itemList,

@@ -5,6 +5,7 @@ import 'package:ereader/shared_widgets/list_builder.dart';
 import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ereader/constants/constants.dart';
 
 class SelectStyleMain extends StatelessWidget {
   const SelectStyleMain({Key? key}) : super(key: key);
@@ -125,14 +126,41 @@ class StyleListItem extends StatelessWidget {
           ),
         ),
       ),
-      kebabFunction: () async {
-        print('Showing menu');
-        await showMenu(
-          context: context,
-          items: popupItems,
-          position: const RelativeRect.fromLTRB(0, 0, 0, 0),
-        );
+      kebabColor: ereaderStyle.fontColor,
+      kebabFunction: (String selectedItem) {
+        switch (selectedItem) {
+          case kMoveUp:
+            {
+              print('Move up');
+              break;
+            }
+          case kMoveDown:
+            {
+              print('Move down');
+              break;
+            }
+          case kEdit:
+            {
+              print('Edit');
+              break;
+            }
+          case kDelete:
+            {
+              print('Delete');
+              break;
+            }
+          default:
+            {
+              print('Invalid');
+            }
+        }
       },
+      itemList: const <String>[
+        kMoveUp,
+        kMoveDown,
+        kEdit,
+        kDelete,
+      ],
     );
   }
 }

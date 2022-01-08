@@ -8,3 +8,9 @@ const String kFontSize = 'Size';
 const String kFontFamily = 'Font';
 const String kMargins = 'Margins';
 const String kName = 'Name';
+
+// Style popup menu items
+const String kMoveUp = 'Move up';
+const String kMoveDown = 'Move down';
+const String kEdit = 'Edit';
+const String kDelete = 'Delete';

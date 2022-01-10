@@ -60,7 +60,7 @@ class SelectStyleMainState extends SelectStyleScreenState {
   }) {
     return SelectStyleMainState(
       allStyles: allStyles ?? [],
-      selectedEreaderStyle: ereaderStyle ?? this.selectedEreaderStyle,
+      selectedEreaderStyle: ereaderStyle ?? selectedEreaderStyle,
       // selectedStyle: selectedStyle ?? this.selectedStyle,
     );
   }

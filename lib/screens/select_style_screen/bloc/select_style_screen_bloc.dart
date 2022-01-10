@@ -10,6 +10,8 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
   SelectStyleBloc() : super(const SelectStyleLoading()) {
     on<LoadPage>(_loadPage);
     on<StyleSelected>(_styleSelected);
+    on<StyleMove>(_styleMove);
+    on<StyleDelete>(_styleDelete);
   }
 
   Future<List<EreaderStyle>> _getStyles() async {
@@ -60,8 +62,6 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
 
     try {
       final firstEreaderStyle = allStyles[0];
-
-      // TODO: Apply settings to the state
       print('About to emit state...');
       emit(
         SelectStyleMainState(
@@ -70,12 +70,87 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
         ),
       );
     } catch (e) {
-      var ereaderSettings = const EreaderStyle();
+      const ereaderSettings = EreaderStyle();
       print('About to emit state...');
       emit(SelectStyleMainState(
         allStyles: allStyles,
         selectedEreaderStyle: ereaderSettings,
       ));
     }
+  }
+
+  Future<void> _styleMove(
+      StyleMove event, Emitter<SelectStyleScreenState> emit) async {
+    final allStyles =
+        await SharedPreferenceTool.getListPreferences('preferences') as List;
+    print('Old length: ${allStyles.length}');
+    final moveStyle = event.ereaderStyle;
+
+    for (final style in allStyles) {
+      print('Name: ${style['name']}');
+      if (style['name'] == moveStyle.name) {
+        final oldPosition = allStyles.indexOf(style);
+        print('Old position: $oldPosition');
+        final newPosition = oldPosition + event.move;
+        print('New position: $newPosition');
+        if ((newPosition >= 0) && (newPosition < allStyles.length)) {
+          allStyles
+            ..remove(style)
+            ..insert(newPosition, style);
+
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('preferences', jsonEncode(allStyles));
+
+          final updatedStyles = await _getStyles();
+          emit(SelectStyleMainState(
+            allStyles: updatedStyles,
+            selectedEreaderStyle: event.ereaderStyle,
+          ));
+        }
+        print('New length: ${allStyles.length}');
+        return;
+      }
+    }
+    emit(state.copyWith());
+  }
+
+  Future<void> _styleDelete(
+      StyleDelete event, Emitter<SelectStyleScreenState> emit) async {
+    final allStyles =
+        await SharedPreferenceTool.getListPreferences('preferences') as List;
+    print('Old length: ${allStyles.length}');
+    final moveStyle = event.ereaderStyle;
+
+    print('Move style: ${moveStyle.name}');
+    print('All styles: ${allStyles}');
+
+    for (final style in allStyles) {
+      print('Name: ${style['name']}');
+      if (style['name'] == moveStyle.name) {
+        final oldPosition = allStyles.indexOf(style);
+        print('Old position: $oldPosition');
+        allStyles.remove(style);
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('preferences', jsonEncode(allStyles));
+
+        final updatedStyles = await _getStyles();
+        print('New length: ${updatedStyles.length}');
+
+        print(updatedStyles);
+        emit(SelectStyleMainState(
+          allStyles: updatedStyles,
+          selectedEreaderStyle: event.ereaderStyle,
+        ));
+
+        // TODO: Find why copyWith is not working
+
+        // print('Emitting...');
+        // emit(state.copyWith(allStyles: updatedStyles));
+        // print('Emitted.');
+        return;
+      }
+    }
+    emit(state.copyWith());
   }
 }

@@ -12,5 +12,5 @@ const String kName = 'Name';
 // Style popup menu items
 const String kMoveUp = 'Move up';
 const String kMoveDown = 'Move down';
-const String kEdit = 'Edit';
+const String kEdit = 'Edit/Copy';
 const String kDelete = 'Delete';

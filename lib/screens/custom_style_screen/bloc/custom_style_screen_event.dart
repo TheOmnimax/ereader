@@ -1,7 +1,6 @@
-import 'package:ereader/constants/constants.dart';
 import 'package:equatable/equatable.dart';
+import 'package:ereader/constants/constants.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
 abstract class CustomStyleEvent extends Equatable {

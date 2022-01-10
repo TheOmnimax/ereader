@@ -26,7 +26,10 @@ class SelectStyleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     void popupItemSelected(String value) {
       if (value == 'Add new style') {
-        Navigator.pushNamed(context, '/custom_style').then((_) {
+        Navigator.pushNamed(
+          context,
+          '/custom_style',
+        ).then((_) {
           context.read<SelectStyleBloc>().add(
                 const LoadPage(),
               );
@@ -132,21 +135,47 @@ class StyleListItem extends StatelessWidget {
           case kMoveUp:
             {
               print('Move up');
+              context.read<SelectStyleBloc>().add(
+                    StyleMove(
+                      ereaderStyle: ereaderStyle,
+                      move: -1,
+                    ),
+                  );
               break;
             }
           case kMoveDown:
             {
               print('Move down');
+              context.read<SelectStyleBloc>().add(
+                    StyleMove(
+                      ereaderStyle: ereaderStyle,
+                      move: 1,
+                    ),
+                  );
               break;
             }
           case kEdit:
             {
               print('Edit');
+
+              Navigator.pushNamed(context, '/custom_style',
+                  arguments: <String, dynamic>{
+                    'style': ereaderStyle,
+                  }).then((_) {
+                context.read<SelectStyleBloc>().add(
+                      const LoadPage(),
+                    );
+              });
               break;
             }
           case kDelete:
             {
               print('Delete');
+              context.read<SelectStyleBloc>().add(
+                    StyleDelete(
+                      ereaderStyle: ereaderStyle,
+                    ),
+                  );
               break;
             }
           default:

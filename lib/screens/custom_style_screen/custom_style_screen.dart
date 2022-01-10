@@ -2,12 +2,11 @@ import 'package:ereader/constants/constants.dart';
 import 'package:ereader/screens/custom_style_screen/bloc/bloc.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/shared_widgets/custom_style/custom_style.dart';
+import 'package:ereader/shared_widgets/custom_style/style_modules.dart';
+import 'package:ereader/shared_widgets/custom_style/style_preview.dart';
 import 'package:ereader/shared_widgets/custom_style/style_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../shared_widgets/custom_style/style_modules.dart';
-import 'package:ereader/shared_widgets/custom_style/style_preview.dart';
 
 class CustomStyleMain extends StatelessWidget {
   const CustomStyleMain({Key? key}) : super(key: key);
@@ -26,6 +25,23 @@ class CustomStyleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final modalRoute = ModalRoute.of(context);
+    final arguments = modalRoute == null
+        ? <String, dynamic>{}
+        : modalRoute.settings.arguments as Map;
+
+    if (arguments.containsKey('style')) {
+      final givenStyle = arguments['style'] as EreaderStyle;
+      context.read<CustomStyleBloc>().add(UpdateStyle(
+            backgroundColor: givenStyle.backgroundColor,
+            fontColor: givenStyle.fontColor,
+            fontSize: givenStyle.fontSize,
+            fontFamily: givenStyle.fontFamily,
+            margins: givenStyle.margins,
+            name: givenStyle.name,
+          ));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Custom ereader style'),

@@ -28,3 +28,29 @@ class StyleSelected extends SelectStyleEvent {
 
   final EreaderStyle ereaderStyle;
 }
+
+class StyleMove extends SelectStyleEvent {
+  const StyleMove({
+    required this.ereaderStyle,
+    required this.move,
+  });
+
+  final EreaderStyle ereaderStyle;
+  final int move;
+}
+
+class StyleEdit extends SelectStyleEvent {
+  const StyleEdit({
+    required this.ereaderStyle,
+  });
+
+  final EreaderStyle ereaderStyle;
+}
+
+class StyleDelete extends SelectStyleEvent {
+  const StyleDelete({
+    required this.ereaderStyle,
+  });
+
+  final EreaderStyle ereaderStyle;
+}

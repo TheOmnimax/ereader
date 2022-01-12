@@ -40,7 +40,7 @@ class SelectStyleLoading extends SelectStyleScreenState {
 }
 
 class SelectStyleMainState extends SelectStyleScreenState {
-  SelectStyleMainState({
+  const SelectStyleMainState({
     this.selectedEreaderStyle = const EreaderStyle(),
     this.allStyles = const <EreaderStyle>[],
     // this.selectedStyle = '',

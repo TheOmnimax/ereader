@@ -39,6 +39,9 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
       StyleSelected event, Emitter<SelectStyleScreenState> emit) async {
     final allStyles = await _getStyles();
 
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedStyle', jsonEncode(event.ereaderStyle));
+
     // TODO: Set so uses current list of styles instead of reloading
     emit(SelectStyleMainState(
       allStyles: allStyles,

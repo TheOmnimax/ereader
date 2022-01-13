@@ -2,18 +2,18 @@ import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 
 class ListBuilder extends StatelessWidget {
-  const ListBuilder({
-    required this.widgets,
-  });
+  const ListBuilder(
+      {required this.widgets, this.missingWarning = 'None found!'});
 
   final List<Widget> widgets;
+  final String missingWarning;
 
   @override
   Widget build(BuildContext context) {
     print('There are ${widgets.length} widgets');
 
     if (widgets.length == 0) {
-      return Text('No styles!');
+      return Text(missingWarning);
     }
     return ListView.separated(
       scrollDirection: Axis.vertical,
@@ -35,9 +35,9 @@ class ListBuilder extends StatelessWidget {
 class ListItem extends StatelessWidget {
   const ListItem({
     required this.mainButton,
-    required this.backgroundColor,
     required this.kebabFunction,
     required this.itemList,
+    this.backgroundColor = Colors.white,
     this.kebabColor = Colors.black,
   });
 

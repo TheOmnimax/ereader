@@ -4,19 +4,25 @@ import 'package:epubx/epubx.dart';
 import 'package:image/image.dart';
 
 class EbookMetadata {
-  const EbookMetadata(
-      {required this.title, required this.author, required this.coverImage});
+  const EbookMetadata({
+    required this.title,
+    required this.author,
+    required this.coverImage,
+    this.filePath = '',
+  });
 
   EbookMetadata.fromEpub(EpubBook epubBook)
       : title = epubBook.Title ?? '[no title]',
         author = epubBook.Author ?? '[no author]',
         coverImage = epubBook.CoverImage ??
             decodePng(File('test.jpg').readAsBytesSync()) ??
-            Image(600, 900);
+            Image(600, 900),
+        filePath = '';
 
   final String title;
   final String author;
-  final Image coverImage;
+  final Image? coverImage;
+  final String filePath;
 }
 
 class EpubMetadataFactory {
@@ -24,7 +30,7 @@ class EpubMetadataFactory {
 
   EpubMetadataFactory({required this.epubBook});
 
-  Image getDefaultCover() {
+  Image? getDefaultCover() {
     final image = decodeJpg(File('test.jpg').readAsBytesSync());
     return image;
   }

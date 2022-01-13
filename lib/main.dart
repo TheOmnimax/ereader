@@ -1,6 +1,6 @@
 import 'package:ereader/screens/custom_style_screen/custom_style_screen.dart';
 import 'package:ereader/screens/select_style_screen/select_style_screen.dart';
-import 'package:ereader/screens/selection_page.dart';
+import 'package:ereader/screens/ebook_selection_screen/ebook_selection_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       initialRoute: '/',
       routes: {
-        '/': (context) => SelectionPage(),
-        '/style_selection': (context) => SelectStyleMain(),
-        '/custom_style': (context) => CustomStyleMain(),
+        '/': (context) => const EbookSelectionMain(),
+        '/style_selection': (context) => const SelectStyleMain(),
+        '/custom_style': (context) => const CustomStyleMain(),
       },
     );
   }

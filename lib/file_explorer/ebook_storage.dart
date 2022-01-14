@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:path/path.dart' as p;
 import 'package:epubx/epubx.dart';
-import 'ebook_metadata.dart';
-import 'package:ereader/constants/constants.dart';
-import 'package:image/image.dart';
+import 'package:ereader/file_explorer/ebook_metadata.dart';
+import 'package:ereader/file_explorer/files.dart';
+import 'package:flutter/material.dart' as material;
+import 'package:path/path.dart' as p;
 
 class EbookStorage {}
 
@@ -14,27 +14,25 @@ class EbookDefaults {
 }
 
 class EbookRetrieval {
-  static Directory ebookDir = Directory(
-    p.join(p.current, 'assets', 'ebook_files'),
-  );
   EbookRetrieval() {
-    print('current: ${p.current}');
-    print('assets: ${Directory('assets').existsSync()}');
-    print('media: ${Directory('media').existsSync()}');
-    print('About to get path');
-    final coverFilePath =
-        File(p.join(p.current, 'assets', 'media', 'default_cover.png'));
-    print('Got path');
-    final coverFile = coverFilePath.readAsBytesSync();
-    print('Processed file');
-    defaultCover = decodeImage(coverFile);
-    print('Decoded');
+    getDefaultCover();
   }
 
   Image? defaultCover;
 
+  Future<void> getDefaultCover() async {
+    print('current: ${p.current}');
+    print('assets: ${Directory('assets').existsSync()}');
+    print('media: ${Directory('media').existsSync()}');
+    print('About to get path');
+    final defaultCover =
+        const material.AssetImage('assets/media/default_cover.png');
+    print('Decoded');
+  }
+
   Future<EpubBook> getEbook(String filePath) async {
     final targetFile = File(filePath);
+    print('About to get book at $filePath');
     final List<int> bytes = await targetFile.readAsBytes();
     final epubBook = await EpubReader.readBook(bytes);
 
@@ -48,30 +46,36 @@ class EbookRetrieval {
     return epubBook;
   }
 
-  List<FileSystemEntity> getFileList() {
-    return ebookDir.listSync().toList();
-  }
-
-  Future<List<EpubBook>> getEbooks() async {
-    final ebookFiles = getFileList(); // List<FileSystemEntity>
-    final ebookList = <EpubBook>[];
-    await Future.forEach(ebookFiles, (FileSystemEntity filePath) async {
-      final epubBook = await getEbook(filePath.path);
-      ebookList.add(epubBook);
-    });
-    return ebookList;
-  }
+  // Future<List<EpubBook>> getEbooks() async {
+  //   final ebookFiles = await getFileList(); // List<FileSystemEntity>
+  //   final ebookList = <EpubBook>[];
+  //   await Future.forEach(ebookFiles, (FileSystemEntity filePath) async {
+  //     print('Path: ${filePath.path}');
+  //     final epubBook = await getEbook(filePath.path);
+  //     print(epubBook);
+  //     ebookList.add(epubBook);
+  //   });
+  //   return ebookList;
+  // }
 
   Future<List<EbookMetadata>> getAllEbookMetadata() async {
+    // TODO: Update to a more private location
+    const fileRetrieval = FileReadWrite(relativePath: 'ebooks');
+    await fileRetrieval.createDir();
     print('About to get file list');
-    final ebookFiles = getFileList(); // List<FileSystemEntity>
-    print('Retrieved file list');
+
+    final directory = fileRetrieval;
+
+    final ebookFiles = await fileRetrieval.getFilesInFolder();
+
+    print('Retrieved file list. There are ${ebookFiles.length} items');
     final ebookMetadataList = <EbookMetadata>[];
     await Future.forEach(ebookFiles, (FileSystemEntity filePath) async {
+      print('Path: ${filePath.path}');
       final epubBook = await getEbook(filePath.path);
       final epubMetadata = EbookMetadata(
         title: epubBook.Title ?? EbookDefaults.title,
-        author: EbookDefaults.author,
+        author: epubBook.Author ?? EbookDefaults.author,
         coverImage: null,
         filePath: filePath.path,
       );
@@ -81,7 +85,7 @@ class EbookRetrieval {
   }
 }
 
-void main() async {
-  EbookRetrieval ebookRetrieval = EbookRetrieval();
-  print(await ebookRetrieval.getEbooks());
-}
+// void main() async {
+//   EbookRetrieval ebookRetrieval = EbookRetrieval();
+//   print(await ebookRetrieval.getEbooks());
+// }

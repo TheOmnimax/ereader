@@ -26,8 +26,16 @@ class SelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void kebabFunction(String value) {
-      if (value == 'eReader style') {
-        Navigator.pushNamed(context, '/style_selection');
+      switch (value) {
+        case 'eReader style':
+          {
+            Navigator.pushNamed(context, '/style_selection');
+            break;
+          }
+        case 'Add eBook':
+          {
+            context.read<EbookSelectionBloc>().add(const GetNewEbook());
+          }
       }
     }
 
@@ -47,7 +55,7 @@ class SelectionPage extends StatelessWidget {
       popupMenuButton: PopupMenuButton<String>(
         onSelected: kebabFunction,
         itemBuilder: (BuildContext context) {
-          return {'eReader style'}.map((String choice) {
+          return {'eReader style', 'Add eBook'}.map((String choice) {
             return PopupMenuItem<String>(
               value: choice,
               child: Text(choice),
@@ -55,6 +63,9 @@ class SelectionPage extends StatelessWidget {
           }).toList();
         },
       ),
+      // child: Image(
+      //   image: AssetImage('assets/media/default_cover.png'),
+      // ),
       child: BlocBuilder<EbookSelectionBloc, EbookSelectionState>(
         builder: (context, state) {
           if (state is EbookSelectionLoading) {

@@ -51,6 +51,8 @@ dev_dependencies:
   equatable: ^2.0.3
   shared_preferences: ^2.0.9
   image: ^3.1.0
+  path_provider: ^2.0.8
+  file_picker: ^4.3.1
 
 
 # For information on the generic Dart part of this file, see the
@@ -66,9 +68,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - assets/
-   - assets/media/
-   - assets/ebook_files/
+#    - assets/
+    - assets/media/
+    - assets/ebook_files/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

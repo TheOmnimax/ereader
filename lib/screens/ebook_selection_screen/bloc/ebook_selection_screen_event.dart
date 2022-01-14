@@ -23,3 +23,7 @@ class EbookSelected extends EbookSelectionEvent {
 
   final EbookMetadata ebookMetadata;
 }
+
+class GetNewEbook extends EbookSelectionEvent {
+  const GetNewEbook();
+}

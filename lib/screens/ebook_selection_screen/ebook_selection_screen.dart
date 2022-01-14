@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/shared_widgets/list_builder.dart';
 import 'package:ereader/file_explorer/ebook_metadata.dart';
+import 'package:ereader/constants/constants.dart';
 
 // TODO: Integrate with bloc using BlocBuilder
 
@@ -39,8 +40,22 @@ class SelectionPage extends StatelessWidget {
       }
     }
 
-    List<Widget> createEbookWidgetList(List<EbookMetadata> ebookMetadataList) {
+    List<Widget> createEbookWidgetList(
+      List<EbookMetadata> ebookMetadataList, {
+      SortType sort = SortType.author,
+      Direction direction = Direction.down,
+    }) {
       final ebookWidgetList = <Widget>[];
+
+      if (sort == SortType.author) {
+        ebookMetadataList.sort((a, b) => a.author.compareTo(b.author));
+      } else if (sort == SortType.title) {
+        ebookMetadataList.sort((a, b) => a.title.compareTo(b.title));
+      }
+
+      if (direction == Direction.up) {
+        ebookMetadataList = ebookMetadataList.reversed.toList();
+      }
 
       for (final ebookMetadata in ebookMetadataList) {
         ebookWidgetList.add(EbookListItem(
@@ -93,11 +108,19 @@ class EbookListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListItem(
-      mainButton: Column(
-        children: <Widget>[
-          Text(ebookMetadata.title),
-          Text(ebookMetadata.author),
-        ],
+      mainButton: TextButton(
+        style: TextButton.styleFrom(
+          alignment: Alignment.centerLeft,
+          primary: Colors.black,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(ebookMetadata.title),
+            Text(ebookMetadata.author),
+          ],
+        ),
+        onPressed: () {},
       ),
       kebabFunction: (selectedItem) {},
       itemList: const <String>[],

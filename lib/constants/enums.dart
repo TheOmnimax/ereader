@@ -6,3 +6,13 @@ enum Module {
   margins,
   name,
 }
+
+enum SortType {
+  author,
+  title,
+}
+
+enum Direction {
+  up,
+  down,
+}

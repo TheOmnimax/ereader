@@ -1,10 +1,11 @@
 import 'dart:convert';
+
 import 'package:ereader/screens/select_style_screen/bloc/select_style_screen_event.dart';
 import 'package:ereader/screens/select_style_screen/bloc/select_style_screen_state.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
+import 'package:ereader/shared_data/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ereader/shared_data/shared_preferences.dart';
 
 class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
   SelectStyleBloc() : super(const SelectStyleLoading()) {

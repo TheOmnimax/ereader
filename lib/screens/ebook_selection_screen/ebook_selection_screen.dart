@@ -8,8 +8,6 @@ import 'package:ereader/shared_widgets/list_builder.dart';
 import 'package:ereader/file_explorer/ebook_metadata.dart';
 import 'package:ereader/constants/constants.dart';
 
-// TODO: Integrate with bloc using BlocBuilder
-
 class EbookSelectionMain extends StatelessWidget {
   const EbookSelectionMain({Key? key}) : super(key: key);
 
@@ -120,10 +118,42 @@ class EbookListItem extends StatelessWidget {
             Text(ebookMetadata.author),
           ],
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/ereader', arguments: <String, dynamic>{
+            'path': ebookMetadata.filePath,
+          });
+        },
       ),
-      kebabFunction: (selectedItem) {},
-      itemList: const <String>[],
+      kebabFunction: (selectedItem) async {
+        switch (selectedItem) {
+          case 'Delete':
+            {
+              await showPopup(
+                context: context,
+                title: 'Delete eBook',
+                body: Text('Are you sure you would like to delete this eBook?'),
+                buttons: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Keep'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      context.read<EbookSelectionBloc>().add(DeleteEbook(
+                            deletePath: ebookMetadata.filePath,
+                          ));
+                    },
+                    child: const Text('Delete'),
+                  ),
+                ],
+              );
+            }
+        }
+      },
+      itemList: const <String>['Delete'],
     );
   }
 }

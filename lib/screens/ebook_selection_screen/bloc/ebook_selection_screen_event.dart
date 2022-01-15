@@ -27,3 +27,11 @@ class EbookSelected extends EbookSelectionEvent {
 class GetNewEbook extends EbookSelectionEvent {
   const GetNewEbook();
 }
+
+class DeleteEbook extends EbookSelectionEvent {
+  const DeleteEbook({
+    required this.deletePath,
+  });
+
+  final String deletePath;
+}

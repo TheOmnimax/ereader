@@ -59,14 +59,12 @@ class EbookRetrieval {
   // }
 
   Future<List<EbookMetadata>> getAllEbookMetadata() async {
-    // TODO: Update to a more private location
     const fileRetrieval = FileReadWrite(relativePath: 'ebooks');
     await fileRetrieval.createDir();
-    print('About to get file list');
-
-    final directory = fileRetrieval;
 
     final ebookFiles = await fileRetrieval.getFilesInFolder();
+
+    // TODO: Check each file, and make sure it is a valid epub file.
 
     print('Retrieved file list. There are ${ebookFiles.length} items');
     final ebookMetadataList = <EbookMetadata>[];

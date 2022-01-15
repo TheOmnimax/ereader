@@ -4,6 +4,7 @@ Future<void> showPopup({
   required BuildContext context,
   required String title,
   required List<Widget> buttons,
+  required Widget body,
 }) async {
   return showDialog<void>(
     context: context,
@@ -12,13 +13,7 @@ Future<void> showPopup({
       return AlertDialog(
         title: Text(title),
         content: SingleChildScrollView(
-          child: ListBody(
-            // TODO: Add parameter for custom dialogue
-            children: const <Widget>[
-              Text('This is a demo alert dialog.'),
-              Text('Would you like to approve of this message?'),
-            ],
-          ),
+          child: body,
         ),
         actions: buttons,
       );

@@ -1,19 +1,20 @@
+import 'dart:io';
+
 import 'package:ereader/file_explorer/ebook_metadata.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ereader/file_explorer/ebook_storage.dart';
+import 'package:ereader/file_explorer/file_picker.dart';
+import 'package:ereader/file_explorer/files.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'ebook_selection_screen_event.dart';
 import 'ebook_selection_screen_state.dart';
-import 'package:ereader/file_explorer/ebook_storage.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ereader/shared_widgets/list_builder.dart';
-import 'package:ereader/file_explorer/file_picker.dart';
-import 'package:ereader/file_explorer/files.dart';
 
 class EbookSelectionBloc
     extends Bloc<EbookSelectionEvent, EbookSelectionState> {
   EbookSelectionBloc() : super(const EbookSelectionLoading()) {
     on<LoadPage>(_loadPage);
     on<GetNewEbook>(_getNewEbook);
+    on<DeleteEbook>(_deleteEbook);
   }
 
   Future<List<EbookMetadata>> _getEbookMetadata() async {
@@ -24,24 +25,24 @@ class EbookSelectionBloc
     return ebookMetadataList;
   }
 
+  Future<void> _deleteEbook(
+      DeleteEbook event, Emitter<EbookSelectionState> emit) async {
+    final filePath = event.deletePath;
+    await File(filePath).delete();
+    final ebookMetadataList = await _getEbookMetadata();
+    emit(EbookSelectionMainState(
+      ebookList: ebookMetadataList,
+    ));
+  }
+
   Future<void> _loadPage(
     LoadPage event,
     Emitter<EbookSelectionState> emit,
   ) async {
     final ebookMetadataList = await _getEbookMetadata();
-    print(ebookMetadataList);
-
     emit(EbookSelectionMainState(
       ebookList: ebookMetadataList,
     ));
-
-    // final ebookWidgetList = <Widget>[];
-    //
-    // for (final ebookMetadata in ebookMetadataList) {
-    //   ebookWidgetList.add(EbookListItem(
-    //     ebookMetadata: ebookMetadata,
-    //   ));
-    // }
   }
 
   Future<void> _getNewEbook(

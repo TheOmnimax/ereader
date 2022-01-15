@@ -2,6 +2,7 @@ import 'package:ereader/screens/custom_style_screen/custom_style_screen.dart';
 import 'package:ereader/screens/select_style_screen/select_style_screen.dart';
 import 'package:ereader/screens/ebook_selection_screen/ebook_selection_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:ereader/screens/ereader_screen/ereader_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const EbookSelectionMain(),
         '/style_selection': (context) => const SelectStyleMain(),
         '/custom_style': (context) => const CustomStyleMain(),
+        '/ereader': (context) => const EreaderMain(),
       },
     );
   }

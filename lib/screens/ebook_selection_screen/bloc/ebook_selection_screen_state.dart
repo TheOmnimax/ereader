@@ -1,6 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:ereader/file_explorer/ebook_storage.dart';
-import 'package:ereader/file_explorer/ebook_storage.dart';
 import 'package:ereader/file_explorer/ebook_metadata.dart';
 
 abstract class EbookSelectionState extends Equatable {

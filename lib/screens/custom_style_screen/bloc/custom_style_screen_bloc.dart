@@ -64,7 +64,6 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
             TextButton(
               child: const Text('Yes, delete'),
               onPressed: () {
-                // TODO: Remove existing style with that name, and add this one.
                 Navigator.of(event.context).pop();
                 styleList
                   ..remove(style)
@@ -78,6 +77,8 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
               },
             ),
           ],
+          body: const Text(
+              'There is already a style with this name. Are you sure you would like to replace the old style with this new the style?'),
         );
         // Do these no matter what is selected in the popup
         await _savePreference(prefs, styleList);

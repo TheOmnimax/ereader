@@ -6,6 +6,7 @@ import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/constants/constants.dart';
+import 'package:ereader/screens/custom_style_screen/custom_style_screen.dart';
 
 class SelectStyleMain extends StatelessWidget {
   const SelectStyleMain({Key? key}) : super(key: key);
@@ -158,14 +159,22 @@ class StyleListItem extends StatelessWidget {
             {
               print('Edit');
 
-              Navigator.pushNamed(context, '/custom_style',
-                  arguments: <String, dynamic>{
-                    'style': ereaderStyle,
-                  }).then((_) {
-                context.read<SelectStyleBloc>().add(
-                      const LoadPage(),
-                    );
-              });
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                    builder: (context) => CustomStyleMain(
+                          defaultStyle: ereaderStyle,
+                        )),
+              );
+
+              // Navigator.pushNamed(context, '/custom_style',
+              //     arguments: <String, dynamic>{
+              //       'style': ereaderStyle,
+              //     }).then((_) {
+              //   context.read<SelectStyleBloc>().add(
+              //         const LoadPage(),
+              //       );
+              // });
               break;
             }
           case kDelete:

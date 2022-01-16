@@ -9,38 +9,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomStyleMain extends StatelessWidget {
-  const CustomStyleMain({Key? key}) : super(key: key);
+  const CustomStyleMain({
+    Key? key,
+    this.defaultStyle = const EreaderStyle(),
+  }) : super(key: key);
+
+  final EreaderStyle defaultStyle;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => CustomStyleBloc(),
-      child: const CustomStyleScreen(),
+      child: CustomStyleScreen(
+        defaultStyle: defaultStyle,
+      ),
     );
   }
 }
 
 class CustomStyleScreen extends StatelessWidget {
-  const CustomStyleScreen({Key? key}) : super(key: key);
+  const CustomStyleScreen({
+    Key? key,
+    this.defaultStyle = const EreaderStyle(),
+  }) : super(key: key);
+
+  final EreaderStyle defaultStyle;
 
   @override
   Widget build(BuildContext context) {
-    final modalRoute = ModalRoute.of(context);
-    final argumentsRaw = modalRoute?.settings.arguments;
-    final arguments =
-        argumentsRaw == null ? <String, dynamic>{} : argumentsRaw as Map;
-
-    if (arguments.containsKey('style')) {
-      final givenStyle = arguments['style'] as EreaderStyle;
-      context.read<CustomStyleBloc>().add(UpdateStyle(
-            backgroundColor: givenStyle.backgroundColor,
-            fontColor: givenStyle.fontColor,
-            fontSize: givenStyle.fontSize,
-            fontFamily: givenStyle.fontFamily,
-            margins: givenStyle.margins,
-            name: givenStyle.name,
-          ));
-    }
+    context.read<CustomStyleBloc>().add(UpdateStyle(
+          backgroundColor: defaultStyle.backgroundColor,
+          fontColor: defaultStyle.fontColor,
+          fontSize: defaultStyle.fontSize,
+          fontFamily: defaultStyle.fontFamily,
+          margins: defaultStyle.margins,
+          name: defaultStyle.name,
+        ));
 
     return Scaffold(
       appBar: AppBar(

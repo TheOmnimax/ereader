@@ -1,7 +1,7 @@
 import 'package:ereader/constants/constants.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/shared_widgets/custom_style/color_slider.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ereader/shared_widgets/custom_style/number_entry.dart';
 import 'package:flutter/material.dart';
 
 class StyleModules extends StatelessWidget {
@@ -44,7 +44,11 @@ class StyleModules extends StatelessWidget {
         }
       case Module.fontSize:
         {
-          return Container();
+          return SingleNumberEntry(
+            onChanged: onFontSizeChange,
+            value: ereaderStyle.fontSize,
+            unit: 'dp',
+          );
         }
       case Module.fontFamily:
         {
@@ -59,9 +63,8 @@ class StyleModules extends StatelessWidget {
           return Container(
             child: TextField(
               onChanged: onNameChange,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Enter a search term',
               ),
             ),
           );

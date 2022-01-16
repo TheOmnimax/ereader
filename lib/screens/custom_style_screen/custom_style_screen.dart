@@ -26,9 +26,9 @@ class CustomStyleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final modalRoute = ModalRoute.of(context);
-    final arguments = modalRoute == null
-        ? <String, dynamic>{}
-        : modalRoute.settings.arguments as Map;
+    final argumentsRaw = modalRoute?.settings.arguments;
+    final arguments =
+        argumentsRaw == null ? <String, dynamic>{} : argumentsRaw as Map;
 
     if (arguments.containsKey('style')) {
       final givenStyle = arguments['style'] as EreaderStyle;
@@ -49,8 +49,8 @@ class CustomStyleScreen extends StatelessWidget {
       body: BlocBuilder<CustomStyleBloc, CustomStyleState>(
           builder: (context, state) {
         final ereaderStyle = state.ereaderStyle;
+        print('Current size: ${ereaderStyle.fontSize}');
         final selectedModule = state.selectedModule;
-        // TODO Add var to get currently selected module from bloc
 
         void updateBackgroundColor(Color color) {
           context.read<CustomStyleBloc>().add(UpdateStyle(
@@ -65,6 +65,7 @@ class CustomStyleScreen extends StatelessWidget {
         }
 
         void updateFontSize(int size) {
+          print('New font size: $size');
           context.read<CustomStyleBloc>().add(UpdateStyle(
                 fontSize: size,
               ));

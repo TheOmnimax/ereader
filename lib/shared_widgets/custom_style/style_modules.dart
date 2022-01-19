@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class StyleModules extends StatelessWidget {
   const StyleModules({
+    Key? key,
     required this.ereaderStyle,
     required this.visibleModule,
     required this.onFontColorChange,
@@ -14,7 +15,7 @@ class StyleModules extends StatelessWidget {
     required this.onFontFamilyChange,
     required this.onMarginsChange,
     required this.onNameChange,
-  });
+  }) : super(key: key);
 
   final EreaderStyle ereaderStyle;
   final Module visibleModule;
@@ -56,6 +57,81 @@ class StyleModules extends StatelessWidget {
         }
       case Module.margins:
         {
+          print('Margins: ${ereaderStyle.margins}');
+          void onTopChange(int value) {
+            onMarginsChange(
+              value,
+              ereaderStyle.margins[1],
+              ereaderStyle.margins[2],
+              ereaderStyle.margins[3],
+            );
+          }
+
+          void onRightChange(int value) {
+            onMarginsChange(
+              ereaderStyle.margins[0],
+              value,
+              ereaderStyle.margins[2],
+              ereaderStyle.margins[3],
+            );
+          }
+
+          void onBottomChange(int value) {
+            onMarginsChange(
+              ereaderStyle.margins[0],
+              ereaderStyle.margins[1],
+              value,
+              ereaderStyle.margins[3],
+            );
+          }
+
+          void onLeftChange(int value) {
+            onMarginsChange(
+              ereaderStyle.margins[0],
+              ereaderStyle.margins[1],
+              ereaderStyle.margins[2],
+              value,
+            );
+          }
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  SingleNumberEntry(
+                    value: ereaderStyle.margins[3],
+                    unit: 'dp',
+                    onChanged: onLeftChange,
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  SingleNumberEntry(
+                    value: ereaderStyle.margins[0],
+                    unit: 'dp',
+                    onChanged: onTopChange,
+                  ),
+                  SingleNumberEntry(
+                    value: ereaderStyle.margins[2],
+                    unit: 'dp',
+                    onChanged: onBottomChange,
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  SingleNumberEntry(
+                    value: ereaderStyle.margins[1],
+                    unit: 'dp',
+                    onChanged: onRightChange,
+                  ),
+                ],
+              ),
+            ],
+          );
+
           return Container();
         }
       case Module.name:

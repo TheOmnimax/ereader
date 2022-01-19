@@ -11,15 +11,24 @@ class StylePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 140,
-      color: ereaderStyle.backgroundColor,
-      child: SingleChildScrollView(
-        child: Text(
-          kSampleText,
-          style: TextStyle(
-            color: ereaderStyle.fontColor,
-            fontSize: ereaderStyle.fontSize.toDouble(),
+    return Expanded(
+      child: Container(
+        color: ereaderStyle.backgroundColor,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              ereaderStyle.margins[3].toDouble(),
+              ereaderStyle.margins[0].toDouble(),
+              ereaderStyle.margins[1].toDouble(),
+              ereaderStyle.margins[2].toDouble(),
+            ),
+            child: Text(
+              kSampleText,
+              style: TextStyle(
+                color: ereaderStyle.fontColor,
+                fontSize: ereaderStyle.fontSize.toDouble(),
+              ),
+            ),
           ),
         ),
       ),

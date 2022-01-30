@@ -2,6 +2,8 @@ import 'package:ereader/constants/constants.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/shared_widgets/custom_style/color_slider.dart';
 import 'package:ereader/shared_widgets/custom_style/number_entry.dart';
+
+import 'package:ereader/shared_widgets/buttons.dart';
 import 'package:flutter/material.dart';
 
 class StyleModules extends StatelessWidget {
@@ -59,6 +61,7 @@ class StyleModules extends StatelessWidget {
         {
           print('Margins: ${ereaderStyle.margins}');
           void onTopChange(int value) {
+            print('Top change');
             onMarginsChange(
               value,
               ereaderStyle.margins[1],
@@ -94,45 +97,15 @@ class StyleModules extends StatelessWidget {
             );
           }
 
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  SingleNumberEntry(
-                    value: ereaderStyle.margins[3],
-                    unit: 'dp',
-                    onChanged: onLeftChange,
-                  ),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  SingleNumberEntry(
-                    value: ereaderStyle.margins[0],
-                    unit: 'dp',
-                    onChanged: onTopChange,
-                  ),
-                  SingleNumberEntry(
-                    value: ereaderStyle.margins[2],
-                    unit: 'dp',
-                    onChanged: onBottomChange,
-                  ),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  SingleNumberEntry(
-                    value: ereaderStyle.margins[1],
-                    unit: 'dp',
-                    onChanged: onRightChange,
-                  ),
-                ],
-              ),
+          return MarginEntry(
+            onChangedFunctions: [
+              onTopChange,
+              onRightChange,
+              onBottomChange,
+              onLeftChange,
             ],
+            margins: ereaderStyle.margins,
           );
-
-          return Container();
         }
       case Module.name:
         {
@@ -150,5 +123,129 @@ class StyleModules extends StatelessWidget {
           return Container();
         }
     }
+  }
+}
+
+class MarginEntry extends StatefulWidget {
+  const MarginEntry({
+    required this.margins,
+    required this.onChangedFunctions,
+    Key? key,
+  }) : super(key: key);
+
+  final List<int> margins;
+  final List<Function(int)> onChangedFunctions;
+
+  @override
+  _MarginEntryState createState() => _MarginEntryState();
+}
+
+class _MarginEntryState extends State<MarginEntry> {
+  Position position = Position.top;
+  @override
+  Widget build(BuildContext context) {
+    var selectedMarginValue = widget.margins[0];
+    var onChanged = widget.onChangedFunctions[0];
+
+    void updateSelectedPos(Position newPos) {
+      setState(() {
+        position = newPos;
+        print('Selected: $position');
+        switch (position) {
+          case Position.top:
+            {
+              // position = widget.margins as Position;
+              selectedMarginValue = widget.margins[0];
+              onChanged = widget.onChangedFunctions[0];
+            }
+            break;
+          case Position.right:
+            {
+              selectedMarginValue = widget.margins[1];
+              onChanged = widget.onChangedFunctions[1];
+              break;
+            }
+          case Position.bottom:
+            {
+              selectedMarginValue = widget.margins[2];
+              onChanged = widget.onChangedFunctions[2];
+              break;
+            }
+          case Position.left:
+            {
+              selectedMarginValue = widget.margins[3];
+              onChanged = widget.onChangedFunctions[3];
+              break;
+            }
+          default:
+            {
+              selectedMarginValue = 0;
+            }
+        }
+      });
+    }
+
+    updateSelectedPos(position);
+
+    print('New position: $position');
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Row(
+          children: [
+            Row(
+              children: [
+                Column(
+                  children: <Widget>[
+                    CircleButton(
+                      icon: Icons.arrow_back,
+                      onChanged: () {
+                        updateSelectedPos(Position.left);
+                      },
+                      selected: position == Position.left,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    CircleButton(
+                      icon: Icons.arrow_upward,
+                      onChanged: () {
+                        updateSelectedPos(Position.top);
+                      },
+                      selected: position == Position.top,
+                    ),
+                    CircleButton(
+                      icon: Icons.arrow_downward,
+                      onChanged: () {
+                        updateSelectedPos(Position.bottom);
+                      },
+                      selected: position == Position.bottom,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    CircleButton(
+                      icon: Icons.arrow_forward,
+                      onChanged: () {
+                        updateSelectedPos(Position.right);
+                      },
+                      selected: position == Position.right,
+                    ),
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
+        SingleNumberEntry(
+          value: selectedMarginValue,
+          unit: 'dp',
+          onChanged: onChanged,
+        ),
+      ],
+    );
   }
 }

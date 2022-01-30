@@ -16,3 +16,10 @@ enum Direction {
   up,
   down,
 }
+
+enum Position {
+  top,
+  right,
+  bottom,
+  left,
+}

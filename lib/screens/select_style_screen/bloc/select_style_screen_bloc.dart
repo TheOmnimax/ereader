@@ -64,23 +64,19 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
     print('Preferences:');
     print(allStyles);
 
-    try {
-      final firstEreaderStyle = allStyles[0];
-      print('About to emit state...');
-      emit(
-        SelectStyleMainState(
-          allStyles: allStyles,
-          selectedEreaderStyle: firstEreaderStyle,
-        ),
-      );
-    } catch (e) {
-      const ereaderSettings = EreaderStyle();
-      print('About to emit state...');
-      emit(SelectStyleMainState(
+    // var selectedStyle =
+
+    // Get currently selected style
+    final selectedStyleMap =
+        await SharedPreferenceTool.getMapPreferences('selectedStyle')
+            as Map<String, dynamic>;
+
+    emit(
+      SelectStyleMainState(
         allStyles: allStyles,
-        selectedEreaderStyle: ereaderSettings,
-      ));
-    }
+        selectedEreaderStyle: EreaderStyle.fromJson(selectedStyleMap),
+      ),
+    );
   }
 
   Future<void> _styleMove(

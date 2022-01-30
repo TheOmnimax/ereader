@@ -53,6 +53,7 @@ class SelectStyleMainState extends SelectStyleScreenState {
   @override
   List<Object?> get props => [selectedEreaderStyle];
 
+  @override
   SelectStyleMainState copyWith({
     List<EreaderStyle>? allStyles,
     EreaderStyle? ereaderStyle,

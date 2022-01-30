@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/screens/ereader_screen/bloc/bloc.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
+import 'package:ereader/screens/ereader_screen/ereader_widgets/ebook_viewer.dart';
+import 'package:ereader/screens/ereader_screen/ereader_widgets/page_turner.dart';
+
 class EreaderMain extends StatelessWidget {
   const EreaderMain({Key? key}) : super(key: key);
 
@@ -29,19 +32,40 @@ class EreaderPage extends StatelessWidget {
     return BlocBuilder<EreaderBloc, EreaderState>(
       builder: (context, state) {
         if (state is EbookLoading) {
+          print('Loading page...');
           return Scaffold(
             appBar: AppBar(
-              title: Text('Loading...'),
+              title: const Text('Loading...'),
               actions: [],
               backgroundColor: Colors.black,
             ),
-            body: SafeArea(
+            body: const SafeArea(
               child: Text('Loading...'),
             ),
           );
         } else if (state is EbookDisplay) {
+          print('State is display');
+          void onLeft() {
+            context.read<EreaderBloc>().add(
+                  TurnPage(
+                    toPage: state.position - 1,
+                  ),
+                );
+          }
+
+          void onRight() {
+            context.read<EreaderBloc>().add(
+                  TurnPage(
+                    toPage: state.position + 1,
+                  ),
+                );
+          }
+
           final ereaderStyle = state.ereaderStyle;
 
+          final ebookProcessed = state.ebookProcessed;
+
+          print('On page ${state.position}');
           return Scaffold(
             appBar: AppBar(
               title: Text(
@@ -51,29 +75,17 @@ class EreaderPage extends StatelessWidget {
               actions: [],
               backgroundColor: ereaderStyle.backgroundColor,
               iconTheme: IconThemeData(
-                color: ereaderStyle.fontColor, //change your color here
+                color: ereaderStyle.fontColor,
               ),
             ),
             body: SafeArea(
               // child: Text('Text'),
-              child: Container(
-                color: ereaderStyle.backgroundColor,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    ereaderStyle.margins[3].toDouble(),
-                    ereaderStyle.margins[0].toDouble(),
-                    ereaderStyle.margins[1].toDouble(),
-                    ereaderStyle.margins[2].toDouble(),
-                  ),
-                  child: SingleChildScrollView(
-                    child: HtmlWidget(
-                      state.content,
-                      textStyle: TextStyle(
-                        color: ereaderStyle.fontColor,
-                        fontSize: ereaderStyle.fontSize.toDouble(),
-                      ),
-                    ),
-                  ),
+              child: PageTurner(
+                onLeft: onLeft,
+                onRight: onRight,
+                child: EbookViewer(
+                  htmlContent: ebookProcessed.parts[state.position],
+                  ereaderStyle: ereaderStyle,
                 ),
               ),
             ),

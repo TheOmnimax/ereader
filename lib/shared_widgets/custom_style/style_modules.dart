@@ -110,11 +110,12 @@ class StyleModules extends StatelessWidget {
       case Module.name:
         {
           return Container(
-            child: TextField(
+            child: TextFormField(
               onChanged: onNameChange,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
+              initialValue: ereaderStyle.name,
             ),
           );
         }

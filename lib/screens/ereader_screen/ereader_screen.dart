@@ -40,27 +40,38 @@ class EreaderPage extends StatelessWidget {
             ),
           );
         } else if (state is EbookDisplay) {
+          final ereaderStyle = state.ereaderStyle;
+
           return Scaffold(
             appBar: AppBar(
               title: Text(
                 state.title,
-                style: TextStyle(color: state.ereaderStyle.fontColor),
+                style: TextStyle(color: ereaderStyle.fontColor),
               ),
               actions: [],
-              backgroundColor: state.ereaderStyle.backgroundColor,
+              backgroundColor: ereaderStyle.backgroundColor,
               iconTheme: IconThemeData(
-                color: state.ereaderStyle.fontColor, //change your color here
+                color: ereaderStyle.fontColor, //change your color here
               ),
             ),
             body: SafeArea(
               // child: Text('Text'),
               child: Container(
-                color: state.ereaderStyle.backgroundColor,
-                child: SingleChildScrollView(
-                  child: HtmlWidget(
-                    state.content,
-                    textStyle: TextStyle(
-                      color: state.ereaderStyle.fontColor,
+                color: ereaderStyle.backgroundColor,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    ereaderStyle.margins[3].toDouble(),
+                    ereaderStyle.margins[0].toDouble(),
+                    ereaderStyle.margins[1].toDouble(),
+                    ereaderStyle.margins[2].toDouble(),
+                  ),
+                  child: SingleChildScrollView(
+                    child: HtmlWidget(
+                      state.content,
+                      textStyle: TextStyle(
+                        color: ereaderStyle.fontColor,
+                        fontSize: ereaderStyle.fontSize.toDouble(),
+                      ),
                     ),
                   ),
                 ),

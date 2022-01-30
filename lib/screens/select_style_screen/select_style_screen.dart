@@ -162,19 +162,15 @@ class StyleListItem extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(
-                    builder: (context) => CustomStyleMain(
-                          defaultStyle: ereaderStyle,
-                        )),
+                  builder: (context) => CustomStyleMain(
+                    defaultStyle: ereaderStyle,
+                  ),
+                ),
+              ).then(
+                (_) => context.read<SelectStyleBloc>().add(
+                      const LoadPage(),
+                    ),
               );
-
-              // Navigator.pushNamed(context, '/custom_style',
-              //     arguments: <String, dynamic>{
-              //       'style': ereaderStyle,
-              //     }).then((_) {
-              //   context.read<SelectStyleBloc>().add(
-              //         const LoadPage(),
-              //       );
-              // });
               break;
             }
           case kDelete:

@@ -76,26 +76,29 @@ class SelectStyleScreen extends StatelessWidget {
       ),
       body: BlocBuilder<SelectStyleBloc, SelectStyleScreenState>(
         builder: (context, state) {
-          final ereaderStyle = state.selectedEreaderStyle;
-          final allStyles = state.allStyles;
-          print('All styles in bloc builder:');
-          print(allStyles);
+          final currentState = state;
 
           if (state is SelectStyleLoading) {
             return Text('Loading...');
+          } else if (state is SelectStyleMainState) {
+            final ereaderStyle = state.selectedEreaderStyle;
+            final allStyles = state.allStyles;
+
+            return SafeArea(
+              child: Column(
+                children: <Widget>[
+                  StylePreview(ereaderStyle: ereaderStyle),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child:
+                        ListBuilder(widgets: styleListBuilder(state.allStyles)),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Text('Error');
           }
-          return SafeArea(
-            child: Column(
-              children: <Widget>[
-                StylePreview(ereaderStyle: ereaderStyle),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child:
-                      ListBuilder(widgets: styleListBuilder(state.allStyles)),
-                ),
-              ],
-            ),
-          );
         },
       ),
     );

@@ -29,12 +29,10 @@ class EbookSelectionLoading extends EbookSelectionState {
 
 class EbookSelectionMainState extends EbookSelectionState {
   const EbookSelectionMainState({
-    this.ebookList = const <EbookMetadata>[],
-  });
+    List<EbookMetadata> ebookList = const <EbookMetadata>[],
+  }) : super(ebookList: ebookList);
 
   // TODO: It is both asking me to override and not to override. Why?
-  final List<EbookMetadata> ebookList;
-
   @override
   List<Object?> get props => [ebookList];
 

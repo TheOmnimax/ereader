@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/screens/ereader_screen/bloc/bloc.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-
 import 'package:ereader/screens/ereader_screen/ereader_widgets/ebook_viewer.dart';
 import 'package:ereader/screens/ereader_screen/ereader_widgets/page_turner.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EreaderMain extends StatelessWidget {
   const EreaderMain({Key? key}) : super(key: key);

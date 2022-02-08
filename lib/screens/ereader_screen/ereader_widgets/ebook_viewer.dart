@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class EbookViewer extends StatelessWidget {

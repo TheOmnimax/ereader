@@ -111,7 +111,6 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
         return;
       }
     }
-    emit(state.copyWith());
   }
 
   Future<void> _styleDelete(
@@ -137,20 +136,14 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
         final updatedStyles = await _getStyles();
         print('New length: ${updatedStyles.length}');
 
-        print(updatedStyles);
-        emit(SelectStyleMainState(
-          allStyles: updatedStyles,
-          selectedEreaderStyle: event.ereaderStyle,
-        ));
+        final currentState = state;
 
-        // TODO: Find why copyWith is not working
+        if (currentState is SelectStyleMainState) {
+          emit(currentState.copyWith(allStyles: updatedStyles));
+        } else {}
 
-        // print('Emitting...');
-        // emit(state.copyWith(allStyles: updatedStyles));
-        // print('Emitted.');
         return;
       }
     }
-    emit(state.copyWith());
   }
 }

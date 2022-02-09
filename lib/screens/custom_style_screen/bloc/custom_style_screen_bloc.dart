@@ -3,7 +3,6 @@ import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_eve
 import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_state.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/shared_widgets/show_popup.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';

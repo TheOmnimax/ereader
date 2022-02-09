@@ -64,33 +64,49 @@ class SelectionPage extends StatelessWidget {
       return ebookWidgetList;
     }
 
-    return MainScaffold(
-      popupMenuButton: PopupMenuButton<String>(
-        onSelected: kebabFunction,
-        itemBuilder: (BuildContext context) {
-          return {'eReader style', 'Add eBook'}.map((String choice) {
-            return PopupMenuItem<String>(
-              value: choice,
-              child: Text(choice),
-            );
-          }).toList();
-        },
+    return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+              title: Text('Log in'),
+              onTap: () {
+                Navigator.pushNamed(context, '/login');
+              },
+            )
+          ],
+        ),
       ),
-      // child: Image(
-      //   image: AssetImage('assets/media/default_cover.png'),
-      // ),
-      child: BlocBuilder<EbookSelectionBloc, EbookSelectionState>(
-        builder: (context, state) {
-          if (state is EbookSelectionLoading) {
-            return Text('Loading...');
-          }
+      appBar: AppBar(
+        title: const Text('eReader'),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: kebabFunction,
+            itemBuilder: (BuildContext context) {
+              return {'eReader style', 'Add eBook'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: BlocBuilder<EbookSelectionBloc, EbookSelectionState>(
+          builder: (context, state) {
+            if (state is EbookSelectionLoading) {
+              return Text('Loading...');
+            }
 
-          return ListBuilder(
-            widgets: createEbookWidgetList(
-              state.ebookList,
-            ),
-          );
-        },
+            return ListBuilder(
+              widgets: createEbookWidgetList(
+                state.ebookList,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

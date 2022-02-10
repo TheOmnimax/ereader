@@ -15,6 +15,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
   Future _register(Register event, Emitter<RegistrationState> emit) async {
     final _auth = FirebaseAuth.instance;
+
     try {
       final userCredential = await _auth.createUserWithEmailAndPassword(
           email: event.username, password: event.password);

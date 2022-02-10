@@ -1,12 +1,9 @@
-import 'package:ereader/file_explorer/ebook_storage.dart';
+import 'package:ereader/constants/constants.dart';
+import 'package:ereader/file_explorer/ebook_metadata.dart';
 import 'package:ereader/screens/ebook_selection_screen/bloc/bloc.dart';
-import 'package:ereader/shared_widgets/main_scaffold.dart';
 import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ereader/shared_widgets/list_builder.dart';
-import 'package:ereader/file_explorer/ebook_metadata.dart';
-import 'package:ereader/constants/constants.dart';
 
 class EbookSelectionMain extends StatelessWidget {
   const EbookSelectionMain({Key? key}) : super(key: key);
@@ -64,51 +61,95 @@ class SelectionPage extends StatelessWidget {
       return ebookWidgetList;
     }
 
-    return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-              title: Text('Log in'),
-              onTap: () {
-                Navigator.pushNamed(context, '/login');
+    return BlocBuilder<EbookSelectionBloc, EbookSelectionState>(
+        builder: (context, state) {
+      // TODO: Can I do this, or should it be a class?
+      ListTile getLoginTile() {
+        if ((state is EbookSelectionMainState) && (state.username != '')) {
+          return ListTile(
+            title: Text(state.username),
+            trailing: TextButton(
+              child: Text('Log out'),
+              onPressed: () async {
+                await showPopup(
+                  context: context,
+                  title: 'Log out',
+                  buttons: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Stay'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        // TODO: Is there a shorthand for this? I do it a lot.
+                        context.read<EbookSelectionBloc>().add(const LogOut());
+                      },
+                      child: const Text('Log out'),
+                    ),
+                  ],
+                  body: Text(
+                    'Are you sure you would like to log out?',
+                  ),
+                );
               },
-            )
+            ),
+          );
+        }
+
+        return ListTile(
+          title: Text('Log in'),
+          onTap: () {
+            Navigator.pushNamed(context, '/login').then((value) {
+              context.read<EbookSelectionBloc>().add(const LoadPage());
+            });
+          },
+        );
+      }
+
+      Widget getSafeArea() {
+        if (state is EbookSelectionLoading) {
+          return Text('Loading');
+        } else {
+          return ListBuilder(
+            widgets: createEbookWidgetList(
+              state.ebookList,
+            ),
+          );
+        }
+      }
+
+      return Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              getLoginTile(),
+            ],
+          ),
+        ),
+        appBar: AppBar(
+          title: const Text('eReader'),
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: kebabFunction,
+              itemBuilder: (BuildContext context) {
+                return {'eReader style', 'Add eBook'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            ),
           ],
         ),
-      ),
-      appBar: AppBar(
-        title: const Text('eReader'),
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: kebabFunction,
-            itemBuilder: (BuildContext context) {
-              return {'eReader style', 'Add eBook'}.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: BlocBuilder<EbookSelectionBloc, EbookSelectionState>(
-          builder: (context, state) {
-            if (state is EbookSelectionLoading) {
-              return Text('Loading...');
-            }
-
-            return ListBuilder(
-              widgets: createEbookWidgetList(
-                state.ebookList,
-              ),
-            );
-          },
+        body: SafeArea(
+          child: getSafeArea(),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

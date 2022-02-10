@@ -19,6 +19,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(state.copyWith(newResult: LoginResult.unknownError));
       } else {
         emit(state.copyWith(newResult: LoginResult.success));
+        Navigator.pop(event.context);
       }
       // Navigator.pop(context);
     } catch (e) {

@@ -22,12 +22,22 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var state = context.read<LoginBloc>().state;
+
+    // Is this the best way to pop in a bloc refresh?
+    if (state.loginResult == LoginResult.success) {
+      Navigator.pop(context);
+    }
+
     var username = '';
     var password = '';
     // TODO: Are these in the right place?
 
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
+        // if (state.loginResult == LoginResult.success) {
+        //   Navigator.pop(context);
+        // }
         Text getLoginStatus() {
           switch (state.loginResult) {
             case LoginResult.success:
@@ -100,6 +110,7 @@ class LoginScreen extends StatelessWidget {
                                     Login(
                                       username: username,
                                       password: password,
+                                      context: context,
                                     ),
                                   );
                             },

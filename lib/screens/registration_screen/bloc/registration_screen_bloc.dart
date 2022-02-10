@@ -10,7 +10,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   RegistrationBloc() : super(const RegistrationState()) {
     on<Register>(_register);
     on<RegisterError>(_registrationError);
-    on<UpdateDetails>(_updateDetails);
   }
 
   Future _register(Register event, Emitter<RegistrationState> emit) async {
@@ -100,14 +99,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     emit(state.copyWith(
       registrationResult: event.registrationResult,
       registrationDetails: '',
-    ));
-  }
-
-  void _updateDetails(UpdateDetails event, Emitter<RegistrationState> emit) {
-    emit(state.copyWith(
-      username: event.username,
-      password1: event.password1,
-      password2: event.password2,
     ));
   }
 }

@@ -31,15 +31,3 @@ class RegisterError extends RegistrationEvent {
   @override
   List<Object> get props => [registrationResult];
 }
-
-class UpdateDetails extends RegistrationEvent {
-  const UpdateDetails({
-    this.username,
-    this.password1,
-    this.password2,
-  });
-
-  final String? username;
-  final String? password1;
-  final String? password2;
-}

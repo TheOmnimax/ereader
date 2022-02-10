@@ -26,7 +26,7 @@ class RegisterError extends RegistrationEvent {
     required this.registrationResult,
   });
 
-  final RegistrationResult registrationResult;
+  final LoginResult registrationResult;
 
   @override
   List<Object> get props => [registrationResult];

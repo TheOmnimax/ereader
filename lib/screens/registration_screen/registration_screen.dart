@@ -1,9 +1,10 @@
 import 'package:ereader/constants/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/screens/registration_screen/bloc/bloc.dart';
 import 'package:ereader/shared_widgets/data_entry.dart';
+import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:ereader/shared_widgets/show_popup.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationMain extends StatelessWidget {
   const RegistrationMain({Key? key}) : super(key: key);
@@ -24,59 +25,13 @@ class RegistrationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationBloc, RegistrationState>(
         builder: (context, state) {
-      if (state.registrationResult == RegistrationResult.success) {
-        if (state.registrationResult == RegistrationResult.success) {}
+      if (state.registrationResult == LoginResult.success) {
+        if (state.registrationResult == LoginResult.success) {}
       }
 
       var username = state.username;
       var password1 = state.password1;
       var password2 = state.password2;
-
-      Text getRegStatus() {
-        switch (state.registrationResult) {
-          case RegistrationResult.success:
-            {
-              return Text('Success!');
-            }
-          case RegistrationResult.missingUsername:
-            {
-              return Text('Please enter an email address!');
-            }
-          case RegistrationResult.invalidEmail:
-            {
-              return Text('Please enter a valid email address');
-            }
-          case RegistrationResult.usedUsername:
-            {
-              return Text(
-                  'Username is already registered. Please either use a different email address, or reset your password.');
-            }
-          case RegistrationResult.missingPassword:
-            {
-              return Text('Please enter a password');
-            }
-          case RegistrationResult.missingReenter:
-            {
-              return Text('Please re-enter your password');
-            }
-          case RegistrationResult.invalidPassword:
-            {
-              return Text('Invalid password');
-            }
-          case RegistrationResult.passwordMismatch:
-            {
-              return Text('Passwords do not match. Please retype them.');
-            }
-          case RegistrationResult.unknownError:
-            {
-              return Text('Unknown error');
-            }
-          default:
-            {
-              return Text('');
-            }
-        }
-      }
 
       return Scaffold(
         appBar: AppBar(
@@ -146,37 +101,32 @@ class RegistrationScreen extends StatelessWidget {
                     if (username == '') {
                       context.read<RegistrationBloc>().add(
                             const RegisterError(
-                              registrationResult:
-                                  RegistrationResult.missingUsername,
+                              registrationResult: LoginResult.missingEmail,
                             ),
                           );
                     } else if (!RegExp(kEmailRegex).hasMatch(username)) {
                       print('Invalid email address');
                       context.read<RegistrationBloc>().add(
                             const RegisterError(
-                              registrationResult:
-                                  RegistrationResult.invalidEmail,
+                              registrationResult: LoginResult.invalidEmail,
                             ),
                           );
                     } else if (password1 == '') {
                       context.read<RegistrationBloc>().add(
                             const RegisterError(
-                              registrationResult:
-                                  RegistrationResult.missingPassword,
+                              registrationResult: LoginResult.missingPassword,
                             ),
                           );
                     } else if (password2 == '') {
                       context.read<RegistrationBloc>().add(
                             const RegisterError(
-                              registrationResult:
-                                  RegistrationResult.missingReenter,
+                              registrationResult: LoginResult.missingReenter,
                             ),
                           );
                     } else if (password1 != password2) {
                       context.read<RegistrationBloc>().add(
                             const RegisterError(
-                              registrationResult:
-                                  RegistrationResult.passwordMismatch,
+                              registrationResult: LoginResult.passwordMismatch,
                             ),
                           );
                     } else {
@@ -192,7 +142,9 @@ class RegistrationScreen extends StatelessWidget {
                   },
                   child: Text('Register'),
                 ),
-                getRegStatus(),
+                LoginStatusWidget(
+                  loginResult: state.registrationResult,
+                ),
                 Text(state.registrationDetails),
               ],
             ),

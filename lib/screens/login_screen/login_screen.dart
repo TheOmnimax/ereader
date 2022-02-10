@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/constants/constants.dart';
 import 'package:ereader/screens/login_screen/bloc/bloc.dart';
 import 'package:ereader/shared_widgets/data_entry.dart';
+import 'package:ereader/shared_widgets/shared_widgets.dart';
 
 class LoginMain extends StatelessWidget {
   const LoginMain({Key? key}) : super(key: key);
@@ -38,7 +39,9 @@ class LoginScreen extends StatelessWidget {
         // if (state.loginResult == LoginResult.success) {
         //   Navigator.pop(context);
         // }
+        print('Refreshing');
         Text getLoginStatus() {
+          print('Getting login status');
           switch (state.loginResult) {
             case LoginResult.success:
               {
@@ -106,17 +109,42 @@ class LoginScreen extends StatelessWidget {
                           ),
                           TextButton(
                             onPressed: () {
-                              context.read<LoginBloc>().add(
-                                    Login(
-                                      username: username,
-                                      password: password,
-                                      context: context,
-                                    ),
-                                  );
+                              if (username == '') {
+                                context.read<LoginBloc>().add(
+                                      const LoginError(
+                                        loginResult: LoginResult.missingEmail,
+                                      ),
+                                    );
+                              } else if (!RegExp(kEmailRegex)
+                                  .hasMatch(username)) {
+                                context.read<LoginBloc>().add(
+                                      const LoginError(
+                                        loginResult: LoginResult.invalidEmail,
+                                      ),
+                                    );
+                              } else if (password == '') {
+                                context.read<LoginBloc>().add(
+                                      const LoginError(
+                                        loginResult:
+                                            LoginResult.missingPassword,
+                                      ),
+                                    );
+                              } else {
+                                context.read<LoginBloc>().add(
+                                      Login(
+                                        username: username,
+                                        password: password,
+                                        context: context,
+                                      ),
+                                    );
+                              }
                             },
                             child: Text('Log in'),
                           ),
-                          getLoginStatus(),
+                          LoginStatusWidget(
+                            loginResult: state.loginResult,
+                          ),
+                          Text(state.loginDetails),
                         ],
                       ),
                     ),

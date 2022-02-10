@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:ereader/constants/constants.dart';
 
 abstract class LoginEvent extends Equatable {
   const LoginEvent();
@@ -18,4 +19,18 @@ class Login extends LoginEvent {
   final String username;
   final String password;
   final BuildContext context;
+
+  @override
+  List<Object> get props => [username, password, context];
+}
+
+class LoginError extends LoginEvent {
+  const LoginError({
+    required this.loginResult,
+  });
+
+  final LoginResult loginResult;
+
+  @override
+  List<Object> get props => [loginResult];
 }

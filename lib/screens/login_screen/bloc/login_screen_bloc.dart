@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(const LoginState()) {
     on<Login>(_login);
+    on<LoginError>(_loginError);
   }
 
   Future _login(Login event, Emitter<LoginState> emit) async {
@@ -16,15 +17,50 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final userCredential = await _auth.signInWithEmailAndPassword(
           email: event.username, password: event.password);
       if (userCredential == null) {
-        emit(state.copyWith(newResult: LoginResult.unknownError));
+        emit(state.copyWith(loginResult: LoginResult.unknownError));
       } else {
-        emit(state.copyWith(newResult: LoginResult.success));
+        emit(state.copyWith(loginResult: LoginResult.success));
         Navigator.pop(event.context);
       }
-      // Navigator.pop(context);
-    } catch (e) {
-      print('Error:');
-      print(e);
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'invalid-email':
+          {
+            emit(state.copyWith(loginResult: LoginResult.invalidEmail));
+            break;
+          }
+        case 'user-disabled':
+          {
+            emit(state.copyWith(loginResult: LoginResult.disabled));
+            break;
+          }
+        case 'user-not-found':
+          {
+            emit(state.copyWith(loginResult: LoginResult.notFound));
+            break;
+          }
+        case 'wrong-password':
+          {
+            emit(state.copyWith(loginResult: LoginResult.invalidPassword));
+            break;
+          }
+        default:
+          {
+            print(e.code);
+            emit(state.copyWith(
+              loginResult: LoginResult.unknownError,
+              loginDetails: e.message,
+            ));
+          }
+      }
     }
+  }
+
+  void _loginError(LoginError event, Emitter<LoginState> emit) {
+    print('Log in error');
+    print(event.loginResult);
+    emit(state.copyWith(
+      loginResult: event.loginResult,
+    ));
   }
 }

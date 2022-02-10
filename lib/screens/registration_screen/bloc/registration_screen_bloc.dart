@@ -20,8 +20,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       final userCredential = await _auth.createUserWithEmailAndPassword(
           email: event.username, password: event.password);
       if (userCredential == null) {
-        emit(state.copyWith(
-            registrationResult: RegistrationResult.unknownError));
+        emit(state.copyWith(registrationResult: LoginResult.unknownError));
       } else {
         await showPopup(
           context: event.context,
@@ -38,7 +37,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
           body: Text('Registration successful!'),
         );
         emit(state.copyWith(
-          registrationResult: RegistrationResult.success,
+          registrationResult: LoginResult.success,
           registrationDetails: '',
         ));
       }
@@ -50,7 +49,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         case 'invalid-email':
           {
             emit(state.copyWith(
-              registrationResult: RegistrationResult.invalidEmail,
+              registrationResult: LoginResult.invalidEmail,
               registrationDetails: e.message,
             ));
             break;
@@ -60,7 +59,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         case 'email-already-in-use':
           {
             emit(state.copyWith(
-              registrationResult: RegistrationResult.usedUsername,
+              registrationResult: LoginResult.usedUsername,
               registrationDetails: '',
             ));
             break;
@@ -68,7 +67,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         case 'weak-password':
           {
             emit(state.copyWith(
-              registrationResult: RegistrationResult.invalidPassword,
+              registrationResult: LoginResult.invalidPassword,
               registrationDetails: e.message,
             ));
             break;
@@ -76,7 +75,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         case 'account-exists-with-different-credential':
           {
             emit(state.copyWith(
-              registrationResult: RegistrationResult.usedUsername,
+              registrationResult: LoginResult.usedUsername,
             ));
             break;
           }
@@ -85,7 +84,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
             print('Error:');
             print(e);
             emit(state.copyWith(
-              registrationResult: RegistrationResult.unknownError,
+              registrationResult: LoginResult.unknownError,
               registrationDetails: e.message,
             ));
             break;

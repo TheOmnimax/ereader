@@ -14,7 +14,7 @@ class RegistrationState extends Equatable {
   final String username;
   final String password1;
   final String password2;
-  final RegistrationResult? registrationResult;
+  final LoginResult? registrationResult;
   final String registrationDetails;
 
   @override
@@ -29,7 +29,7 @@ class RegistrationState extends Equatable {
     String? username,
     String? password1,
     String? password2,
-    RegistrationResult? registrationResult,
+    LoginResult? registrationResult,
     String? registrationDetails,
   }) {
     return RegistrationState(

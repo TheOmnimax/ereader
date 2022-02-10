@@ -19,19 +19,14 @@ enum Direction {
 
 enum LoginResult {
   success,
-  invalidUsername,
-  invalidPassword,
-  unknownError,
-}
-
-enum RegistrationResult {
-  success,
-  missingUsername,
+  disabled,
   invalidEmail,
-  usedUsername,
+  invalidPassword,
+  missingEmail,
   missingPassword,
   missingReenter,
-  invalidPassword,
   passwordMismatch,
+  notFound,
+  usedUsername,
   unknownError,
 }

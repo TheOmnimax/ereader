@@ -23,16 +23,11 @@ class RegistrationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var username = '';
+    var password1 = '';
+    var password2 = '';
     return BlocBuilder<RegistrationBloc, RegistrationState>(
         builder: (context, state) {
-      if (state.registrationResult == LoginResult.success) {
-        if (state.registrationResult == LoginResult.success) {}
-      }
-
-      var username = state.username;
-      var password1 = state.password1;
-      var password2 = state.password2;
-
       return Scaffold(
         appBar: AppBar(
           title: Text('Registration'),
@@ -57,11 +52,6 @@ class RegistrationScreen extends StatelessWidget {
                   onChanged: (value) {
                     username = value;
                     print('Updating username to: $username');
-                    context.read<RegistrationBloc>().add(
-                          UpdateDetails(
-                            username: username,
-                          ),
-                        );
                   },
                 ),
                 const SizedBox(
@@ -72,11 +62,6 @@ class RegistrationScreen extends StatelessWidget {
                   label: 'Password',
                   onChanged: (value) {
                     password1 = value;
-                    context.read<RegistrationBloc>().add(
-                          UpdateDetails(
-                            password1: password1,
-                          ),
-                        );
                   },
                 ),
                 const SizedBox(
@@ -87,11 +72,6 @@ class RegistrationScreen extends StatelessWidget {
                   label: 'Re-enter password',
                   onChanged: (value) {
                     password2 = value;
-                    context.read<RegistrationBloc>().add(
-                          UpdateDetails(
-                            password2: password2,
-                          ),
-                        );
                   },
                 ),
                 TextButton(

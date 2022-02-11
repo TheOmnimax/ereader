@@ -33,6 +33,8 @@ dependencies:
   flutter_archive: ^4.0.1
   epubx: ^3.0.0-dev.3
   path: ^1.8.0
+  flutter_widget_from_html_core: ^0.8.4
+  provider: ^6.0.0
   firebase_core: ^1.12.0
   firebase_auth: ^3.3.6
   cloud_firestore: ^3.1.7
@@ -43,7 +45,12 @@ dependencies:
   image: ^3.1.0
   path_provider: ^2.0.8
   file_picker: ^4.3.1
-  flutter_widget_from_html_core: ^0.8.4
+  flutter_html: ^2.2.1
+
+dev_dependencies:
+  flutter:
+    sdk: flutter
+
 
 dev_dependencies:
   flutter:

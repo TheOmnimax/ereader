@@ -8,10 +8,19 @@ import 'dart:convert';
 import 'package:ereader/shared_data/shared_preferences.dart';
 
 import '../../../shared_data/ereader_style.dart';
+import 'package:ereader/screens/ereader_screen/ebook_processor/ebook_processor.dart';
 
 class EreaderBloc extends Bloc<EreaderEvent, EreaderState> {
   EreaderBloc() : super(const EbookLoading()) {
     on<LoadBook>(_loadBook);
+    on<TurnPage>(_turnPage);
+  }
+
+  Future<EbookProcessed> _processEbook(EpubBook epubBook) async {
+    final ebookProcessor = EbookProcessor(epubBook: epubBook);
+    final ebookProcessed = await ebookProcessor.runProcessor();
+
+    return ebookProcessed;
   }
 
   Future _loadBook(LoadBook event, Emitter<EreaderState> emit) async {
@@ -27,28 +36,28 @@ class EreaderBloc extends Bloc<EreaderEvent, EreaderState> {
     final ebook = await ebookRetrieval.getEbook(event.ebookPath);
 
     final title = ebook.Title ?? 'No title';
-    final content = ebook.Content; // EpubContent
 
-    if (content == null) {
-      emit(EbookDisplay(
-        title: title,
-        content: 'No content',
-        ereaderStyle: selectedStyle,
-      ));
-    } else {
-      final htmlFiles = content.Html ?? <String?, EpubTextContentFile>{};
+    final ebookProcessed = await _processEbook(ebook);
+    print('Processed ebook');
 
-      final htmlList = <String>[];
+    emit(EbookDisplay(
+      title: title,
+      ebookProcessed: ebookProcessed,
+      ereaderStyle: selectedStyle,
+    ));
+  }
 
-      for (var htmlFile in htmlFiles.values) {
-        htmlList.add(htmlFile.Content ?? '');
-      }
-
-      emit(EbookDisplay(
-        title: title,
-        content: htmlList.join(),
-        ereaderStyle: selectedStyle,
-      ));
+  Future _turnPage(TurnPage event, Emitter<EreaderState> emit) async {
+    var newPage = event.toPage;
+    if (newPage < 0) {
+      newPage = 0;
     }
+    print('Turning to page $newPage');
+
+    emit(
+      state.copyWith(
+        newPosition: newPage,
+      ),
+    );
   }
 }

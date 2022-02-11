@@ -64,9 +64,8 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
               child: const Text('Yes, delete'),
               onPressed: () {
                 Navigator.of(event.context).pop();
-                styleList
-                  ..remove(style)
-                  ..add(jsonData);
+                var styleIndex = styleList.indexOf(style);
+                styleList[styleIndex] = jsonData;
               },
             ),
             TextButton(

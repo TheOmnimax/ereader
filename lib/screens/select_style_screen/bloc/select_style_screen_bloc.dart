@@ -64,23 +64,19 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
     print('Preferences:');
     print(allStyles);
 
-    try {
-      final firstEreaderStyle = allStyles[0];
-      print('About to emit state...');
-      emit(
-        SelectStyleMainState(
-          allStyles: allStyles,
-          selectedEreaderStyle: firstEreaderStyle,
-        ),
-      );
-    } catch (e) {
-      const ereaderSettings = EreaderStyle();
-      print('About to emit state...');
-      emit(SelectStyleMainState(
+    // var selectedStyle =
+
+    // Get currently selected style
+    final selectedStyleMap =
+        await SharedPreferenceTool.getMapPreferences('selectedStyle')
+            as Map<String, dynamic>;
+
+    emit(
+      SelectStyleMainState(
         allStyles: allStyles,
-        selectedEreaderStyle: ereaderSettings,
-      ));
-    }
+        selectedEreaderStyle: EreaderStyle.fromJson(selectedStyleMap),
+      ),
+    );
   }
 
   Future<void> _styleMove(
@@ -115,7 +111,6 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
         return;
       }
     }
-    emit(state.copyWith());
   }
 
   Future<void> _styleDelete(
@@ -141,20 +136,14 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
         final updatedStyles = await _getStyles();
         print('New length: ${updatedStyles.length}');
 
-        print(updatedStyles);
-        emit(SelectStyleMainState(
-          allStyles: updatedStyles,
-          selectedEreaderStyle: event.ereaderStyle,
-        ));
+        final currentState = state;
 
-        // TODO: Find why copyWith is not working
+        if (currentState is SelectStyleMainState) {
+          emit(currentState.copyWith(allStyles: updatedStyles));
+        } else {}
 
-        // print('Emitting...');
-        // emit(state.copyWith(allStyles: updatedStyles));
-        // print('Emitted.');
         return;
       }
     }
-    emit(state.copyWith());
   }
 }

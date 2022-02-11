@@ -17,6 +17,12 @@ enum Direction {
   down,
 }
 
+enum Position {
+  top,
+  right,
+  bottom,
+  left,
+}
 enum LoginResult {
   success,
   disabled,

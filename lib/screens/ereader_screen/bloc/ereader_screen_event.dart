@@ -13,3 +13,11 @@ class LoadBook extends EreaderEvent {
 
   final String ebookPath;
 }
+
+class TurnPage extends EreaderEvent {
+  const TurnPage({
+    required this.toPage,
+  });
+
+  final int toPage;
+}

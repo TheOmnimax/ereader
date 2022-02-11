@@ -6,6 +6,7 @@ import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/constants/constants.dart';
+import 'package:ereader/screens/custom_style_screen/custom_style_screen.dart';
 
 class SelectStyleMain extends StatelessWidget {
   const SelectStyleMain({Key? key}) : super(key: key);
@@ -75,26 +76,29 @@ class SelectStyleScreen extends StatelessWidget {
       ),
       body: BlocBuilder<SelectStyleBloc, SelectStyleScreenState>(
         builder: (context, state) {
-          final ereaderStyle = state.selectedEreaderStyle;
-          final allStyles = state.allStyles;
-          print('All styles in bloc builder:');
-          print(allStyles);
+          final currentState = state;
 
           if (state is SelectStyleLoading) {
             return Text('Loading...');
+          } else if (state is SelectStyleMainState) {
+            final ereaderStyle = state.selectedEreaderStyle;
+            final allStyles = state.allStyles;
+
+            return SafeArea(
+              child: Column(
+                children: <Widget>[
+                  StylePreview(ereaderStyle: ereaderStyle),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child:
+                        ListBuilder(widgets: styleListBuilder(state.allStyles)),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Text('Error');
           }
-          return SafeArea(
-            child: Column(
-              children: <Widget>[
-                StylePreview(ereaderStyle: ereaderStyle),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child:
-                      ListBuilder(widgets: styleListBuilder(state.allStyles)),
-                ),
-              ],
-            ),
-          );
         },
       ),
     );
@@ -158,14 +162,18 @@ class StyleListItem extends StatelessWidget {
             {
               print('Edit');
 
-              Navigator.pushNamed(context, '/custom_style',
-                  arguments: <String, dynamic>{
-                    'style': ereaderStyle,
-                  }).then((_) {
-                context.read<SelectStyleBloc>().add(
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) => CustomStyleMain(
+                    defaultStyle: ereaderStyle,
+                  ),
+                ),
+              ).then(
+                (_) => context.read<SelectStyleBloc>().add(
                       const LoadPage(),
-                    );
-              });
+                    ),
+              );
               break;
             }
           case kDelete:

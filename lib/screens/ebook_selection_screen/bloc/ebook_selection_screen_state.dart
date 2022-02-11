@@ -35,7 +35,8 @@ class EbookSelectionLoading extends EbookSelectionState {
 class EbookSelectionMainState extends EbookSelectionState {
   const EbookSelectionMainState({
     List<EbookMetadata> ebookList = const <EbookMetadata>[],
-  }) : super(ebookList: ebookList);
+    String username = '',
+  }) : super(ebookList: ebookList, username: username);
 
   @override
   List<Object?> get props => [ebookList, username];

@@ -35,3 +35,7 @@ class DeleteEbook extends EbookSelectionEvent {
 
   final String deletePath;
 }
+
+class LogOut extends EbookSelectionEvent {
+  const LogOut();
+}

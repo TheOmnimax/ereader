@@ -23,3 +23,16 @@ enum Position {
   bottom,
   left,
 }
+enum LoginResult {
+  success,
+  disabled,
+  invalidEmail,
+  invalidPassword,
+  missingEmail,
+  missingPassword,
+  missingReenter,
+  passwordMismatch,
+  notFound,
+  usedUsername,
+  unknownError,
+}

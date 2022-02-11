@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'ebook_selection_screen_event.dart';
 import 'ebook_selection_screen_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EbookSelectionBloc
     extends Bloc<EbookSelectionEvent, EbookSelectionState> {
@@ -15,6 +16,7 @@ class EbookSelectionBloc
     on<LoadPage>(_loadPage);
     on<GetNewEbook>(_getNewEbook);
     on<DeleteEbook>(_deleteEbook);
+    on<LogOut>(_logOut);
   }
 
   Future<List<EbookMetadata>> _getEbookMetadata() async {
@@ -39,9 +41,15 @@ class EbookSelectionBloc
     LoadPage event,
     Emitter<EbookSelectionState> emit,
   ) async {
+    final _auth = FirebaseAuth.instance;
+    // TODO: Do I need to get an instance each time? OR can I just use a static var?
+
+    final user = _auth.currentUser;
+
     final ebookMetadataList = await _getEbookMetadata();
     emit(EbookSelectionMainState(
       ebookList: ebookMetadataList,
+      username: user?.email ?? '',
     ));
   }
 
@@ -66,4 +74,30 @@ class EbookSelectionBloc
       emit(state.copyWith());
     }
   }
+
+  Future<void> _logOut(
+    LogOut event,
+    Emitter<EbookSelectionState> emit,
+  ) async {
+    final _auth = FirebaseAuth.instance;
+    try {
+      await _auth.signOut();
+      final currentUser = _auth.currentUser;
+      if (currentUser == null) {
+        emit(state.copyWith(
+          username: '',
+        ));
+      } else {
+        throw LogoutError('Failed to log out for unknown reason.');
+      }
+    } catch (e) {
+      print(e);
+      emit(state.copyWith());
+    }
+  }
+}
+
+class LogoutError implements Exception {
+  LogoutError(this.cause);
+  String cause;
 }

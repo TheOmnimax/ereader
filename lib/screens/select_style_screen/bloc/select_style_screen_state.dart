@@ -5,36 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:ereader/shared_data/shared_preferences.dart';
 
 abstract class SelectStyleScreenState extends Equatable {
-  const SelectStyleScreenState({
-    this.selectedEreaderStyle = const EreaderStyle(),
-    this.allStyles = const <EreaderStyle>[],
-  });
-
-  final EreaderStyle selectedEreaderStyle;
-  // TODO: Find how to not use ereaderStyle in parent state, since not needed for all child states
-  // get currentState => String 'Other';
-  // TODO: Find how to set thsi up properly
-  final List<EreaderStyle> allStyles;
+  const SelectStyleScreenState();
 
   @override
   List<Object?> get props => [];
-
-  SelectStyleScreenState copyWith({
-    List<EreaderStyle>? allStyles,
-    EreaderStyle? ereaderStyle,
-    // String? selectedStyle,
-  });
 }
 
 class SelectStyleLoading extends SelectStyleScreenState {
   const SelectStyleLoading();
 
-  @override
-  SelectStyleLoading copyWith({
-    List<EreaderStyle>? allStyles,
-    EreaderStyle? ereaderStyle,
-    // String? selectedStyle,
-  }) {
+  SelectStyleLoading copyWith() {
     return const SelectStyleLoading();
   }
 }
@@ -51,8 +31,9 @@ class SelectStyleMainState extends SelectStyleScreenState {
   final List<EreaderStyle> allStyles;
 
   @override
-  List<Object?> get props => [selectedEreaderStyle];
+  List<Object?> get props => [selectedEreaderStyle, allStyles];
 
+  @override
   SelectStyleMainState copyWith({
     List<EreaderStyle>? allStyles,
     EreaderStyle? ereaderStyle,

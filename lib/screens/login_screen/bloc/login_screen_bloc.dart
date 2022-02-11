@@ -20,6 +20,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(state.copyWith(loginResult: LoginResult.unknownError));
       } else {
         emit(state.copyWith(loginResult: LoginResult.success));
+        // TODO: What is the best way to close the screen?
         Navigator.pop(event.context);
       }
     } on FirebaseAuthException catch (e) {

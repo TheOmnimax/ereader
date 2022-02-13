@@ -38,30 +38,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCFbFJ1GeKpvMKkhehTf7r5T1CMHh3eoqg',
-    appId: '1:471797074685:web:f57bfb93d5718454bf8c94',
-    messagingSenderId: '471797074685',
-    projectId: 'ereader-b4b93',
-    authDomain: 'ereader-b4b93.firebaseapp.com',
-    storageBucket: 'ereader-b4b93.appspot.com',
-    measurementId: 'G-0Y2ECR7NX2',
+    apiKey: 'AIzaSyCpbJ7uhc1oVSth0GPZRLejclSxZWDQTjY',
+    appId: '1:529389859869:web:c5fff6ed503a022a9bc2f4',
+    messagingSenderId: '529389859869',
+    projectId: 'ereader-341202',
+    authDomain: 'ereader-341202.firebaseapp.com',
+    storageBucket: 'ereader-341202.appspot.com',
+    measurementId: 'G-V1ZZK6S218',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCTrQAgJbW1KJerW625MFvc7oV17GR4T10',
-    appId: '1:471797074685:android:19d505a7473ae18cbf8c94',
-    messagingSenderId: '471797074685',
-    projectId: 'ereader-b4b93',
-    storageBucket: 'ereader-b4b93.appspot.com',
+    apiKey: 'AIzaSyBtpILEVVSHOauZc4h2EiDYpGH0NkxgATc',
+    appId: '1:529389859869:android:c43fc251048421d79bc2f4',
+    messagingSenderId: '529389859869',
+    projectId: 'ereader-341202',
+    storageBucket: 'ereader-341202.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA_wfq0oGxVmND4b6iRDeTT58s8bzfDMJY',
-    appId: '1:471797074685:ios:e6dc24a32e196674bf8c94',
-    messagingSenderId: '471797074685',
-    projectId: 'ereader-b4b93',
-    storageBucket: 'ereader-b4b93.appspot.com',
-    iosClientId: '471797074685-hr4nhj9h95cp066gkj1b4j94sb75uaro.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCEaaP4Uq4lJHbGt5daumeG4Xu2UQ4PiRo',
+    appId: '1:529389859869:ios:98f9c16b1b4811b09bc2f4',
+    messagingSenderId: '529389859869',
+    projectId: 'ereader-341202',
+    storageBucket: 'ereader-341202.appspot.com',
+    iosClientId: '529389859869-8ipfjj6mjqbsnba7pir8r0suci4t524q.apps.googleusercontent.com',
     iosBundleId: 'com.maxshaberman.ereader',
   );
 }

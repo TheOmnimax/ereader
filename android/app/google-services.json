@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "529389859869",
+    "project_id": "ereader-341202",
+    "storage_bucket": "ereader-341202.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529389859869:android:c43fc251048421d79bc2f4",
+        "android_client_info": {
+          "package_name": "com.maxshaberman.ereader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529389859869-qijd4j782uoq2thn8btpg0r2shs4hstq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtpILEVVSHOauZc4h2EiDYpGH0NkxgATc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "529389859869-qijd4j782uoq2thn8btpg0r2shs4hstq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

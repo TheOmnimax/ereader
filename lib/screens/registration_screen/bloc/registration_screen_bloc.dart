@@ -1,10 +1,10 @@
-import 'dart:convert';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/constants/constants.dart';
+import 'package:ereader/screens/ebook_selection_screen/bloc/bloc.dart';
 import 'package:ereader/screens/registration_screen/bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ereader/shared_widgets/show_popup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   RegistrationBloc() : super(const RegistrationState()) {
@@ -30,6 +30,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
               onPressed: () {
                 Navigator.pop(event.context);
                 Navigator.pop(event.context);
+                // event.context.read<EbookSelectionBloc>().add(const LoadPage());
               },
             ),
           ],

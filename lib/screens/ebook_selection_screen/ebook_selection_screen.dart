@@ -99,7 +99,7 @@ class SelectionPage extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
                           // TODO: Is there a shorthand for this? I do it a lot.
-                          context.read<AppBloc>().add(LogOut());
+                          context.read<AppBloc>().add(Logout());
                         },
                         child: const Text('Log out'),
                       ),
@@ -110,11 +110,7 @@ class SelectionPage extends StatelessWidget {
                   );
                 },
                 login: () {
-                  Navigator.pushNamed(context,
-                          '/login') /*.then((value) {
-                    context.read<EbookSelectionBloc>().add(const LoadPage());
-                  })*/
-                      ;
+                  Navigator.pushNamed(context, '/login');
                 },
               ),
             ],

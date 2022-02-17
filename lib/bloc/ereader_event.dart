@@ -1,5 +1,5 @@
-import 'package:equatable/equatable.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
+import 'package:ereader/constants/constants.dart';
 
 abstract class AppEvent {
   AppEvent();
@@ -19,18 +19,30 @@ class Login extends AppEvent {
   final String password;
 }
 
-class LogOut extends AppEvent {
-  LogOut();
+class Logout extends AppEvent {
+  Logout();
 }
 
 class Register extends AppEvent {
   Register({
     required this.username,
-    required this.password,
+    required this.password1,
+    required this.password2,
   });
 
   final String username;
-  final String password;
+  final String password1;
+  final String password2;
+}
+
+class LoginError extends AppEvent {
+  LoginError({
+    this.loginResult,
+    this.loginDetails,
+  });
+
+  final LoginResult? loginResult;
+  final String? loginDetails;
 }
 
 class SelectStyle extends AppEvent {

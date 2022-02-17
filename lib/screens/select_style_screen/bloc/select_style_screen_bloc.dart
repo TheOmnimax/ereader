@@ -70,18 +70,37 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
 
     final allStyles = await _styleList;
 
+    print('Styles:');
+    print(allStyles);
+
     // var selectedStyle =
 
     // Get currently selected style
     final selectedStyleMap =
         await _fileReadWrite.getFileAsMap(_selectedStyleFile);
 
-    emit(
-      SelectStyleMainState(
-        allStyles: allStyles,
-        selectedEreaderStyle: EreaderStyle.fromJson(selectedStyleMap),
-      ),
-    );
+    print('Selected style:');
+    print(selectedStyleMap);
+    final EreaderStyle selectedStyle;
+    if (selectedStyleMap.isEmpty) {
+      selectedStyle = const EreaderStyle();
+    } else {
+      selectedStyle = EreaderStyle.fromJson(selectedStyleMap);
+    }
+
+    try {
+      emit(
+        SelectStyleMainState(
+          allStyles: allStyles,
+          selectedEreaderStyle: selectedStyle,
+        ),
+      );
+    } catch (e) {
+      print(e);
+      emit(
+        const SelectStyleMainState(),
+      );
+    }
   }
 
   Future<void> _styleMove(

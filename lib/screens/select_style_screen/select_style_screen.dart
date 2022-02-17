@@ -1,3 +1,4 @@
+import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/screens/select_style_screen/bloc/bloc.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/shared_widgets/custom_style/style_preview.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/constants/constants.dart';
 import 'package:ereader/screens/custom_style_screen/custom_style_screen.dart';
+import 'package:ereader/bloc/bloc.dart';
 
 class SelectStyleMain extends StatelessWidget {
   const SelectStyleMain({Key? key}) : super(key: key);
@@ -25,6 +27,8 @@ class SelectStyleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appBloc = context.watch<AppBloc>();
+
     void popupItemSelected(String value) {
       if (value == 'Add new style') {
         Navigator.pushNamed(
@@ -45,9 +49,7 @@ class SelectStyleScreen extends StatelessWidget {
       for (final value in ereaderStyles) {
         final listItem = StyleListItem(
           onPressed: () {
-            context
-                .read<SelectStyleBloc>()
-                .add(StyleSelected(ereaderStyle: value));
+            context.read<AppBloc>().add(SelectStyle(newStyle: value));
           },
           ereaderStyle: value,
           popupItems: createPopupMenuList(
@@ -83,11 +85,13 @@ class SelectStyleScreen extends StatelessWidget {
           } else if (state is SelectStyleMainState) {
             final ereaderStyle = state.selectedEreaderStyle;
             final allStyles = state.allStyles;
+            print('All styles:');
+            print(allStyles);
 
             return SafeArea(
               child: Column(
                 children: <Widget>[
-                  StylePreview(ereaderStyle: ereaderStyle),
+                  StylePreview(ereaderStyle: appBloc.state.currentStyle),
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child:

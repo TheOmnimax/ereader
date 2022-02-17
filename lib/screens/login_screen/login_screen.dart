@@ -25,140 +25,97 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appBloc = context.watch<AppBloc>();
-
-    var loginStatus = appBloc.state.loginStatus;
-    var loginDetails = appBloc.state.loginDetails;
-
-    var state = context.read<LoginBloc>().state;
-
-    // Is this the best way to pop in a bloc refresh?
-    if (state.loginResult == LoginResult.success) {
-      Navigator.pop(context);
-    }
-
+    context.read<AppBloc>().add(LoginError());
     var username = '';
     var password = '';
-    // TODO: Are these in the right place?
-    final buildContext = context;
+    return Builder(builder: (context) {
+      final appBloc = context.watch<AppBloc>();
+      return BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          print('Status: ${appBloc.state.loginStatus}');
+          if (appBloc.state.username != '') {
+            Navigator.pop(context);
+            // TODO: QUESTION: Is this the best place to pop? It works, but it gives an error.
+          }
+          // if (state.loginResult == LoginResult.success) {
+          //   Navigator.pop(context);
+          // }
 
-    return BlocBuilder<LoginBloc, LoginState>(
-      builder: (context, state) {
-        if (loginStatus != null) {
-          // If there was an error logging in from the app bloc, then update the error here.
-          context.read<LoginBloc>().add(
-                LoginError(
-                  loginResult: loginStatus,
-                  loginDetails: loginDetails ?? '',
-                ),
-              );
-        }
-        // if (state.loginResult == LoginResult.success) {
-        //   Navigator.pop(context);
-        // }
+          print('Refreshing');
 
-        print('Refreshing');
-
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Log in'),
-          ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.popAndPushNamed(context, '/register')
-                        .then((value) {
-                      buildContext
-                          .read<EbookSelectionBloc>()
-                          .add(const LoadPage());
-                      // TODO: Why does this not work? How can I make it update a different bloc?
-                    });
-                  },
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Text('Register'),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 35),
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Log in'),
+            ),
+            body: SafeArea(
+              child: Column(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.popAndPushNamed(context, '/register');
+                    },
                     child: Align(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text('Log in'),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                              'Log in so you can save your settings to the cloud.'),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          RoundedTextBox(
-                            keyboard: TextInputType.emailAddress,
-                            label: 'Email address',
-                            onChanged: (value) {
-                              username = value;
-                            },
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          RoundedTextBox(
-                            obscureText: true,
-                            label: 'Password',
-                            onChanged: (value) {
-                              password = value;
-                            },
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              if (username == '') {
-                                context.read<LoginBloc>().add(
-                                      const LoginError(
-                                        loginResult: LoginResult.missingEmail,
-                                      ),
-                                    );
-                              } else if (!RegExp(kEmailRegex)
-                                  .hasMatch(username)) {
-                                context.read<LoginBloc>().add(
-                                      const LoginError(
-                                        loginResult: LoginResult.invalidEmail,
-                                      ),
-                                    );
-                              } else if (password == '') {
-                                context.read<LoginBloc>().add(
-                                      const LoginError(
-                                        loginResult:
-                                            LoginResult.missingPassword,
-                                      ),
-                                    );
-                              } else {
+                      alignment: Alignment.topRight,
+                      child: Text('Register'),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 35),
+                      child: Align(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text('Log in'),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                                'Log in so you can save your settings to the cloud.'),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            RoundedTextBox(
+                              keyboard: TextInputType.emailAddress,
+                              label: 'Email address',
+                              onChanged: (value) {
+                                username = value;
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            RoundedTextBox(
+                              obscureText: true,
+                              label: 'Password',
+                              onChanged: (value) {
+                                password = value;
+                              },
+                            ),
+                            TextButton(
+                              onPressed: () {
                                 context.read<AppBloc>().add(Login(
                                       username: username,
                                       password: password,
                                     ));
-                              }
-                            },
-                            child: Text('Log in'),
-                          ),
-                          LoginStatusWidget(
-                            loginResult: state.loginResult,
-                          ),
-                          Text(state.loginDetails),
-                        ],
+                              },
+                              child: Text('Log in'),
+                            ),
+                            LoginStatusWidget(
+                              loginResult: appBloc.state.loginStatus,
+                            ),
+                            Text(appBloc.state.loginDetails ?? ''),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    });
   }
 }

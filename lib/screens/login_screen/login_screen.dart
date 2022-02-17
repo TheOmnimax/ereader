@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/constants/constants.dart';
+import 'package:ereader/screens/ebook_selection_screen/bloc/bloc.dart';
 import 'package:ereader/screens/login_screen/bloc/bloc.dart';
 import 'package:ereader/shared_widgets/data_entry.dart';
 import 'package:ereader/shared_widgets/shared_widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ereader/bloc/bloc.dart';
 
 class LoginMain extends StatelessWidget {
   const LoginMain({Key? key}) : super(key: key);
@@ -23,6 +25,11 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appBloc = context.watch<AppBloc>();
+
+    var loginStatus = appBloc.state.loginStatus;
+    var loginDetails = appBloc.state.loginDetails;
+
     var state = context.read<LoginBloc>().state;
 
     // Is this the best way to pop in a bloc refresh?
@@ -33,30 +40,24 @@ class LoginScreen extends StatelessWidget {
     var username = '';
     var password = '';
     // TODO: Are these in the right place?
+    final buildContext = context;
 
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
+        if (loginStatus != null) {
+          // If there was an error logging in from the app bloc, then update the error here.
+          context.read<LoginBloc>().add(
+                LoginError(
+                  loginResult: loginStatus,
+                  loginDetails: loginDetails ?? '',
+                ),
+              );
+        }
         // if (state.loginResult == LoginResult.success) {
         //   Navigator.pop(context);
         // }
+
         print('Refreshing');
-        Text getLoginStatus() {
-          print('Getting login status');
-          switch (state.loginResult) {
-            case LoginResult.success:
-              {
-                return Text('Success');
-              }
-            case LoginResult.unknownError:
-              {
-                return Text('Invalid credentials');
-              }
-            default:
-              {
-                return Text('');
-              }
-          }
-        }
 
         return Scaffold(
           appBar: AppBar(
@@ -67,7 +68,13 @@ class LoginScreen extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {
-                    Navigator.popAndPushNamed(context, '/register');
+                    Navigator.popAndPushNamed(context, '/register')
+                        .then((value) {
+                      buildContext
+                          .read<EbookSelectionBloc>()
+                          .add(const LoadPage());
+                      // TODO: Why does this not work? How can I make it update a different bloc?
+                    });
                   },
                   child: Align(
                     alignment: Alignment.topRight,
@@ -130,13 +137,10 @@ class LoginScreen extends StatelessWidget {
                                       ),
                                     );
                               } else {
-                                context.read<LoginBloc>().add(
-                                      Login(
-                                        username: username,
-                                        password: password,
-                                        context: context,
-                                      ),
-                                    );
+                                context.read<AppBloc>().add(Login(
+                                      username: username,
+                                      password: password,
+                                    ));
                               }
                             },
                             child: Text('Log in'),

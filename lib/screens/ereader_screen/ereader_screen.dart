@@ -61,9 +61,10 @@ class EreaderPage extends StatelessWidget {
 
           final ereaderStyle = state.ereaderStyle;
 
-          final ebookProcessed = state.ebookProcessed;
+          final ebookProcessed = state.ebookProcessed.parts[0];
 
           print('On page ${state.position}');
+          print(ebookProcessed);
           return Scaffold(
             appBar: AppBar(
               title: Text(
@@ -77,16 +78,17 @@ class EreaderPage extends StatelessWidget {
               ),
             ),
             body: SafeArea(
-              // child: Text('Text'),
-              child: PageTurner(
-                onLeft: onLeft,
-                onRight: onRight,
-                child: EbookViewer(
-                  htmlContent: ebookProcessed.parts[state.position],
-                  ereaderStyle: ereaderStyle,
-                ),
-              ),
+              child: PageView(),
             ),
+            // child: Text('Text'),
+            // child: PageTurner(
+            //   onLeft: onLeft,
+            //   onRight: onRight,
+            //   child: EbookViewer(
+            //     htmlContent: ebookProcessed.parts[state.position],
+            //     ereaderStyle: ereaderStyle,
+            //   ),
+            // ),
           );
         }
         return Text('Unknown state error');

@@ -1,17 +1,16 @@
+import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/screens/custom_style_screen/custom_style_screen.dart';
-
-import 'package:ereader/screens/login_screen/login_screen.dart';
-import 'package:ereader/screens/registration_screen/bloc/bloc.dart';
-import 'package:ereader/screens/select_style_screen/select_style_screen.dart';
-
 import 'package:ereader/screens/ebook_selection_screen/ebook_selection_screen.dart';
+//TESTING ONLY!
+import 'package:ereader/screens/ereader_screen/ebook_processor/html_processor.dart';
 import 'package:ereader/screens/ereader_screen/ereader_screen.dart';
-
-import 'package:ereader/screens/select_style_screen/select_style_screen.dart';
-import 'package:flutter/material.dart';
-
+import 'package:ereader/screens/login_screen/login_screen.dart';
 import 'package:ereader/screens/registration_screen/registration_screen.dart';
+import 'package:ereader/screens/select_style_screen/select_style_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'firebase_options.dart';
 
 Future main() async {
@@ -19,7 +18,19 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const Main());
+}
+
+class Main extends StatelessWidget {
+  const Main({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => AppBloc()..add(AppOpened()),
+      child: const MyApp(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {

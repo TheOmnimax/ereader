@@ -6,6 +6,7 @@ import 'package:ereader/shared_widgets/show_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ereader/file_explorer/files.dart';
 
 class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
   CustomStyleBloc() : super(const CustomStyleState()) {
@@ -14,6 +15,10 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
     on<SavePreferences>(_savePreferences);
     // on<LoadPreferences>(_loadPreferences);
   }
+
+  final FileReadWrite fileReadWrite =
+      const FileReadWrite(relativePath: 'styles/');
+  final String filename = 'savedStyles.json';
 
   // EreaderStyle ereaderStyle = const EreaderStyle();
 
@@ -38,20 +43,11 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
     );
   }
 
-  Future<void> _savePreference(SharedPreferences prefs, List styleList) async {
-    final newPrefString = jsonEncode(styleList);
-    await prefs.setString('preferences', newPrefString);
-  }
-
   Future<void> _savePreferences(
       SavePreferences event, Emitter<CustomStyleState> emit) async {
     final newName = event.ereaderStyle.name;
     final jsonData = event.ereaderStyle.toJson();
-    final prefs = await SharedPreferences.getInstance();
-    final allPreferences = prefs.getString('preferences') ?? '[]';
-    print('Preferences:');
-    print(allPreferences);
-    final styleList = jsonDecode(allPreferences) as List;
+    final styleList = await fileReadWrite.getFileAsList(filename);
 
     for (final style in styleList) {
       final styleName = style['name'] as String;
@@ -79,14 +75,21 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
               'There is already a style with this name. Are you sure you would like to replace the old style with this new the style?'),
         );
         // Do these no matter what is selected in the popup
-        await _savePreference(prefs, styleList);
+        final stringData = jsonEncode(styleList);
+        await fileReadWrite.writeString(
+          filename: filename,
+          contents: stringData,
+        );
         emit(state.copyWith());
         return;
       }
     }
 
-    styleList.add(jsonData);
-    await _savePreference(prefs, styleList);
+    final stringData = jsonEncode(styleList);
+    await fileReadWrite.writeString(
+      filename: filename,
+      contents: stringData,
+    );
     emit(state.copyWith());
   }
 

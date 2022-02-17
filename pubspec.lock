@@ -250,7 +250,7 @@ packages:
     source: hosted
     version: "2.7.2"
   html:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: html
       url: "https://pub.dartlang.org"

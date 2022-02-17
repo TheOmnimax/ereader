@@ -1,3 +1,4 @@
+import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/constants/constants.dart';
 import 'package:ereader/file_explorer/ebook_metadata.dart';
 import 'package:ereader/screens/ebook_selection_screen/bloc/bloc.dart';
@@ -61,54 +62,10 @@ class SelectionPage extends StatelessWidget {
       return ebookWidgetList;
     }
 
+    final appBloc = context.watch<AppBloc>();
     return BlocBuilder<EbookSelectionBloc, EbookSelectionState>(
         builder: (context, state) {
-      // TODO: Can I do this, or should it be a class?
-      ListTile getLoginTile() {
-        if ((state is EbookSelectionMainState) && (state.username != '')) {
-          return ListTile(
-            title: Text(state.username),
-            trailing: TextButton(
-              child: Text('Log out'),
-              onPressed: () async {
-                await showPopup(
-                  context: context,
-                  title: 'Log out',
-                  buttons: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Stay'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        // TODO: Is there a shorthand for this? I do it a lot.
-                        context.read<EbookSelectionBloc>().add(const LogOut());
-                      },
-                      child: const Text('Log out'),
-                    ),
-                  ],
-                  body: Text(
-                    'Are you sure you would like to log out?',
-                  ),
-                );
-              },
-            ),
-          );
-        }
-
-        return ListTile(
-          title: Text('Log in'),
-          onTap: () {
-            Navigator.pushNamed(context, '/login').then((value) {
-              context.read<EbookSelectionBloc>().add(const LoadPage());
-            });
-          },
-        );
-      }
-
+      print('Username: ${appBloc.state.username}');
       Widget getSafeArea() {
         if (state is EbookSelectionLoading) {
           return Text('Loading');
@@ -125,7 +82,41 @@ class SelectionPage extends StatelessWidget {
         drawer: Drawer(
           child: ListView(
             children: <Widget>[
-              getLoginTile(),
+              LoginTile(
+                username: appBloc.state.username,
+                logout: () async {
+                  await showPopup(
+                    context: context,
+                    title: 'Log out',
+                    buttons: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Stay'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          // TODO: Is there a shorthand for this? I do it a lot.
+                          context.read<AppBloc>().add(LogOut());
+                        },
+                        child: const Text('Log out'),
+                      ),
+                    ],
+                    body: Text(
+                      'Are you sure you would like to log out?',
+                    ),
+                  );
+                },
+                login: () {
+                  Navigator.pushNamed(context,
+                          '/login') /*.then((value) {
+                    context.read<EbookSelectionBloc>().add(const LoadPage());
+                  })*/
+                      ;
+                },
+              ),
             ],
           ),
         ),
@@ -212,5 +203,36 @@ class EbookListItem extends StatelessWidget {
       },
       itemList: const <String>['Delete'],
     );
+  }
+}
+
+class LoginTile extends StatelessWidget {
+  const LoginTile({
+    Key? key,
+    required this.username,
+    required this.login,
+    required this.logout,
+  }) : super(key: key);
+
+  final String username;
+  final Function() login;
+  final Function() logout;
+
+  @override
+  Widget build(BuildContext context) {
+    if (username == '') {
+      return ListTile(
+        title: Text('Log in'),
+        onTap: login,
+      );
+    } else {
+      return ListTile(
+        title: Text(username),
+        trailing: TextButton(
+          child: Text('Log out'),
+          onPressed: logout,
+        ),
+      );
+    }
   }
 }

@@ -26,7 +26,7 @@ class FileReadWrite {
     return directory.path;
   }
 
-  Future<bool> createDir({bool support = true}) async {
+  Future<bool> createDir() async {
     final path = await _localPath;
 
     final newPath = Directory(p.join(path, relativePath));
@@ -62,6 +62,12 @@ class FileReadWrite {
     return successful;
   }
 
+  Future<bool> addFileByName(String filename) async {
+    final file = File(filename);
+    final result = await addFile(file);
+    return result;
+  }
+
   Future<File> _getFileObject(String filename) async {
     final dir = await _mainDir;
     final path = p.join(dir.path, filename);
@@ -69,30 +75,54 @@ class FileReadWrite {
     return file;
   }
 
-  Future<String> getFileAsString(String filename) async {
+  Future<String> getFileAsString(String filename, {bool create = false}) async {
     final file = await _getFileObject(filename);
-    final fileData = file.readAsStringSync();
-    return fileData;
+    try {
+      final fileData = file.readAsStringSync();
+      return fileData;
+    } on FileSystemException catch (e) {
+      print('Error');
+      if (e.message == 'Cannot open file') {
+        file.createSync();
+        print('Created file');
+      } else {
+        print(e);
+      }
+      return '';
+    } catch (e) {
+      print(e);
+      return '';
+    }
   }
 
-  Future<Map<String, dynamic>> getFileAsMap(String filename) async {
-    final stringData = await getFileAsString(filename);
+  Future<Map<String, dynamic>> getFileAsMap(String filename,
+      {bool create = false}) async {
+    final stringData = await getFileAsString(filename, create: create);
     try {
-      final jsonData = jsonDecode(stringData) as Map<String, dynamic>;
-      return jsonData;
+      if (stringData == '') {
+        return <String, dynamic>{};
+      } else {
+        final jsonData = jsonDecode(stringData) as Map<String, dynamic>;
+        return jsonData;
+      }
     } catch (e) {
       print('Error getting map data from $filename');
       return <String, dynamic>{};
     }
   }
 
-  Future<List> getFileAsList(String filename) async {
-    final stringData = await getFileAsString(filename);
+  Future<List> getFileAsList(String filename, {bool create = false}) async {
+    final stringData = await getFileAsString(filename, create: create);
     try {
-      final listData = jsonDecode(stringData) as List<String>;
-      return listData;
+      if (stringData == '') {
+        return <dynamic>[];
+      } else {
+        final listData = jsonDecode(stringData) as List;
+        return listData;
+      }
     } catch (e) {
-      print('Error getting map data from $filename');
+      print(e);
+      print('Error getting list data from $filename');
       return <String>[];
     }
   }

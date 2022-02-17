@@ -16,9 +16,9 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
     // on<LoadPreferences>(_loadPreferences);
   }
 
-  final FileReadWrite fileReadWrite =
+  final FileReadWrite _fileReadWrite =
       const FileReadWrite(relativePath: 'styles/');
-  final String filename = 'savedStyles.json';
+  final String _filename = 'savedStyles.json';
 
   // EreaderStyle ereaderStyle = const EreaderStyle();
 
@@ -47,17 +47,19 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
       SavePreferences event, Emitter<CustomStyleState> emit) async {
     final newName = event.ereaderStyle.name;
     final jsonData = event.ereaderStyle.toJson();
-    final styleList = await fileReadWrite.getFileAsList(filename);
+    final styleList = await _fileReadWrite.getFileAsList(_filename);
+    var alreadyExists = false;
 
     for (final style in styleList) {
       final styleName = style['name'] as String;
       if (newName == styleName) {
+        alreadyExists = true;
         await showPopup(
           context: event.context,
           title: 'Warning: Name already exists',
           buttons: <Widget>[
             TextButton(
-              child: const Text('Yes, delete'),
+              child: const Text('Yes, update'),
               onPressed: () {
                 Navigator.of(event.context).pop();
                 var styleIndex = styleList.indexOf(style);
@@ -74,20 +76,19 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
           body: const Text(
               'There is already a style with this name. Are you sure you would like to replace the old style with this new the style?'),
         );
-        // Do these no matter what is selected in the popup
-        final stringData = jsonEncode(styleList);
-        await fileReadWrite.writeString(
-          filename: filename,
-          contents: stringData,
-        );
-        emit(state.copyWith());
-        return;
+        break;
       }
     }
 
+    if (!alreadyExists) {
+      styleList.add(jsonData);
+    }
+
     final stringData = jsonEncode(styleList);
-    await fileReadWrite.writeString(
-      filename: filename,
+    print('Writing:');
+    print(stringData);
+    await _fileReadWrite.writeString(
+      filename: _filename,
       contents: stringData,
     );
     emit(state.copyWith());

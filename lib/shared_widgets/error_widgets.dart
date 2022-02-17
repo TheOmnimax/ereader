@@ -24,9 +24,13 @@ class LoginStatusWidget extends StatelessWidget {
         {
           return Text('Please enter a valid email address');
         }
-      case LoginResult.invalidPassword:
+      case LoginResult.wrongPassword:
         {
-          return Text('Invalid password');
+          return Text('Incorrect password');
+        }
+      case LoginResult.weakPassword:
+        {
+          return Text('Password too weak');
         }
       case LoginResult.missingEmail:
         {
@@ -56,6 +60,11 @@ class LoginStatusWidget extends StatelessWidget {
       case LoginResult.unknownError:
         {
           return Text('Unknown error');
+        }
+      case LoginResult.brute:
+        {
+          return Text(
+              'There were too many incorrect attempts to log in. Please try again later.');
         }
       default:
         {

@@ -24,15 +24,15 @@ abstract class LoginEvent extends Equatable {
 //   List<Object> get props => [username, password, context];
 // }
 
-class LoginError extends LoginEvent {
-  const LoginError({
-    required this.loginResult,
-    this.loginDetails = '',
-  });
-
-  final LoginResult loginResult;
-  final String loginDetails;
-
-  @override
-  List<Object> get props => [loginResult];
-}
+// class LoginError extends LoginEvent {
+//   const LoginError({
+//     required this.loginResult,
+//     this.loginDetails = '',
+//   });
+//
+//   final LoginResult loginResult;
+//   final String loginDetails;
+//
+//   @override
+//   List<Object> get props => [loginResult];
+// }

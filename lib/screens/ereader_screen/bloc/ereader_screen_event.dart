@@ -8,10 +8,18 @@ abstract class EreaderEvent extends Equatable {
   List<Object> get props => [];
 }
 
+// class LoadScreen extends EreaderEvent {
+//   const LoadScreen({})
+// }
+
 class LoadBook extends EreaderEvent {
-  const LoadBook({required this.ebookPath});
+  const LoadBook({
+    required this.ebookPath,
+    required this.widgetHeight,
+  });
 
   final String ebookPath;
+  final double widgetHeight;
 }
 
 class TurnPage extends EreaderEvent {

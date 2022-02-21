@@ -1,32 +1,37 @@
+import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/screens/ereader_screen/bloc/bloc.dart';
-import 'package:ereader/screens/ereader_screen/ereader_widgets/ebook_viewer.dart';
-import 'package:ereader/screens/ereader_screen/ereader_widgets/page_turner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EreaderMain extends StatelessWidget {
-  const EreaderMain({Key? key}) : super(key: key);
+  const EreaderMain({
+    required this.ebookPath,
+    Key? key,
+  }) : super(key: key);
+
+  final String ebookPath;
 
   @override
   Widget build(BuildContext context) {
-    final modalRoute = ModalRoute.of(context);
-    final arguments = modalRoute == null
-        ? <String, dynamic>{}
-        : modalRoute.settings.arguments as Map;
-
-    final ebookPath = arguments['path'] as String;
     return BlocProvider(
-      create: (_) => EreaderBloc()..add(LoadBook(ebookPath: ebookPath)),
-      child: const EreaderPage(),
+      create: (_) => EreaderBloc() /*..add(LoadBook(ebookPath: ebookPath))*/,
+      child: EreaderPage(
+        ebookPath: ebookPath,
+      ),
     );
   }
 }
 
 class EreaderPage extends StatelessWidget {
-  const EreaderPage({Key? key}) : super(key: key);
+  const EreaderPage({
+    required this.ebookPath,
+    Key? key,
+  }) : super(key: key);
+  final String ebookPath;
 
   @override
   Widget build(BuildContext context) {
+    final appBloc = context.watch<AppBloc>();
     return BlocBuilder<EreaderBloc, EreaderState>(
       builder: (context, state) {
         if (state is EbookLoading) {
@@ -37,9 +42,17 @@ class EreaderPage extends StatelessWidget {
               actions: [],
               backgroundColor: Colors.black,
             ),
-            body: const SafeArea(
-              child: Text('Loading...'),
-            ),
+            body: Builder(builder: (context) {
+              final screenHeight = MediaQuery.of(context).size.height;
+              final appBarHeight = Scaffold.of(context).appBarMaxHeight;
+              context.read<EreaderBloc>().add(LoadBook(
+                    ebookPath: ebookPath,
+                    widgetHeight: screenHeight - (appBarHeight ?? 0),
+                  ));
+              return const SafeArea(
+                child: Text('Loading...'),
+              );
+            }),
           );
         } else if (state is EbookDisplay) {
           print('State is display');
@@ -59,8 +72,6 @@ class EreaderPage extends StatelessWidget {
                 );
           }
 
-          final ereaderStyle = state.ereaderStyle;
-
           final ebookProcessed = state.ebookProcessed.parts[0];
 
           print('On page ${state.position}');
@@ -69,17 +80,21 @@ class EreaderPage extends StatelessWidget {
             appBar: AppBar(
               title: Text(
                 state.title,
-                style: TextStyle(color: ereaderStyle.fontColor),
+                style: TextStyle(
+                  color: appBloc.state.currentStyle.fontColor,
+                ),
               ),
               actions: [],
-              backgroundColor: ereaderStyle.backgroundColor,
+              backgroundColor: appBloc.state.currentStyle.backgroundColor,
               iconTheme: IconThemeData(
-                color: ereaderStyle.fontColor,
+                color: appBloc.state.currentStyle.fontColor,
               ),
             ),
-            body: SafeArea(
-              child: PageView(),
-            ),
+            body: Builder(builder: (context) {
+              return SafeArea(
+                child: PageView(),
+              );
+            }),
             // child: Text('Text'),
             // child: PageTurner(
             //   onLeft: onLeft,

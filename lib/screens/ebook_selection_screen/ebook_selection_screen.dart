@@ -6,6 +6,8 @@ import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../ereader_screen/ereader_screen.dart';
+
 class EbookSelectionMain extends StatelessWidget {
   const EbookSelectionMain({Key? key}) : super(key: key);
 
@@ -163,9 +165,14 @@ class EbookListItem extends StatelessWidget {
           ],
         ),
         onPressed: () {
-          Navigator.pushNamed(context, '/ereader', arguments: <String, dynamic>{
-            'path': ebookMetadata.filePath,
-          });
+          Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (context) => EreaderMain(
+                ebookPath: ebookMetadata.filePath,
+              ),
+            ),
+          );
         },
       ),
       kebabFunction: (selectedItem) async {

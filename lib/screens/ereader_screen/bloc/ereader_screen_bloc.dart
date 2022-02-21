@@ -26,11 +26,6 @@ class EreaderBloc extends Bloc<EreaderEvent, EreaderState> {
   Future _loadBook(LoadBook event, Emitter<EreaderState> emit) async {
     // final fileReadWrite = FileReadWrite(relativePath: 'ebooks');
 
-    final selectedStyleMap =
-        await SharedPreferenceTool.getMapPreferences('selectedStyle')
-            as Map<String, dynamic>;
-    final selectedStyle = EreaderStyle.fromJson(selectedStyleMap);
-
     final ebookRetrieval = EbookRetrieval();
     print('Path of opened book: ${event.ebookPath}');
     final ebook = await ebookRetrieval.getEbook(event.ebookPath);
@@ -43,7 +38,6 @@ class EreaderBloc extends Bloc<EreaderEvent, EreaderState> {
     emit(EbookDisplay(
       title: title,
       ebookProcessed: ebookProcessed,
-      ereaderStyle: selectedStyle,
     ));
   }
 

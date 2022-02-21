@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const EbookSelectionMain(),
         '/style_selection': (context) => const SelectStyleMain(),
         '/custom_style': (context) => const CustomStyleMain(),
-        '/ereader': (context) => const EreaderMain(),
+        // '/ereader': (context) => const EreaderMain(),
         '/login': (context) => const LoginMain(),
         '/register': (context) => const RegistrationMain(),
       },

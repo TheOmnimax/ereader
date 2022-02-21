@@ -8,14 +8,12 @@ import 'package:ereader/screens/ereader_screen/ebook_processor/ebook_processor.d
 abstract class EreaderState extends Equatable {
   const EreaderState({
     this.title = 'No title',
-    this.ereaderStyle = const EreaderStyle(),
     this.ebookProcessed = const EbookProcessed(),
     this.position = 0,
   });
 
   final String title;
   final EbookProcessed ebookProcessed;
-  final EreaderStyle ereaderStyle;
   final int position;
 
   @override
@@ -23,7 +21,6 @@ abstract class EreaderState extends Equatable {
 
   EreaderState copyWith({
     String? newTitle,
-    EreaderStyle? newEreaderStyle,
     EbookProcessed? newEbookProcessed,
     int? newPosition,
   });
@@ -35,7 +32,6 @@ class EbookLoading extends EreaderState {
   @override
   EbookLoading copyWith({
     String? newTitle,
-    EreaderStyle? newEreaderStyle,
     EbookProcessed? newEbookProcessed,
     int? newPosition,
   }) {
@@ -46,14 +42,12 @@ class EbookLoading extends EreaderState {
 class EbookDisplay extends EreaderState {
   const EbookDisplay({
     required this.title,
-    this.ereaderStyle = const EreaderStyle(),
     required this.ebookProcessed,
     this.position = 0,
   });
 
   final String title;
   final EbookProcessed ebookProcessed;
-  final EreaderStyle ereaderStyle;
   final int position;
 
   @override
@@ -68,7 +62,6 @@ class EbookDisplay extends EreaderState {
   }) {
     return EbookDisplay(
       title: newTitle ?? title,
-      ereaderStyle: newEreaderStyle ?? ereaderStyle,
       ebookProcessed: newEbookProcessed ?? ebookProcessed,
       position: newPosition ?? position,
     );

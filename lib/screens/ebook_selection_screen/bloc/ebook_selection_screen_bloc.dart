@@ -70,10 +70,10 @@ class EbookSelectionBloc
         final ebookMetadataList = await _getEbookMetadata();
         emit(EbookSelectionMainState(ebookList: ebookMetadataList));
       } else {
-        emit(state.copyWith());
+        emit(state);
       }
     } else {
-      emit(state.copyWith());
+      emit(state);
     }
   }
 

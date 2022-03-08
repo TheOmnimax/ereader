@@ -6,7 +6,7 @@ import 'package:ereader/shared_widgets/show_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ereader/file_explorer/files.dart';
+import 'package:ereader/utils/file_explorer/files.dart';
 
 class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
   CustomStyleBloc() : super(const CustomStyleState()) {

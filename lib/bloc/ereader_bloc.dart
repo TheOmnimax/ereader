@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/constants/constants.dart';
-import 'package:ereader/file_explorer/files.dart';
+import 'package:ereader/utils/file_explorer/files.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

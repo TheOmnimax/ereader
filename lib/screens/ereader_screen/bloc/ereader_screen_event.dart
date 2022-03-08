@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:ereader/file_explorer/ebook_metadata.dart';
+import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 
 abstract class EreaderEvent extends Equatable {
   const EreaderEvent();

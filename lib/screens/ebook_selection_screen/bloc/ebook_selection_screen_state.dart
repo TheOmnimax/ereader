@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:ereader/file_explorer/ebook_metadata.dart';
+import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 
 abstract class EbookSelectionState extends Equatable {
   const EbookSelectionState({
@@ -12,24 +12,12 @@ abstract class EbookSelectionState extends Equatable {
 
   @override
   List<Object?> get props => [];
-
-  EbookSelectionState copyWith({
-    List<EbookMetadata>? ebookList,
-    String username,
-  });
 }
 
 class EbookSelectionLoading extends EbookSelectionState {
   const EbookSelectionLoading();
 
-  @override
-  EbookSelectionLoading copyWith({
-    // TODO: Is this the best way to set this up, even though the parameters are not used?
-    List<EbookMetadata>? ebookList,
-    String? username,
-  }) {
-    return const EbookSelectionLoading();
-  }
+
 }
 
 class EbookSelectionMainState extends EbookSelectionState {

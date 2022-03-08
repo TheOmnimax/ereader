@@ -1,7 +1,7 @@
 import 'package:epubx/epubx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ereader/file_explorer/ebook_storage.dart';
+import 'package:ereader/utils/file_explorer/ebook_storage.dart';
 
 import 'package:html/dom.dart';
 import 'package:html/dom_parsing.dart';

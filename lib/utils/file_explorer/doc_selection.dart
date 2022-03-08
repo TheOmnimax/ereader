@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ereader/file_explorer/ebook_metadata.dart';
+import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 
 class DocRow extends StatelessWidget {
   final EbookMetadata docData;

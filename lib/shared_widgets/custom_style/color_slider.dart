@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'number_entry.dart';
 
 class ColorSelection extends StatelessWidget {
   ColorSelection({
@@ -25,17 +26,50 @@ class ColorSelection extends StatelessWidget {
 
     return Column(
       children: <Widget>[
-        ColorSlider(
-          onChange: setRed,
-          value: color.red,
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: ColorSlider(
+                onChange: setRed,
+                value: color.red,
+              ),
+            ),
+            SingleNumberEntry(
+              defaultValue: 0,
+              onChanged: setRed,
+              value: color.red,
+            ),
+          ],
         ),
-        ColorSlider(
-          onChange: setGreen,
-          value: color.green,
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: ColorSlider(
+                onChange: setGreen,
+                value: color.green,
+              ),
+            ),
+            SingleNumberEntry(
+              defaultValue: 0,
+              onChanged: setGreen,
+              value: color.green,
+            ),
+          ],
         ),
-        ColorSlider(
-          onChange: setBlue,
-          value: color.blue,
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: ColorSlider(
+                onChange: setBlue,
+                value: color.blue,
+              ),
+            ),
+            SingleNumberEntry(
+              defaultValue: 0,
+              onChanged: setBlue,
+              value: color.blue,
+            ),
+          ],
         ),
       ],
     );

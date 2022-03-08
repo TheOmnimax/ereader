@@ -69,11 +69,12 @@ class SingleNumberEntry extends StatelessWidget {
       print('New value: ${tc.value}');
     });
     // tc.text = value.toString();
-    if (value == 12) {
+    if (value == defaultValue) {
       // tc.selection = const TextSelection(baseOffset: 0, extentOffset: 2);
 
-      tc.text = '12';
-      tc.selection = const TextSelection(baseOffset: 0, extentOffset: 2);
+      tc.text = defaultValue.toString();
+      tc.selection = TextSelection(
+          baseOffset: 0, extentOffset: defaultValue.toString().length);
     } else {
       tc.text = value.toString();
       tc.selection = TextSelection(
@@ -100,7 +101,7 @@ class SingleNumberEntry extends StatelessWidget {
               final valDouble = num.tryParse(value);
               if (valDouble == null) {
                 print('Value is null');
-                onChanged(12);
+                onChanged(defaultValue);
               } else {
                 print('Updating normally');
                 onChanged(valDouble.toInt());

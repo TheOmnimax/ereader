@@ -12,15 +12,28 @@ class ColorSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int colorRangeCheck(int num) {
+      if (num > 255) {
+        return 255;
+      } else if (num < 0) {
+        return 0;
+      } else {
+        return num;
+      }
+    }
+
     void setRed(int red) {
+      red = colorRangeCheck(red);
       onChange(Color.fromARGB(255, red, color.green, color.blue));
     }
 
     void setGreen(int green) {
+      green = colorRangeCheck(green);
       onChange(Color.fromARGB(255, color.red, green, color.blue));
     }
 
     void setBlue(int blue) {
+      blue = colorRangeCheck(blue);
       onChange(Color.fromARGB(255, color.red, color.green, blue));
     }
 

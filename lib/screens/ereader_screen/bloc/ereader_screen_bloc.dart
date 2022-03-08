@@ -1,14 +1,8 @@
 import 'package:epubx/epubx.dart';
 import 'package:ereader/screens/ereader_screen/bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ereader/file_explorer/files.dart';
-import 'package:ereader/file_explorer/ebook_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:ereader/shared_data/shared_preferences.dart';
-
-import '../../../shared_data/ereader_style.dart';
 import 'package:ereader/screens/ereader_screen/ebook_processor/ebook_processor.dart';
+import 'package:ereader/utils/file_explorer/ebook_storage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EreaderBloc extends Bloc<EreaderEvent, EreaderState> {
   EreaderBloc() : super(const EbookLoading()) {

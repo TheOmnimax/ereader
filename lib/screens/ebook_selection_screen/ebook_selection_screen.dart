@@ -1,6 +1,6 @@
 import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/constants/constants.dart';
-import 'package:ereader/file_explorer/ebook_metadata.dart';
+import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 import 'package:ereader/screens/ebook_selection_screen/bloc/bloc.dart';
 import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';

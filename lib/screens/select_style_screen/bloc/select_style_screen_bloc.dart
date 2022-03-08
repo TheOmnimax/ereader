@@ -4,7 +4,7 @@ import 'package:ereader/screens/select_style_screen/bloc/select_style_screen_eve
 import 'package:ereader/screens/select_style_screen/bloc/select_style_screen_state.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ereader/file_explorer/files.dart';
+import 'package:ereader/utils/file_explorer/files.dart';
 
 class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
   SelectStyleBloc() : super(const SelectStyleLoading()) {

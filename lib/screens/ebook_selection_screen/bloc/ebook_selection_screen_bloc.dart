@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:ereader/file_explorer/ebook_metadata.dart';
-import 'package:ereader/file_explorer/ebook_storage.dart';
-import 'package:ereader/file_explorer/file_picker.dart';
-import 'package:ereader/file_explorer/files.dart';
+import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
+import 'package:ereader/utils/file_explorer/ebook_storage.dart';
+import 'package:ereader/utils/file_explorer/file_picker.dart';
+import 'package:ereader/utils/file_explorer/files.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'ebook_selection_screen_event.dart';
@@ -19,6 +19,8 @@ class EbookSelectionBloc
     on<DeleteEbook>(_deleteEbook);
     // on<LogOut>(_logOut);
   }
+
+  final _auth = FirebaseAuth.instance;
 
   Future<List<EbookMetadata>> _getEbookMetadata() async {
     final ebookRetrieval = EbookRetrieval();
@@ -43,8 +45,6 @@ class EbookSelectionBloc
     Emitter<EbookSelectionState> emit,
   ) async {
     print('Loading page...');
-    final _auth = FirebaseAuth.instance;
-    // TODO: Do I need to get an instance each time? OR can I just use a static var?
 
     final user = _auth.currentUser;
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:epubx/epubx.dart';
-import 'package:ereader/file_explorer/ebook_metadata.dart';
-import 'package:ereader/file_explorer/files.dart';
+import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
+import 'package:ereader/utils/file_explorer/files.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:path/path.dart' as p;
 

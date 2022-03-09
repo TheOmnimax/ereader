@@ -1,4 +1,5 @@
 export 'enums.dart';
 export 'maps.dart';
-export 'strings.dart';
 export 'regex.dart';
+export 'strings.dart';
+export 'theme_data.dart';

@@ -53,7 +53,6 @@ class CustomStyleScreen extends StatelessWidget {
       body: BlocBuilder<CustomStyleBloc, CustomStyleState>(
           builder: (context, state) {
         final ereaderStyle = state.ereaderStyle;
-        print('Current size: ${ereaderStyle.fontSize}');
         final selectedModule = state.selectedModule;
 
         void updateBackgroundColor(Color color) {
@@ -69,7 +68,6 @@ class CustomStyleScreen extends StatelessWidget {
         }
 
         void updateFontSize(int size) {
-          print('New font size: $size');
           context.read<CustomStyleBloc>().add(UpdateStyle(
                 fontSize: size,
               ));

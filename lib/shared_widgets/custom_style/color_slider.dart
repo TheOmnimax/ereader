@@ -1,12 +1,14 @@
-import 'package:flutter/material.dart';
-import 'number_entry.dart';
 import 'dart:math';
+import 'package:ereader/constants/constants.dart';
+import 'package:ereader/shared_widgets/custom_style/number_entry.dart';
+import 'package:flutter/material.dart';
 
 class ColorSelection extends StatelessWidget {
-  ColorSelection({
+  const ColorSelection({
+    Key? key,
     required this.onChange,
     this.color = Colors.white,
-  });
+  }) : super(key: key);
 
   final Function(Color) onChange;
   final Color color;
@@ -44,11 +46,8 @@ class ColorSelection extends StatelessWidget {
 
     void setWhite(int white) {
       white = colorRangeCheck(white);
-      var oldWhite = getWhite();
-      print('${color.red}, ${color.green}, ${color.blue}, $oldWhite');
-      print(white);
-      var diff = oldWhite - white;
-      print('Diff: $diff');
+      final oldWhite = getWhite();
+      final diff = oldWhite - white;
       onChange(Color.fromARGB(
         255,
         colorRangeCheck(color.red - diff),
@@ -60,40 +59,30 @@ class ColorSelection extends StatelessWidget {
     return Column(
       children: <Widget>[
         ColorSelector(
+          activeColor: Colors.red,
           onChange: setRed,
+          thumbColor: Color.fromARGB(255, color.red, 0, 0),
           value: color.red,
         ),
         ColorSelector(
+          activeColor: Colors.green,
           onChange: setGreen,
+          thumbColor: Color.fromARGB(255, 0, color.green, 0),
           value: color.green,
         ),
         ColorSelector(
+          activeColor: Colors.blue,
           onChange: setBlue,
+          thumbColor: Color.fromARGB(255, 0, 0, color.blue),
           value: color.blue,
         ),
         ColorSelector(
+          activeColor: Colors.white,
           onChange: setWhite,
+          thumbColor: Color.fromARGB(255, getWhite(), getWhite(), getWhite()),
           value: getWhite(),
         ),
       ],
-    );
-  }
-}
-
-class ColorSlider extends StatelessWidget {
-  const ColorSlider({required this.onChange, this.value = 255});
-
-  final Function(int) onChange;
-  final int value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Slider(
-      max: 255,
-      value: value.toDouble(),
-      onChanged: (double newValue) {
-        onChange(newValue.toInt());
-      },
     );
   }
 }
@@ -102,20 +91,29 @@ class ColorSelector extends StatelessWidget {
   const ColorSelector({
     required this.onChange,
     required this.value,
+    this.activeColor = themeColor,
+    this.thumbColor = themeColor,
     Key? key,
   }) : super(key: key);
 
   final Function(int) onChange;
   final int value;
+  final Color activeColor;
+  final Color thumbColor;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
         Expanded(
-          child: ColorSlider(
-            onChange: onChange,
-            value: value,
+          child: Slider(
+            activeColor: activeColor,
+            thumbColor: thumbColor,
+            max: 255,
+            onChanged: (double newValue) {
+              onChange(newValue.toInt());
+            },
+            value: value.toDouble(),
           ),
         ),
         SingleNumberEntry(

@@ -64,14 +64,10 @@ class SingleNumberEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Loading with value: $value');
-    tc.addListener(() {
-      print('New value: ${tc.value}');
-    });
-    // tc.text = value.toString();
+    // tc.addListener(() {
+    //   print('New value: ${tc.value}');
+    // });
     if (value == defaultValue) {
-      // tc.selection = const TextSelection(baseOffset: 0, extentOffset: 2);
-
       tc.text = defaultValue.toString();
       tc.selection = TextSelection(
           baseOffset: 0, extentOffset: defaultValue.toString().length);
@@ -80,7 +76,6 @@ class SingleNumberEntry extends StatelessWidget {
       tc.selection = TextSelection(
           baseOffset: tc.text.length, extentOffset: tc.text.length);
     }
-    print('Received value is $value');
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -95,15 +90,12 @@ class SingleNumberEntry extends StatelessWidget {
             ],
             keyboardType: TextInputType.number,
             onChanged: (String value) {
-              print('Updating with value: $value');
               // onChanged(value);
               // return;
               final valDouble = num.tryParse(value);
               if (valDouble == null) {
-                print('Value is null');
                 onChanged(defaultValue);
               } else {
-                print('Updating normally');
                 onChanged(valDouble.toInt());
               }
             },

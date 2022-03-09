@@ -114,10 +114,12 @@ class SingleNumberEntry extends StatelessWidget {
         Column(
           children: [
             IconButton(
+              constraints: const BoxConstraints(),
+              icon: const Icon(Icons.arrow_upward),
               onPressed: () {
                 onChanged(value + arrowChange);
               },
-              icon: const Icon(Icons.arrow_upward),
+              padding: EdgeInsets.zero,
             ),
             IconButton(
               onPressed: () {

@@ -42,12 +42,13 @@ class MultiNumberEntry extends StatelessWidget {
 
 class SingleNumberEntry extends StatelessWidget {
   SingleNumberEntry({
+    Key? key,
     this.value = 12,
     this.unit,
     this.arrowChange = 1,
     required this.onChanged,
     this.defaultValue = 12,
-  });
+  }) : super(key: key);
 
   final int value;
   final String? unit;
@@ -57,24 +58,18 @@ class SingleNumberEntry extends StatelessWidget {
 
   final tc = TextEditingController();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // tc.addListener(() {
-    //   print('New value: ${tc.value}');
-    // });
     if (value == defaultValue) {
-      tc.text = defaultValue.toString();
-      tc.selection = TextSelection(
-          baseOffset: 0, extentOffset: defaultValue.toString().length);
+      tc
+        ..text = defaultValue.toString()
+        ..selection = TextSelection(
+            baseOffset: 0, extentOffset: defaultValue.toString().length);
     } else {
-      tc.text = value.toString();
-      tc.selection = TextSelection(
-          baseOffset: tc.text.length, extentOffset: tc.text.length);
+      tc
+        ..text = value.toString()
+        ..selection = TextSelection(
+            baseOffset: tc.text.length, extentOffset: tc.text.length);
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

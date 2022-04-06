@@ -29,11 +29,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       const FileReadWrite(relativePath: 'styles');
   final String _selectedStyleFile = 'selectedStyle.json';
 
+  Future<String> get authToken async {
+    final user = _auth.currentUser;
+    final token = await user?.getIdToken() ?? '';
+    return token;
+  }
+
   Future _appOpened(AppOpened event, Emitter<AppState> emit) async {
     print('App opened');
     final EreaderStyle selectedStyle;
     final createdStyleDir = await _styleRetriever.createDir();
     if (createdStyleDir) {
+      print('Adding selected style');
       await _styleRetriever.addFileByName(_selectedStyleFile);
       await _styleRetriever.addFileByName('savedStyles.json');
 

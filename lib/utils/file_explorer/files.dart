@@ -51,13 +51,7 @@ class FileReadWrite {
   }
 
   Future<bool> addFile(File file) async {
-    final dir = await _mainDir;
-    await createDir();
-    final fileName = p.basename(file.path);
-    final newFile = await file.copy(p.join(dir.path, fileName));
-    await newFile.create();
-    print('New file: $newFile');
-    final successful = newFile.existsSync();
+    final successful = file.existsSync();
     print('Successful: $successful');
     return successful;
   }

@@ -1,9 +1,4 @@
-import 'package:ereader/constants/constants.dart';
-import 'package:ereader/screens/ebook_selection_screen/bloc/bloc.dart';
 import 'package:ereader/screens/registration_screen/bloc/bloc.dart';
-import 'package:ereader/shared_widgets/show_popup.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
+import 'package:flutter/material.dart';
 
 abstract class EreaderEvent extends Equatable {
   const EreaderEvent();
@@ -8,24 +8,21 @@ abstract class EreaderEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// class LoadScreen extends EreaderEvent {
-//   const LoadScreen({})
-// }
-
 class LoadBook extends EreaderEvent {
   const LoadBook({
-    required this.ebookPath,
-    required this.widgetHeight,
+    required this.workingHeight,
+    required this.workingWidth,
+    required this.style,
   });
 
-  final String ebookPath;
-  final double widgetHeight;
+  final double workingHeight;
+  final double workingWidth;
+  final TextStyle style;
 }
 
-class TurnPage extends EreaderEvent {
-  const TurnPage({
-    required this.toPage,
+class WordSelected extends EreaderEvent {
+  const WordSelected({
+    required this.selectedWord,
   });
-
-  final int toPage;
+  final String selectedWord;
 }

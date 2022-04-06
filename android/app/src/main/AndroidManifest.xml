@@ -2,8 +2,8 @@
     package="com.maxshaberman.ereader">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
    <application
-        android:label="ereader"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Thali"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

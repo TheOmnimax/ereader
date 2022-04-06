@@ -46,7 +46,9 @@ class SelectionPage extends StatelessWidget {
       final ebookWidgetList = <Widget>[];
 
       if (sort == SortType.author) {
-        ebookMetadataList.sort((a, b) => a.author.compareTo(b.author));
+        // TODO: Update this to work better now that this is a list
+        ebookMetadataList.sort(
+            (a, b) => a.authors.toString().compareTo(b.authors.toString()));
       } else if (sort == SortType.title) {
         ebookMetadataList.sort((a, b) => a.title.compareTo(b.title));
       }
@@ -115,6 +117,12 @@ class SelectionPage extends StatelessWidget {
                   Navigator.pushNamed(context, '/login');
                 },
               ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/download');
+                },
+                child: const Text('Download'),
+              )
             ],
           ),
         ),
@@ -161,7 +169,7 @@ class EbookListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(ebookMetadata.title),
-            Text(ebookMetadata.author),
+            Text(ebookMetadata.authors.toString()),
           ],
         ),
         onPressed: () {
@@ -212,7 +220,7 @@ class EbookListItem extends StatelessWidget {
 class LoginTile extends StatelessWidget {
   const LoginTile({
     Key? key,
-    required this.username,
+    this.username = '',
     required this.login,
     required this.logout,
   }) : super(key: key);
@@ -225,15 +233,15 @@ class LoginTile extends StatelessWidget {
   Widget build(BuildContext context) {
     if (username == '') {
       return ListTile(
-        title: Text('Log in'),
+        title: const Text('Log in'),
         onTap: login,
       );
     } else {
       return ListTile(
         title: Text(username),
         trailing: TextButton(
-          child: Text('Log out'),
           onPressed: logout,
+          child: const Text('Log out'),
         ),
       );
     }

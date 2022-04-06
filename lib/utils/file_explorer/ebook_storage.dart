@@ -9,7 +9,7 @@ class EbookStorage {}
 
 class EbookDefaults {
   static const String title = '[No title]';
-  static const String author = '[Unknown]';
+  static const List<String> author = ['[Unknown]'];
   static const List<String> authorList = <String>['[Unknown]'];
 }
 
@@ -73,7 +73,7 @@ class EbookRetrieval {
       final epubBook = await getEbook(filePath.path);
       final epubMetadata = EbookMetadata(
         title: epubBook.Title ?? EbookDefaults.title,
-        author: epubBook.Author ?? EbookDefaults.author,
+        authors: epubBook.AuthorList ?? EbookDefaults.author,
         coverImage: null,
         filePath: filePath.path,
       );

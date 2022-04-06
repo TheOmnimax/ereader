@@ -2,6 +2,7 @@ import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/constants/constants.dart';
 import 'package:ereader/firebase_options.dart';
 import 'package:ereader/screens/custom_style_screen/custom_style_screen.dart';
+import 'package:ereader/screens/download_ebooks_screen/download_ebooks_screen.dart';
 import 'package:ereader/screens/ebook_selection_screen/ebook_selection_screen.dart';
 import 'package:ereader/screens/login_screen/login_screen.dart';
 import 'package:ereader/screens/registration_screen/registration_screen.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         // '/ereader': (context) => const EreaderMain(),
         '/login': (context) => const LoginMain(),
         '/register': (context) => const RegistrationMain(),
+        '/download': (context) => const DownloadEbooksScreen(),
       },
     );
   }

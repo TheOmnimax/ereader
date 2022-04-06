@@ -1,39 +1,51 @@
 import 'package:equatable/equatable.dart';
-import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
-import 'package:epubx/epubx.dart';
-import 'package:ereader/shared_data/ereader_style.dart';
-
-import 'package:ereader/screens/ereader_screen/ebook_processor/ebook_processor.dart';
+import 'package:ereader/utils/html_processor/html_processor.dart';
 
 abstract class EreaderState extends Equatable {
   const EreaderState({
-    this.title = 'No title',
-    this.ebookProcessed = const EbookProcessed(),
-    this.position = 0,
+    // this.content = '',
+    this.pages = const <PageData>[],
+    this.pageNum = 0,
   });
 
-  final String title;
-  final EbookProcessed ebookProcessed;
-  final int position;
+  // final String content;
+  final List<PageData> pages;
+  final int pageNum;
 
   @override
   List<Object?> get props => [];
 
   EreaderState copyWith({
-    String? newTitle,
-    EbookProcessed? newEbookProcessed,
-    int? newPosition,
+    // String? content,
+    List<PageData>? pages,
+    int? pageNum,
   });
 }
 
-class EbookLoading extends EreaderState {
-  const EbookLoading();
+class EbookInitial extends EreaderState {
+  const EbookInitial();
 
   @override
+  EreaderState copyWith({
+    // String? content,
+    List<PageData>? pages,
+    int? pageNum,
+  }) {
+    return EbookInitial();
+  }
+}
+
+class EbookLoading extends EreaderState {
+  const EbookLoading({
+    this.content = '',
+  });
+
+  final String content;
+  @override
   EbookLoading copyWith({
-    String? newTitle,
-    EbookProcessed? newEbookProcessed,
-    int? newPosition,
+    // String? content,
+    List<PageData>? pages,
+    int? pageNum,
   }) {
     return const EbookLoading();
   }
@@ -41,29 +53,28 @@ class EbookLoading extends EreaderState {
 
 class EbookDisplay extends EreaderState {
   const EbookDisplay({
-    required this.title,
-    required this.ebookProcessed,
-    this.position = 0,
+    // required this.content,
+    required this.pages,
+    required this.pageNum,
   });
 
-  final String title;
-  final EbookProcessed ebookProcessed;
-  final int position;
+  // final String content;
+  final List<PageData> pages;
+  final int pageNum;
 
   @override
-  List<Object?> get props => [position];
+  List<Object?> get props => [pages, pageNum];
 
   @override
   EbookDisplay copyWith({
-    String? newTitle,
-    EreaderStyle? newEreaderStyle,
-    EbookProcessed? newEbookProcessed,
-    int? newPosition,
+    // String? content,
+    List<PageData>? pages,
+    int? pageNum,
   }) {
     return EbookDisplay(
-      title: newTitle ?? title,
-      ebookProcessed: newEbookProcessed ?? ebookProcessed,
-      position: newPosition ?? position,
+      // content: content ?? this.content,
+      pages: pages ?? this.pages,
+      pageNum: pageNum ?? this.pageNum,
     );
   }
 }

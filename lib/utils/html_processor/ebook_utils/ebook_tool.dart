@@ -94,6 +94,7 @@ class EbookProcessor {
               htmlContent: htmlContent,
               pageHeight: pageHeight,
               pageWidth: pageWidth,
+              defaultStyle: style,
             ));
           }
         }

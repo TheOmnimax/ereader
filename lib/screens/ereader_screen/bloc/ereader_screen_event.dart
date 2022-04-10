@@ -10,11 +10,13 @@ abstract class EreaderEvent extends Equatable {
 
 class LoadBook extends EreaderEvent {
   const LoadBook({
+    required this.ebookPath,
     required this.workingHeight,
     required this.workingWidth,
     required this.style,
   });
 
+  final String ebookPath;
   final double workingHeight;
   final double workingWidth;
   final TextStyle style;

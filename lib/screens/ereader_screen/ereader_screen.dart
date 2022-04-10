@@ -107,16 +107,23 @@ class EreaderScreen extends StatelessWidget {
           color: Colors.black,
           height: 2,
         );
-        final screenSize = MediaQuery.of(context).size;
+        final mqData = MediaQuery.of(context);
+        final screenSize = mqData.size;
+        final uiUsed = mqData.viewPadding.top;
+        print('Width: ${screenSize.width}');
+        print('Screen height: ${screenSize.height}');
+        print('Top: $uiUsed');
         return Scaffold(
           appBar: AppBar(),
           body: Builder(
             builder: (BuildContext context) {
               final appBarHeight = Scaffold.of(context).appBarMaxHeight;
+              print('App bar: $appBarHeight');
               print('Adding...');
               if (state is EbookLoading) {
                 context.read<EreaderBloc>().add(
                       LoadBook(
+                        ebookPath: ebookPath,
                         workingHeight: screenSize.height - (appBarHeight ?? 0),
                         workingWidth: screenSize.width,
                         style: textStyle,

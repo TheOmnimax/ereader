@@ -27,8 +27,8 @@ class HtmlDisplayTool {
     final body = document.body;
 
     if (body != null) {
-      ElementProcessor elementProcessor = ElementProcessor(topElement: body);
-      elementProcessor.runProcessor();
+      final elementProcessor = ElementProcessor(topElement: body)
+        ..runProcessor();
 
       return HtmlDisplayTool._(
         textSpanList: elementProcessor.textSpanList,
@@ -69,9 +69,9 @@ class HtmlDisplayTool {
   }) {
     pageWidth -=
         3; // Subtract 3, or it may not calculate properly. I'm not sure why! 2 is too little, so it may take some trial-and-error to adjust this.
-    print('Starting page breaker.');
-    print(pageHeight);
-    print(pageWidth);
+    // print('Starting page breaker.');
+    // print(pageHeight);
+    // print(pageWidth);
     final remainingChunks = List<WordChunk>.from(
         wordChunks); // All word chunks. Occasionally added to when there is leftover text from the last page
     final remainingSpans = List<TextSpan>.from(
@@ -100,7 +100,7 @@ class HtmlDisplayTool {
           style: defaultStyle);
       final lineMetrics = textPainter.computeLineMetrics();
 
-      print('There are ${lineMetrics.length} lines');
+      // print('There are ${lineMetrics.length} lines');
       for (var i = 0; i < lineMetrics.length; i++) {
         final line = lineMetrics[i]; // Line metrics of the current line
 
@@ -130,13 +130,13 @@ class HtmlDisplayTool {
               final nextWords = <String>[];
               var nextLine = false;
               for (final word in chunkWords) {
-                print('Word: $word');
+                // print('Word: $word');
                 final wordLength = word.length;
-                print('${wordLength + currentLength} / $currentPageEndIndex');
+                // print('${wordLength + currentLength} / $currentPageEndIndex');
                 if (!nextLine &&
                     (currentLength + wordLength >= currentPageEndIndex)) {
                   nextLine = true;
-                  print('On to next line!');
+                  // print('On to next line!');
                 }
                 if (!nextLine) {
                   additionalWords.add(word);
@@ -146,8 +146,8 @@ class HtmlDisplayTool {
                   nextWords.add(word);
                 }
               }
-              print('New words: $additionalWords');
-              print('Next words: $nextWords');
+              // print('New words: $additionalWords');
+              // print('Next words: $nextWords');
               final newSpan = TextSpan(
                 text: additionalWords.join(' '),
               );
@@ -172,7 +172,7 @@ class HtmlDisplayTool {
               children: List.from(currentPage),
             ),
           ));
-          print('Page added. On chunk $onChunk of $numChunks');
+          // print('Page added. On chunk $onChunk of $numChunks');
           currentPage.clear();
           continue chunkLoop;
         } // End IF
@@ -197,7 +197,7 @@ class HtmlDisplayTool {
     required double pageWidth,
     TextStyle defaultStyle = const TextStyle(),
   }) {
-    HtmlDisplayTool htmlDisplayTool = HtmlDisplayTool.fromHtml(htmlContent);
+    final htmlDisplayTool = HtmlDisplayTool.fromHtml(htmlContent);
     final pages = htmlDisplayTool.pageBreaker(
       pageHeight: pageHeight,
       pageWidth: pageWidth,

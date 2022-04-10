@@ -1,12 +1,10 @@
 import 'dart:ui';
-import 'package:flutter/gestures.dart';
-import 'package:html/parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'helper_classes.dart';
+import 'package:html/parser.dart';
 import 'element_processor.dart';
+import 'helper_classes.dart';
 import 'used_classes.dart';
-import 'package:flutter/gestures.dart';
 
 class HtmlDisplayTool {
   HtmlDisplayTool._({
@@ -58,11 +56,9 @@ class HtmlDisplayTool {
         style: style,
       ),
       textDirection: TextDirection.ltr,
-    );
-    textPainter.layout(
-      minWidth: 0,
-      maxWidth: maxWidth,
-    );
+    )..layout(
+        maxWidth: maxWidth - 3,
+      );
     return textPainter;
   }
 
@@ -71,19 +67,21 @@ class HtmlDisplayTool {
     required double pageWidth,
     TextStyle defaultStyle = const TextStyle(),
   }) {
+    pageWidth -=
+        3; // Subtract 3, or it may not calculate properly. I'm not sure why! 2 is too little, so it may take some trial-and-error to adjust this.
     print('Starting page breaker.');
     print(pageHeight);
     print(pageWidth);
-    List<WordChunk> remainingChunks = List.from(
+    final remainingChunks = List<WordChunk>.from(
         wordChunks); // All word chunks. Occasionally added to when there is leftover text from the last page
-    List<TextSpan> remainingSpans = List.from(
+    final remainingSpans = List<TextSpan>.from(
         textSpanList); // Used to create the text painter each time to determine when the page overflows, and at the end to create the last page. Unlike the remaining chunks, when a remainingSpans element is used on the page, it is removed from this list.
 
-    List<PageData> pages = <PageData>[];
+    final pages = <PageData>[];
 
-    int onChunk = 0;
-    int numChunks = remainingChunks.length;
-    List<TextSpan> currentPage = <TextSpan>[];
+    var onChunk = 0;
+    var numChunks = remainingChunks.length;
+    final currentPage = <TextSpan>[];
 
     chunkLoop:
     while (onChunk < numChunks) {
@@ -96,28 +94,30 @@ class HtmlDisplayTool {
         }
       }
 
-      TextPainter textPainter = _generatePainter(
+      final textPainter = _generatePainter(
           textSpanList: remainingSpans,
           maxWidth: pageWidth,
           style: defaultStyle);
-      List<LineMetrics> lineMetrics = textPainter.computeLineMetrics();
+      final lineMetrics = textPainter.computeLineMetrics();
 
       print('There are ${lineMetrics.length} lines');
-      for (int i = 0; i < lineMetrics.length; i++) {
-        final line = lineMetrics[i];
+      for (var i = 0; i < lineMetrics.length; i++) {
+        final line = lineMetrics[i]; // Line metrics of the current line
 
         final left = line.left;
         final top = line.baseline - line.ascent;
         final bottom = line.baseline + line.descent;
 
         if (pageHeight < bottom) {
-          int currentPageEndIndex =
+          // True if the content is too long for the page. If false, it means the content can fit, and it can simply be added without breaking up the page
+          // print('Overtaking');
+          final currentPageEndIndex =
               textPainter.getPositionForOffset(Offset(left, top)).offset;
 
-          int currentLength = 0;
+          var currentLength = 0;
           while (
               (onChunk < numChunks) && (currentLength < currentPageEndIndex)) {
-            WordChunk workingChunk = remainingChunks[onChunk];
+            final workingChunk = remainingChunks[onChunk];
             if (workingChunk.length + currentLength < currentPageEndIndex) {
               currentPage.add(workingChunk.textSpan);
               remainingSpans.remove(workingChunk.textSpan);
@@ -126,12 +126,12 @@ class HtmlDisplayTool {
             } else {
               // Create new span with part of the words, add it to the page, create new span with the remaining words, have that span replace the first one in the list, create new chunk with those remaining words, add it to the chunk list.
               final chunkWords = workingChunk.wordList;
-              List<String> additionalWords = <String>[];
-              List<String> nextWords = <String>[];
-              bool nextLine = false;
-              for (var word in chunkWords) {
+              final additionalWords = <String>[];
+              final nextWords = <String>[];
+              var nextLine = false;
+              for (final word in chunkWords) {
                 print('Word: $word');
-                int wordLength = word.length;
+                final wordLength = word.length;
                 print('${wordLength + currentLength} / $currentPageEndIndex');
                 if (!nextLine &&
                     (currentLength + wordLength >= currentPageEndIndex)) {

@@ -122,6 +122,20 @@ class ElementProcessor {
           addLineBreak = true;
           break;
         }
+      case 'h2':
+        {
+          addLineBreak = true;
+          break;
+        }
+      case 'br':
+        {
+          addLineBreak = true;
+          break;
+        }
+      default:
+        {
+          break;
+        }
     }
 
     for (var node in nodes) {

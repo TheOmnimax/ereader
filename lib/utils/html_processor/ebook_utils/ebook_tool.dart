@@ -50,59 +50,16 @@ class EbookProcessor {
     required double pageWidth,
     required TextStyle style,
   }) {
-    List<PageData> pages = <PageData>[];
-    List<ChapterData> chapterData = <ChapterData>[];
-    List<EpubChapter>? chapters = epubBook.Chapters;
-    EpubContent? content = epubBook.Content;
+    final pageGenerator = PageGenerator(
+      epubBook: epubBook,
+      pageWidth: pageWidth,
+      pageHeight: pageHeight,
+      style: style,
+    )..generate();
 
-    if (chapters != null) {
-      for (final chapter in chapters) {
-        // TODO: Add run through subchapters
-        chapterData.add(
-          ChapterData.generate(
-            chapterData: chapter,
-            start: pages.length,
-          ),
-        );
-        final String? htmlContent = chapter.HtmlContent; // String?
-        print('CHAPTER: ${chapter.Title}');
-        if (htmlContent != null) {
-          final newPages = HtmlDisplayTool.getPages(
-            htmlContent: htmlContent,
-            pageHeight: pageHeight,
-            pageWidth: pageWidth,
-            defaultStyle: style,
-          );
-          print(
-              'There are ${newPages.length} new pages in the chapter ${chapter.Title}');
-          pages.addAll(newPages);
-        } else {
-          pages.add(PageData(
-              content: TextSpan())); // Add blank page if chapter has no content
-        }
-      }
-    } else if (content != null) {
-      // No chapters, so check content
-      final contentHtmlMap = content.Html;
-      if (contentHtmlMap != null) {
-        for (final contentFileName in contentHtmlMap.keys) {
-          final htmlContent = contentHtmlMap[contentFileName]?.Content;
-          if (htmlContent != null) {
-            // TODO: QUESTION: Could this be a function in a method, or is that not proper?
-            // TODO: Make anonymous function
-            pages.addAll(HtmlDisplayTool.getPages(
-              htmlContent: htmlContent,
-              pageHeight: pageHeight,
-              pageWidth: pageWidth,
-              defaultStyle: style,
-            ));
-          }
-        }
-      }
-    } // End content check
     return PageChapterData(
-      pageData: pages,
-      chapterData: chapterData,
+      pageData: pageGenerator.pages,
+      chapterData: pageGenerator.chapterData,
     );
   }
 }

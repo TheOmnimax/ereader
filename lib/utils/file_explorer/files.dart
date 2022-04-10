@@ -51,13 +51,18 @@ class FileReadWrite {
   }
 
   Future<bool> addFile(File file) async {
-    final successful = file.existsSync();
-    print('Successful: $successful');
-    return successful;
+    final exists = file.existsSync();
+    if (exists) {
+      return false;
+    }
+
+    file.createSync();
+    return true;
   }
 
   Future<bool> addFileByName(String filename) async {
-    final file = File(filename);
+    final dir = await _mainDir;
+    final file = File(p.join(dir.path, filename));
     final result = await addFile(file);
     return result;
   }

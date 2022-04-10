@@ -38,8 +38,15 @@ class DownloadEbooksMain extends StatelessWidget {
                 if (blocState is ListBooks) {
                   final ebookButtons = <EbookButton>[];
                   for (final ebook in blocState.ebookList) {
-                    ebookButtons.add(
-                        EbookButton(ebookMetadata: ebook, onPressed: () {}));
+                    ebookButtons.add(EbookButton(
+                        ebookMetadata: ebook,
+                        onPressed: () {
+                          context.read<DownloadEbooksBloc>().add(
+                                DownloadEbook(
+                                  filename: ebook.filePath,
+                                ),
+                              );
+                        }));
                   }
 
                   return ListBuilder(widgets: ebookButtons);

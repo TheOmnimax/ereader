@@ -8,7 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 // import 'package:flutter/material.dart';
 import 'dart:async';
 
-part 'ebook_metadata.g.dart';
+// part 'ebook_metadata.g.dart';
 
 // TODO: Update with author and publisher list
 class EbookMetadata {
@@ -81,8 +81,8 @@ class GenEbookMetadata {
     required this.filePath,
   });
 
-  factory GenEbookMetadata.fromJson(Map<String, dynamic> json) =>
-      _$GenEbookMetadataFromJson(json);
+  // factory GenEbookMetadata.fromJson(Map<String, dynamic> json) =>
+  //     _$GenEbookMetadataFromJson(json);
 
   final String title;
   final List<String?> authors;

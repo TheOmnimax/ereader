@@ -1,5 +1,6 @@
 import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/constants/constants.dart';
+import 'package:ereader/screens/download_ebooks_screen/bloc/bloc.dart';
 import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 import 'package:ereader/screens/ebook_selection_screen/bloc/bloc.dart';
 import 'package:ereader/shared_widgets/shared_widgets.dart';
@@ -19,6 +20,9 @@ class EbookSelectionMain extends StatelessWidget {
     );
   }
 }
+
+// TODO: Set to add event LoadPage() whenever screen on top is popped
+// TODO: Fix opener of book
 
 class SelectionPage extends StatelessWidget {
   const SelectionPage({Key? key}) : super(key: key);
@@ -129,6 +133,13 @@ class SelectionPage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('eReader'),
           actions: <Widget>[
+            IconButton(
+                onPressed: () {
+                  context.read<EbookSelectionBloc>().add(const LoadPage());
+                },
+                icon: const Icon(
+                  Icons.sync,
+                )),
             PopupMenuButton<String>(
               onSelected: kebabFunction,
               itemBuilder: (BuildContext context) {

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:ereader/bloc/ereader_bloc.dart';
 import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
+import 'package:ereader/utils/file_explorer/files.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'bloc.dart';
@@ -68,5 +70,39 @@ class DownloadEbooksBloc
   }
 
   Future _downloadEbook(
-      DownloadEbook event, Emitter<DownloadEbooksState> emit) async {}
+      DownloadEbook event, Emitter<DownloadEbooksState> emit) async {
+    final auth = await appBloc.authToken;
+
+    final uri =
+        Uri.parse('https://ereader-341202.uc.r.appspot.com/download-ebook');
+
+    final headers = {
+      HttpHeaders.authorizationHeader: auth,
+    };
+
+    final response = await http.post(
+      uri,
+      headers: headers,
+      body: event.filename,
+    );
+
+    final statusCode = response.statusCode;
+    final responseBodyRaw = response.body;
+    final codeUnits = responseBodyRaw.codeUnits;
+    final unit8List = Uint8List.fromList(codeUnits);
+
+    print('statusCode:');
+    print(statusCode);
+
+    // final ebookFile = File(event.filename)..writeAsBytesSync(unit8List);
+
+    const fileReadWrite = FileReadWrite(relativePath: 'ebooks');
+    final successAdd = await fileReadWrite.addFileByName(event.filename);
+    print('Added: $successAdd');
+    final successCreate = await fileReadWrite.writeBytes(
+      filename: event.filename,
+      contents: codeUnits,
+    );
+    print('Created: $successCreate');
+  }
 }

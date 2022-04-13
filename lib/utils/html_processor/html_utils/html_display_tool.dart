@@ -67,14 +67,14 @@ class HtmlDisplayTool {
 
       final lineEndIndex =
           textPainter.getPositionForOffset(Offset(left, top)).offset;
-      print('At bottom: $bottom');
-      print('Line ($lastEndIndex, $lineEndIndex):');
-      print(content.substring(lastEndIndex, lineEndIndex));
+      // print('At bottom: $bottom');
+      // print('Line ($lastEndIndex, $lineEndIndex):');
+      // print(content.substring(lastEndIndex, lineEndIndex));
       lastEndIndex = lineEndIndex;
 
       if (pageHeight < bottom) {
         // True if the content is too long for the page. If false, it means the content can fit, and it can simply be added without breaking up the page
-        print('Overtaking');
+        // print('Overtaking');
         final currentPageEndIndex =
             textPainter.getPositionForOffset(Offset(left, top)).offset;
 
@@ -96,9 +96,9 @@ class HtmlDisplayTool {
   }) {
     pageWidth -=
         3; // Subtract 3, or it may not calculate properly. I'm not sure why! 2 is too little, so it may take some trial-and-error to adjust this.
-    print('Starting page breaker.');
-    print(pageHeight);
-    print(pageWidth);
+    // print('Starting page breaker.');
+    // print(pageHeight);
+    // print(pageWidth);
     final pages = <PageData>[];
     var workingSpan = textSpan.copyWith(style: defaultStyle);
 

@@ -1,4 +1,5 @@
 import 'package:clipboard/clipboard.dart';
+import 'package:ereader/bloc/ereader_bloc.dart';
 import 'package:ereader/screens/ereader_screen/bloc/bloc.dart';
 import 'package:ereader/shared_widgets/show_popup.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class EreaderMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => EreaderBloc(),
+      create: (context) => EreaderBloc(appBloc: context.read<AppBloc>()),
       child: EreaderScreen(
         ebookPath: ebookPath,
       ),
@@ -99,6 +100,7 @@ class EreaderScreen extends StatelessWidget {
 
     return BlocBuilder<EreaderBloc, EreaderState>(
       builder: (context, state) {
+        final appBloc = context.watch<AppBloc>();
         final pages = state.pages;
         final pageNum = state.pageNum;
         print('There are ${pages.length} pages');
@@ -130,36 +132,51 @@ class EreaderScreen extends StatelessWidget {
                       ),
                     );
                 return Text('Loading...');
-              } else {
+              } else if (state is EbookDisplay) {
                 if (pages.length == 0) {
                   return SafeArea(child: Text('Nothin\'!'));
                 } else {
+                  final currentStyle = appBloc.state.currentStyle;
+                  final padding = currentStyle.margins;
                   return SafeArea(
                     child: PageView.builder(itemBuilder: (context, index) {
                       final page = pages[index];
                       final pageContent = page.content;
                       final plainText = pageContent.toPlainText();
                       final contentLength = plainText.length;
-                      return SelectableText.rich(
-                        pageContent,
-                        style: textStyle,
-                        onSelectionChanged: (selection, cause) {
-                          textSelected(
-                            selection: selection,
-                            plainText: plainText,
-                            contentLength: contentLength,
-                            appBarHeight: appBarHeight,
-                            screenSize: screenSize,
-                          );
-                        }, // End function when text is selected
-                        toolbarOptions: ToolbarOptions(
-                          copy: false,
-                          selectAll: false,
+                      return Container(
+                        color: currentStyle.backgroundColor,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            top: padding[0].toDouble(),
+                            right: padding[1].toDouble(),
+                            bottom: padding[2].toDouble(),
+                            left: padding[3].toDouble(),
+                          ),
+                          child: SelectableText.rich(
+                            pageContent,
+                            style: state.style.toTextStyle(),
+                            onSelectionChanged: (selection, cause) {
+                              textSelected(
+                                selection: selection,
+                                plainText: plainText,
+                                contentLength: contentLength,
+                                appBarHeight: appBarHeight,
+                                screenSize: screenSize,
+                              );
+                            }, // End function when text is selected
+                            toolbarOptions: ToolbarOptions(
+                              copy: false,
+                              selectAll: false,
+                            ),
+                          ),
                         ),
                       );
                     }),
                   );
                 }
+              } else {
+                return Text('Error');
               }
             },
           ),

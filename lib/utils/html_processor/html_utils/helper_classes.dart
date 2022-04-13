@@ -100,8 +100,8 @@ class TextSpanDivider {
       if (over) {
         nextChildren.add(child);
       } else {
-        final workingText;
-        var nextText;
+        final String? workingText;
+        String? nextText;
 
         final spanText = child.text;
         if (spanText != null) {
@@ -131,7 +131,7 @@ class TextSpanDivider {
         }
 
         final spanChildrenRaw = child.children;
-        final spanChildren;
+        final List<TextSpan> spanChildren;
         if (spanChildrenRaw == null) {
           spanChildren = <TextSpan>[];
         } else {
@@ -187,10 +187,10 @@ class TextSpanDivider {
   TextSpanDivision getDivision() {
     atTop = true;
 
-    final currentText;
-    final nextText;
-    final currentChildren;
-    final nextChildren;
+    final String? currentText;
+    final String? nextText;
+    final List<TextSpan>? currentChildren;
+    final List<TextSpan>? nextChildren;
 
     final spanText = workingSpan.text;
     if (spanText != null) {
@@ -202,13 +202,13 @@ class TextSpanDivider {
       nextText = null;
     }
     final spanChildrenRaw = workingSpan.children;
-    final spanChildren;
+    final List<TextSpan> spanChildren;
     if (spanChildrenRaw == null) {
       spanChildren = <TextSpan>[];
     } else {
       spanChildren = spanChildrenRaw as List<TextSpan>;
     }
-    if (spanChildren.length > 0) {
+    if (spanChildren.isNotEmpty) {
       final splitChildren = _processChildren(textSpanChildren: spanChildren);
       currentChildren = splitChildren.currentChildren;
       nextChildren = splitChildren.nextChildren;
@@ -217,19 +217,16 @@ class TextSpanDivider {
       nextChildren = null;
     }
 
-    final currentSpan;
-    if ((currentText == null) && (currentChildren.length == 0)) {
-      currentSpan = null; // Don't bother adding it if there is nothing to add
-    } else {
-      currentSpan = TextSpan(
-        text: currentText,
-        children: currentChildren,
-        style: workingSpan.style,
-      );
-    }
+    final TextSpan currentSpan;
+    currentSpan = TextSpan(
+      text: currentText,
+      children: currentChildren,
+      style: workingSpan.style,
+    );
 
-    final nextSpan;
-    if (nextText == null && (nextChildren.length == 0)) {
+    final TextSpan? nextSpan;
+    if (nextText == null &&
+        ((nextChildren == null) || (nextChildren.isEmpty))) {
       nextSpan = null; // Don't bother adding it if there is nothing to add
     } else {
       nextSpan = TextSpan(
@@ -264,7 +261,6 @@ class TextSpanDivision {
 
   final TextSpan currentSpan;
   final TextSpan? nextSpan;
-  var atText = 0;
 }
 
 // Will add more later, but these are the only ones I need.

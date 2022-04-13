@@ -92,7 +92,7 @@ class PageGenerator {
         ),
       );
       final htmlContent = chapter.HtmlContent; // String?
-      print('CHAPTER: ${chapter.Title}');
+      // print('CHAPTER: ${chapter.Title}');
       if (htmlContent != null) {
         final newPages = HtmlDisplayTool.getPages(
           htmlContent: htmlContent,
@@ -100,8 +100,8 @@ class PageGenerator {
           pageWidth: pageWidth,
           defaultStyle: style,
         );
-        print(
-            'There are ${newPages.length} new pages in the chapter ${chapter.Title}');
+        // print(
+        //     'There are ${newPages.length} new pages in the chapter ${chapter.Title}');
         pages.addAll(newPages);
       } else {
         pages.add(PageData(

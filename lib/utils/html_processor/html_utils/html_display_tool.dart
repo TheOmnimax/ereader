@@ -8,14 +8,10 @@ import 'used_classes.dart';
 
 class HtmlDisplayTool {
   HtmlDisplayTool._({
-    required this.textSpanList,
-    required this.wordChunks,
-    required this.plainText,
+    required this.textSpan,
   });
 
-  final List<TextSpan> textSpanList;
-  final List<WordChunk> wordChunks;
-  final String plainText;
+  final TextSpan textSpan;
 
   static HtmlDisplayTool fromHtml(String htmlContent) {
     // Start by clearing readability elements
@@ -26,40 +22,71 @@ class HtmlDisplayTool {
 
     final body = document.body;
 
-    if (body != null) {
-      final elementProcessor = ElementProcessor(topElement: body)
-        ..runProcessor();
+    final elementProcessor = ElementProcessor(document: document);
 
-      return HtmlDisplayTool._(
-        textSpanList: elementProcessor.textSpanList,
-        wordChunks: elementProcessor.wordChunks,
-        plainText: elementProcessor.plainText,
-      );
-    } else {
-      return HtmlDisplayTool._(
-        textSpanList: [],
-        wordChunks: [],
-        plainText: '',
-      );
-    }
+    return HtmlDisplayTool._(
+      textSpan: elementProcessor.runProcessor(),
+    );
   }
 
   // Creates a text painter that is used to determine which text is on which lines, which is used to determine when to break up the pages
   TextPainter _generatePainter({
-    required List<TextSpan> textSpanList,
+    required TextSpan textSpan,
     required double maxWidth,
-    TextStyle style = const TextStyle(),
   }) {
     final textPainter = TextPainter(
-      text: TextSpan(
-        children: textSpanList,
-        style: style,
-      ),
+      text: textSpan,
       textDirection: TextDirection.ltr,
     )..layout(
-        maxWidth: maxWidth - 3,
+        maxWidth: maxWidth,
       );
     return textPainter;
+  }
+
+  TextSpanDivision breaker({
+    required TextSpan textSpan,
+    required double pageHeight,
+    required double pageWidth,
+    TextStyle defaultStyle = const TextStyle(),
+  }) {
+    final textPainter = _generatePainter(
+      textSpan: textSpan,
+      maxWidth: pageWidth,
+    );
+
+    final content = textPainter.text?.toPlainText() ?? '';
+    var lastEndIndex = 0;
+
+    final lineMetrics = textPainter.computeLineMetrics();
+    for (var i = 0; i < lineMetrics.length; i++) {
+      final line = lineMetrics[i]; // Line metrics of the current line
+
+      final left = line.left;
+      final top = line.baseline - line.ascent;
+      final bottom = line.baseline + line.descent;
+
+      final lineEndIndex =
+          textPainter.getPositionForOffset(Offset(left, top)).offset;
+      print('At bottom: $bottom');
+      print('Line ($lastEndIndex, $lineEndIndex):');
+      print(content.substring(lastEndIndex, lineEndIndex));
+      lastEndIndex = lineEndIndex;
+
+      if (pageHeight < bottom) {
+        // True if the content is too long for the page. If false, it means the content can fit, and it can simply be added without breaking up the page
+        print('Overtaking');
+        final currentPageEndIndex =
+            textPainter.getPositionForOffset(Offset(left, top)).offset;
+
+        final spanDivider = TextSpanDivider(
+            workingSpan: textSpan, pageEndIndex: currentPageEndIndex);
+        final division = spanDivider.getDivision();
+        return division;
+        // pages.add(PageData(content: spanDivision.currentSpan));
+        // workingSpan = spanDivision.nextSpan;
+      }
+    }
+    return TextSpanDivision(currentSpan: textSpan); // No division was necessary
   }
 
   List<PageData> pageBreaker({
@@ -69,125 +96,22 @@ class HtmlDisplayTool {
   }) {
     pageWidth -=
         3; // Subtract 3, or it may not calculate properly. I'm not sure why! 2 is too little, so it may take some trial-and-error to adjust this.
-    // print('Starting page breaker.');
-    // print(pageHeight);
-    // print(pageWidth);
-    final remainingChunks = List<WordChunk>.from(
-        wordChunks); // All word chunks. Occasionally added to when there is leftover text from the last page
-    final remainingSpans = List<TextSpan>.from(
-        textSpanList); // Used to create the text painter each time to determine when the page overflows, and at the end to create the last page. Unlike the remaining chunks, when a remainingSpans element is used on the page, it is removed from this list.
-
+    print('Starting page breaker.');
+    print(pageHeight);
+    print(pageWidth);
     final pages = <PageData>[];
+    var workingSpan = textSpan.copyWith(style: defaultStyle);
 
-    var onChunk = 0;
-    var numChunks = remainingChunks.length;
-    final currentPage = <TextSpan>[];
-
-    chunkLoop:
-    while (onChunk < numChunks) {
-      // Remove leading line breaks on new pages
-      if (remainingSpans[0].text == '\n') {
-        remainingSpans.removeAt(0);
-        onChunk++;
-        if (onChunk >= numChunks) {
-          break;
-        }
-      }
-
-      final textPainter = _generatePainter(
-          textSpanList: remainingSpans,
-          maxWidth: pageWidth,
-          style: defaultStyle);
-      final lineMetrics = textPainter.computeLineMetrics();
-
-      // print('There are ${lineMetrics.length} lines');
-      for (var i = 0; i < lineMetrics.length; i++) {
-        final line = lineMetrics[i]; // Line metrics of the current line
-
-        final left = line.left;
-        final top = line.baseline - line.ascent;
-        final bottom = line.baseline + line.descent;
-
-        if (pageHeight < bottom) {
-          // True if the content is too long for the page. If false, it means the content can fit, and it can simply be added without breaking up the page
-          // print('Overtaking');
-          final currentPageEndIndex =
-              textPainter.getPositionForOffset(Offset(left, top)).offset;
-
-          var currentLength = 0;
-          while (
-              (onChunk < numChunks) && (currentLength < currentPageEndIndex)) {
-            final workingChunk = remainingChunks[onChunk];
-            if (workingChunk.length + currentLength < currentPageEndIndex) {
-              currentPage.add(workingChunk.textSpan);
-              remainingSpans.remove(workingChunk.textSpan);
-              currentLength += workingChunk.length;
-              onChunk++;
-            } else {
-              // Create new span with part of the words, add it to the page, create new span with the remaining words, have that span replace the first one in the list, create new chunk with those remaining words, add it to the chunk list.
-              final chunkWords = workingChunk.wordList;
-              final additionalWords = <String>[];
-              final nextWords = <String>[];
-              var nextLine = false;
-              for (final word in chunkWords) {
-                // print('Word: $word');
-                final wordLength = word.length;
-                // print('${wordLength + currentLength} / $currentPageEndIndex');
-                if (!nextLine &&
-                    (currentLength + wordLength >= currentPageEndIndex)) {
-                  nextLine = true;
-                  // print('On to next line!');
-                }
-                if (!nextLine) {
-                  additionalWords.add(word);
-                  currentLength += word.length +
-                      1; // Add one for the space, but will adjust this later to be cleaner
-                } else {
-                  nextWords.add(word);
-                }
-              }
-              // print('New words: $additionalWords');
-              // print('Next words: $nextWords');
-              final newSpan = TextSpan(
-                text: additionalWords.join(' '),
-              );
-              currentPage.add(newSpan);
-              remainingSpans.remove(workingChunk.textSpan);
-              final nextSpan = TextSpan(
-                text: nextWords.join(' '),
-              );
-              remainingSpans.insert(0, nextSpan);
-              remainingChunks.insert(
-                onChunk + 1,
-                WordChunk.buildWordChunk(textSpan: nextSpan),
-              );
-              numChunks++;
-              onChunk++;
-
-              break;
-            }
-          } // End WHILE through chunks for page
-          pages.add(PageData(
-            content: TextSpan(
-              children: List.from(currentPage),
-            ),
-          ));
-          // print('Page added. On chunk $onChunk of $numChunks');
-          currentPage.clear();
-          continue chunkLoop;
-        } // End IF
-      } // End FOR through each line
-
-      // For adding the last page
-      // Can only get here if the FOR loop did not end early
-      pages.add(PageData(
-        content: TextSpan(
-          children: remainingSpans,
-        ),
-      ));
-      break;
-    } // End WHIlE through all chunks for all pages
-
+    var spanDivision = breaker(
+        pageHeight: pageHeight, pageWidth: pageWidth, textSpan: workingSpan);
+    pages.add(PageData(content: spanDivision.currentSpan));
+    var nextSpan = spanDivision.nextSpan;
+    while (nextSpan != null) {
+      spanDivision = breaker(
+          pageHeight: pageHeight, pageWidth: pageWidth, textSpan: nextSpan);
+      pages.add(PageData(content: spanDivision.currentSpan));
+      nextSpan = spanDivision.nextSpan;
+    }
     return pages;
   }
 

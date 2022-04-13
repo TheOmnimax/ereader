@@ -3,33 +3,39 @@ import 'package:html/dom.dart' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'helper_classes.dart';
+import '../../text_span_table/text_span_table.dart';
 
-// Used by HtmlDisplayTool to take the elements, and create a list of text spans and such.
 class ElementProcessor {
   ElementProcessor({
-    required this.topElement,
+    required this.document,
   });
 
-  List<TextSpan> textSpanList = <TextSpan>[];
-  List<WordChunk> wordChunks = <WordChunk>[];
-  String plainText = '';
-  final html.Element topElement;
+  final html.Document document;
+  static const _lineBreakTags = [
+    'p',
+    'tr',
+    'title',
+    'h2',
+    'h3',
+  ];
 
-  // Takes a string in a "style" HTML attribute, and turns it into a map so the list of styles in easily retrievable
-  Map<String, String> _mapStyle(String styleString) {
-    Map<String, String> styleMap = <String, String>{};
-    List<String> parts = styleString.split(new RegExp(r';[ \n]*'));
-    for (var part in parts) {
-      List<String> styleParts = part.split(new RegExp(r':[ \n]*'));
-      styleMap[styleParts[0]] = styleParts[1];
+  html.NodeList eliminateWhitespace(html.NodeList nodeList) {
+    if (nodeList[0].nodeType == 3) {
+      nodeList[0].text = nodeList[0].text?.replaceAll(RegExp(r'^[ \n]+'), '');
     }
 
-    return styleMap;
+    if (nodeList[nodeList.length - 1].nodeType == 3) {
+      nodeList[nodeList.length - 1].text = nodeList[nodeList.length - 1]
+          .text
+          ?.replaceAll(RegExp(r'[ \n]+$'), '');
+    }
+
+    return nodeList;
   }
 
   // Adds style to TextStyle based on the styles found in the "style" attribute of the HTML tag. Done up here for organization.
   TextStyle _applyStyle({
-    required TextStyle currentStyle,
+    TextStyle currentStyle = const TextStyle(),
     required Map<String, String> styleMap,
   }) {
     for (var style in styleMap.keys) {
@@ -87,123 +93,166 @@ class ElementProcessor {
     return currentStyle.copyWith();
   }
 
-  void _processElement({
-    required html.Node element,
-    TextStyle currentStyle = const TextStyle(),
-    String workingTag = '',
-  }) {
-    var nodes = element.nodes;
-    var elements = element.children;
-    var onElement = 0;
-
-    bool addLineBreak = false;
-    switch (workingTag) {
-      case '':
-      case 'p':
-        {
-          // while (nodes[0].nodeType == 3) {
-          //   if (RegExp(r'^ +$').hasMatch(nodes[0].text ?? '')) {
-          //     nodes.removeAt(0);
-          //   } else {
-          //     // TODO: Find way to remove spaces between p tags without removing them within p's.
-          //     // nodes[0].text = nodes[0].text?.trim();
-          //     break;
-          //   }
-          // }
-          // while (nodes[nodes.length - 1].nodeType == 3) {
-          //   if (RegExp(r'^ +$').hasMatch(nodes[nodes.length - 1].text ?? '')) {
-          //     nodes.removeAt(nodes.length - 1);
-          //   } else {
-          //     nodes[nodes.length - 1].text =
-          //         nodes[nodes.length - 1].text?.trim();
-          //     break;
-          //   }
-          // }
-          addLineBreak = true;
-          break;
-        }
-      case 'h2':
-        {
-          addLineBreak = true;
-          break;
-        }
-      case 'br':
-        {
-          addLineBreak = true;
-          break;
-        }
-      default:
-        {
-          break;
-        }
+  Map<String, String> _mapStyle(String styleString) {
+    Map<String, String> styleMap = <String, String>{};
+    List<String> parts = styleString.split(new RegExp(r';[ \n]*'));
+    for (var part in parts) {
+      List<String> styleParts = part.split(new RegExp(r':[ \n]*'));
+      styleMap[styleParts[0]] = styleParts[1];
     }
 
-    for (var node in nodes) {
-      TextStyle spanStyle = currentStyle;
+    return styleMap;
+  }
 
+  TextSpan _nodeProcessor({
+    required html.NodeList nodes,
+    required List<html.Element> elements,
+    List<String> parents = const <String>[],
+    String elementTag = '',
+    TextStyle? spanStyle,
+  }) {
+    var onElement = 0;
+    TextStyle? nextStyle;
+
+    final children = <TextSpan>[];
+    var lastTag = '';
+    final String identifier;
+    for (final node in nodes) {
+      nextStyle = null;
       switch (node.nodeType) {
-        case 1:
+        case (1):
           {
-            var workingElement = elements[onElement];
-            workingTag = workingElement.localName ?? '';
-            var attributes = workingElement.attributes;
+            // Element node
+            final element = elements[onElement];
+            onElement++;
+            final tagName = element.localName ?? '';
 
+            var addLineBreak = false;
+
+            if (_lineBreakTags.contains(tagName)) {
+              nodes = eliminateWhitespace(nodes);
+              addLineBreak = true;
+            }
+
+            switch (tagName) {
+              case '':
+                {
+                  break;
+                }
+              case 'p':
+                {
+                  children.add(TextSpan(text: '    '));
+                  break;
+                }
+              case 'table':
+                {
+                  break;
+                }
+              case 'tr':
+                {
+                  break;
+                }
+              case 'td':
+                {
+                  break;
+                }
+              case 'title':
+                {
+                  break;
+                }
+              case 'h2':
+                {
+                  break;
+                }
+              case 'h3':
+                {
+                  break;
+                }
+              case 'br':
+                {
+                  children.add(TextSpan(text: '\n'));
+                  break;
+                }
+              default:
+                {
+                  break;
+                }
+            }
+
+            final attributes = node.attributes;
             for (var attribute in attributes.keys) {
               switch (attribute) {
                 case 'style':
                   {
                     Map<String, String> styleMap =
                         _mapStyle(attributes[attribute] ?? '');
-                    spanStyle = _applyStyle(
-                        currentStyle: spanStyle, styleMap: styleMap);
+                    if (spanStyle == null) {
+                      nextStyle = _applyStyle(
+                        styleMap: styleMap,
+                      );
+                    } else {
+                      nextStyle = _applyStyle(
+                        currentStyle: spanStyle,
+                        styleMap: styleMap,
+                      );
+                    }
                     break;
                   }
                 case 'href':
                   {}
               }
             }
-            // TODO: This is a pretty messy way to do this. Is there a better way?
-            onElement++;
 
-            _processElement(
-                element: node, currentStyle: spanStyle, workingTag: workingTag);
+            children.add(_nodeProcessor(
+              nodes: node.nodes,
+              elements: node.children,
+              parents: parents + [tagName],
+              elementTag: tagName,
+              spanStyle: nextStyle,
+            ));
 
+            switch (tagName) {
+              case 'td':
+                {
+                  children.add(TextSpan(text: '    '));
+                }
+            }
+
+            if (addLineBreak) {
+              for (final tag in _lineBreakTags) {
+                if (parents.contains(tag)) {
+                  addLineBreak = false;
+                  break;
+                }
+              }
+            }
+            if (addLineBreak) {
+              // Element needs to be followed by a linebreak, but there is not already a line break scheduled
+              children.add(TextSpan(text: '\n'));
+            }
+            lastTag = tagName;
             break;
           }
-        case 3:
+        case (3):
           {
-            var thisSpan = TextSpan(
-              text: node.text,
-              style: spanStyle,
-              // recognizer: new TapGestureRecognizer()
-              //   ..onTap = () => print(node.text),
-            );
-            textSpanList.add(thisSpan);
-            wordChunks.add(
-              WordChunk.buildWordChunk(
-                textSpan: thisSpan,
-              ),
-            );
-            plainText += ' ${node.text}';
+            children.add(TextSpan(text: node.text));
+            lastTag = '';
             break;
           }
-      }
-    }
+      } // End SWITCH through node type
+    } // End FOR through each node
+    // return _processElement(workingNode: document);
+    return TextSpan(
+      // text: elementTag,
+      children: children,
+      style: spanStyle,
+    );
+  }
 
-    if (addLineBreak) {
-      // print('Adding line break');
-      const lineBreakSpan = TextSpan(text: '\n');
-      wordChunks.add(
-        WordChunk.buildWordChunk(
-          textSpan: lineBreakSpan,
-        ),
-      );
-      textSpanList.add(lineBreakSpan);
-      plainText += '\n';
-    }
-  } // END PROCESS ELEMENT
-
-  void runProcessor() {
-    _processElement(element: topElement);
+  TextSpan runProcessor() {
+    return _nodeProcessor(
+      nodes: document.nodes,
+      elements: document.children,
+    );
   }
 }

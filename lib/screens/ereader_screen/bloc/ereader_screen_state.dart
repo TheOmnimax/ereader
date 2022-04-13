@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/utils/html_processor/html_processor.dart';
 
 abstract class EreaderState extends Equatable {
@@ -56,25 +57,29 @@ class EbookDisplay extends EreaderState {
     // required this.content,
     required this.pages,
     required this.pageNum,
+    required this.style,
   });
 
   // final String content;
   final List<PageData> pages;
   final int pageNum;
+  final EreaderStyle style;
 
   @override
-  List<Object?> get props => [pages, pageNum];
+  List<Object?> get props => [pages, pageNum, style];
 
   @override
   EbookDisplay copyWith({
     // String? content,
     List<PageData>? pages,
     int? pageNum,
+    EreaderStyle? style,
   }) {
     return EbookDisplay(
       // content: content ?? this.content,
       pages: pages ?? this.pages,
       pageNum: pageNum ?? this.pageNum,
+      style: style ?? this.style,
     );
   }
 }

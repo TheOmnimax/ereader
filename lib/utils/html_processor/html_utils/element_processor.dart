@@ -3,7 +3,6 @@ import 'package:html/dom.dart' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'helper_classes.dart';
-import '../../text_span_table/text_span_table.dart';
 
 class ElementProcessor {
   ElementProcessor({

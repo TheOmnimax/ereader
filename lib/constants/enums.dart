@@ -38,3 +38,8 @@ enum LoginResult {
   brute,
   unknownError,
 }
+
+enum LoadingStatus {
+  working,
+  ready,
+}

@@ -1,5 +1,6 @@
 import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/bloc/ereader_bloc.dart';
+import 'package:ereader/constants/constants.dart';
 import 'package:ereader/screens/download_ebooks_screen/bloc/bloc.dart';
 import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
@@ -32,30 +33,54 @@ class DownloadEbooksMain extends StatelessWidget {
           title: const Text('Download'),
         ),
         body: SafeArea(
-          child: Column(
-            children: [
-              Builder(builder: (state) {
-                if (blocState is ListBooks) {
-                  final ebookButtons = <EbookButton>[];
-                  for (final ebook in blocState.ebookList) {
-                    ebookButtons.add(EbookButton(
-                        ebookMetadata: ebook,
-                        onPressed: () {
-                          context.read<DownloadEbooksBloc>().add(
-                                DownloadEbook(
-                                  filename: ebook.filePath,
-                                ),
-                              );
-                        }));
-                  }
-
-                  return ListBuilder(widgets: ebookButtons);
-                } else {
-                  return Container();
-                }
-              }),
-            ],
-          ),
+          child: Builder(builder: (state) {
+            if (blocState is InitialState) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: const Text('Loading book list...'),
+                  ),
+                  bigLoading,
+                ],
+              );
+            } else {
+              final ebookButtons = <EbookButton>[];
+              for (final ebook in blocState.ebookList) {
+                ebookButtons.add(
+                  EbookButton(
+                      ebookMetadata: ebook,
+                      onPressed: () {
+                        context.read<DownloadEbooksBloc>().add(
+                              DownloadEbook(
+                                filename: ebook.filePath,
+                              ),
+                            );
+                      }),
+                );
+              } // End FOR
+              return Column(
+                children: [
+                  Expanded(child: ListBuilder(widgets: ebookButtons)),
+                  Builder(builder: (context) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(blocState.info),
+                          LoadingIcon(
+                            status: blocState.status,
+                          )
+                        ],
+                      ),
+                    );
+                  })
+                ],
+              );
+            }
+          }),
         ),
       );
     });

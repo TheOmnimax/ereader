@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:ereader/bloc/ereader_bloc.dart';
+import 'package:ereader/constants/constants.dart';
 import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 import 'package:ereader/utils/file_explorer/files.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,6 +72,10 @@ class DownloadEbooksBloc
 
   Future _downloadEbook(
       DownloadEbook event, Emitter<DownloadEbooksState> emit) async {
+    emit(state.copyWith(
+      status: LoadingStatus.working,
+      info: 'Downloading...',
+    ));
     final auth = await appBloc.authToken;
 
     final uri =
@@ -104,5 +109,9 @@ class DownloadEbooksBloc
       contents: codeUnits,
     );
     print('Created: $successCreate');
+    emit(state.copyWith(
+      status: LoadingStatus.ready,
+      info: 'Complete!',
+    ));
   }
 }

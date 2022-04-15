@@ -25,9 +25,24 @@ class DownloadEbooksMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appBloc = context.watch<AppBloc>();
+    final downloadBloc = context.read<DownloadEbooksBloc>();
 
     return BlocBuilder<DownloadEbooksBloc, DownloadEbooksState>(
         builder: (context, blocState) {
+      // WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      //   if (blocState is DownloadExists) await {
+      //     showPopup(context: context, title: 'eBook already exists', buttons: buttons, body: body)
+      //   }
+      // });
+
+      void downloadEbook(String filepath) {
+        context.read<DownloadEbooksBloc>().add(
+              DownloadEbook(
+                filename: filepath,
+              ),
+            );
+      }
+
       return Scaffold(
         appBar: AppBar(
           title: const Text('Download'),
@@ -37,26 +52,51 @@ class DownloadEbooksMain extends StatelessWidget {
             if (blocState is InitialState) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: const [
                   Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: const Text('Loading book list...'),
+                    padding: EdgeInsets.all(20),
+                    child: Text('Loading book list...'),
                   ),
                   bigLoading,
                 ],
               );
+            } else if (blocState is NoLogin) {
+              return const Text(
+                  'You are not logged in. Please log in to download eBooks.');
             } else {
               final ebookButtons = <EbookButton>[];
               for (final ebook in blocState.ebookList) {
                 ebookButtons.add(
                   EbookButton(
                       ebookMetadata: ebook,
-                      onPressed: () {
-                        context.read<DownloadEbooksBloc>().add(
-                              DownloadEbook(
-                                filename: ebook.filePath,
+                      onPressed: () async {
+                        final exists =
+                            await downloadBloc.fileExists(ebook.filePath);
+                        if (exists) {
+                          await showPopup(
+                            context: context,
+                            title: 'eBook already exists',
+                            buttons: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('No'),
                               ),
-                            );
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  downloadEbook(ebook.filePath);
+                                },
+                                child: Text('Yes'),
+                              ),
+                            ],
+                            body: const Text(
+                                'This file has already been downloaded. Would you like to download it again?'),
+                          );
+                        } else {
+                          downloadEbook(ebook.filePath);
+                        }
                       }),
                 );
               } // End FOR

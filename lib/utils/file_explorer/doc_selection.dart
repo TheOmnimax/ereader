@@ -22,7 +22,7 @@ class DocRow extends StatelessWidget {
             Text(
               docData.title,
             ),
-            Text(docData.authors.toString()),
+            Text(docData.authorList()),
           ],
         ),
       ),
@@ -49,7 +49,7 @@ List<ListTile> buildDocRows(List<EbookMetadata> docList) {
   for (EbookMetadata doc in docList) {
     docRows.add(
       ListTile(
-        title: Text('${doc.title}\n${doc.authors.toString()}'),
+        title: Text('${doc.title}\n${doc.authorList()}'),
         onTap: () {
           print('${doc.title}');
         },

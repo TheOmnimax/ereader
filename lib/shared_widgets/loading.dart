@@ -26,6 +26,16 @@ class LoadingIcon extends StatelessWidget {
         Icons.check_circle,
         color: Colors.green,
       );
+    } else if (status == LoadingStatus.error) {
+      return const Icon(
+        Icons.error,
+        color: Colors.red,
+      );
+    } else if (status == LoadingStatus.warning) {
+      return const Icon(
+        Icons.warning,
+        color: Colors.orange,
+      );
     } else {
       return Container();
     }

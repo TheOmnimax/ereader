@@ -153,4 +153,17 @@ class FileReadWrite {
       return false;
     }
   }
+
+  Future<bool> exists({
+    required String filename,
+  }) async {
+    final file = await _getFileObject(filename);
+    try {
+      final exists = file.existsSync();
+      return exists;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

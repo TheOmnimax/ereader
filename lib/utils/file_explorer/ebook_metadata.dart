@@ -70,6 +70,10 @@ class EbookMetadata {
   final List<String?> authors;
   final Image? coverImage;
   final String filePath;
+
+  String authorList() {
+    return authors.join(', ');
+  }
 }
 
 @JsonSerializable()

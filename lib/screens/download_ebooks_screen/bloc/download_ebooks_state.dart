@@ -38,6 +38,19 @@ class InitialState extends DownloadEbooksState {
   }
 }
 
+class NoLogin extends DownloadEbooksState {
+  const NoLogin();
+
+  @override
+  NoLogin copyWith({
+    List<EbookMetadata>? ebookList,
+    LoadingStatus? status,
+    String? info,
+  }) {
+    return const NoLogin();
+  }
+}
+
 class ListBooks extends DownloadEbooksState {
   const ListBooks({
     required List<EbookMetadata> ebookList,
@@ -50,7 +63,7 @@ class ListBooks extends DownloadEbooksState {
         );
 
   @override
-  List<Object?> get props => [ebookList, status];
+  List<Object?> get props => [ebookList, status, info];
 
   @override
   ListBooks copyWith({
@@ -65,6 +78,25 @@ class ListBooks extends DownloadEbooksState {
     );
   }
 }
+
+// TODO: Question: Is there an easier way to set up a state that is the same except for a few things?
+// class DownloadExists extends ListBooks {
+//   const DownloadExists({
+//     required List<EbookMetadata> ebookList,
+//     required this.filename,
+//     required this.codeUnits,
+//   }) : super(
+//           ebookList: ebookList,
+//           status: LoadingStatus.warning,
+//           info: 'eBook already exists!',
+//         );
+//
+//   final String filename;
+//   final List<int> codeUnits;
+//
+//   @override
+//   List<Object?> get props => [ebookList, status, info];
+// }
 
 // class Downloading extends DownloadEbooksState {
 //   const Downloading({

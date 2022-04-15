@@ -51,8 +51,8 @@ class SelectionPage extends StatelessWidget {
 
       if (sort == SortType.author) {
         // TODO: Update this to work better now that this is a list
-        ebookMetadataList.sort(
-            (a, b) => a.authors.toString().compareTo(b.authors.toString()));
+        ebookMetadataList
+            .sort((a, b) => a.authorList().compareTo(b.authorList()));
       } else if (sort == SortType.title) {
         ebookMetadataList.sort((a, b) => a.title.compareTo(b.title));
       }
@@ -180,7 +180,7 @@ class EbookListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(ebookMetadata.title),
-            Text(ebookMetadata.authors.toString()),
+            Text(ebookMetadata.authorList()),
           ],
         ),
         onPressed: () {

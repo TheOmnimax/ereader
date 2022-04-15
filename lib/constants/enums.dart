@@ -42,4 +42,6 @@ enum LoginResult {
 enum LoadingStatus {
   working,
   ready,
+  warning,
+  error,
 }

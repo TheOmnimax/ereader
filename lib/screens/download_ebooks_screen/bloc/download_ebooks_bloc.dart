@@ -17,9 +17,18 @@ class DownloadEbooksBloc
   }
 
   final AppBloc appBloc;
+  final fileReadWrite = const FileReadWrite(relativePath: 'ebooks');
+
+  Future<bool> fileExists(String filename) async {
+    final exists = await fileReadWrite.exists(filename: filename);
+    return exists;
+  }
 
   Future<String> _getEbookList(String auth) async {
     final uri = Uri.parse('https://ereader-341202.uc.r.appspot.com/list-all');
+
+    if (auth == '') {
+    } else {}
 
     final headers = {
       HttpHeaders.authorizationHeader: auth,
@@ -53,16 +62,14 @@ class DownloadEbooksBloc
       GetEbookList event, Emitter<DownloadEbooksState> emit) async {
     final auth = await appBloc.authToken;
     if (auth == '') {
+      emit(const NoLogin());
     } else {
       final ebookDictListRaw = await _getEbookList(auth);
       final ebookDictList = json.decode(ebookDictListRaw) as List;
       final ebookList = <EbookMetadata>[];
-      // final data = EbookMetadataJsonList.fromJson(ebookDictList);
-      // print(data);
 
       for (final ebookData in ebookDictList) {
         final ebookDict = ebookData as Map<String, dynamic>;
-        // ebookDict['authors'] = ebookDict['authors'] as List<String>;
         ebookList.add(await EbookMetadata.fromServerJson(ebookDict));
       }
 
@@ -93,22 +100,21 @@ class DownloadEbooksBloc
 
     final statusCode = response.statusCode;
     final responseBodyRaw = response.body;
+
+    if (statusCode >= 400) {
+      emit(state.copyWith(
+        status: LoadingStatus.error,
+        info: '$statusCode error',
+      ));
+      return;
+    }
+
     final codeUnits = responseBodyRaw.codeUnits;
-    final unit8List = Uint8List.fromList(codeUnits);
-
-    print('statusCode:');
-    print(statusCode);
-
-    // final ebookFile = File(event.filename)..writeAsBytesSync(unit8List);
-
-    const fileReadWrite = FileReadWrite(relativePath: 'ebooks');
     final successAdd = await fileReadWrite.addFileByName(event.filename);
-    print('Added: $successAdd');
     final successCreate = await fileReadWrite.writeBytes(
       filename: event.filename,
       contents: codeUnits,
     );
-    print('Created: $successCreate');
     emit(state.copyWith(
       status: LoadingStatus.ready,
       info: 'Complete!',

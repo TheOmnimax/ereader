@@ -63,4 +63,11 @@ class EreaderStyle {
         fontFamily: fontFamily,
         margins: margins);
   }
+
+  TextStyle toTextStyle() {
+    return TextStyle(
+      fontSize: fontSize.toDouble(),
+      color: fontColor,
+    );
+  }
 }

@@ -98,92 +98,88 @@ class EreaderScreen extends StatelessWidget {
       } // End overlay being created
     } // End function to create text overlay
 
-    return BlocBuilder<EreaderBloc, EreaderState>(
-      builder: (context, state) {
-        final appBloc = context.watch<AppBloc>();
-        final pages = state.pages;
-        final pageNum = state.pageNum;
-        print('There are ${pages.length} pages');
-        print('It is on page $pageNum');
-        TextStyle textStyle = TextStyle(
-          color: Colors.black,
-          height: 2,
-        );
-        final mqData = MediaQuery.of(context);
-        final screenSize = mqData.size;
-        final uiUsed = mqData.viewPadding.top;
-        print('Width: ${screenSize.width}');
-        print('Screen height: ${screenSize.height}');
-        print('Top: $uiUsed');
-        return Scaffold(
-          appBar: AppBar(),
-          body: Builder(
-            builder: (BuildContext context) {
-              final appBarHeight = Scaffold.of(context).appBarMaxHeight;
-              print('App bar: $appBarHeight');
-              print('Adding...');
-              if (state is EbookLoading) {
-                context.read<EreaderBloc>().add(
-                      LoadBook(
-                        ebookPath: ebookPath,
-                        workingHeight: screenSize.height - (appBarHeight ?? 0),
-                        workingWidth: screenSize.width,
-                        style: textStyle,
+    return Scaffold(
+      appBar: AppBar(),
+      body: BlocBuilder<EreaderBloc, EreaderState>(
+        builder: (BuildContext context, state) {
+          final appBloc = context.watch<AppBloc>();
+          final pages = state.pages;
+          final pageNum = state.pageNum;
+          // print('There are ${pages.length} pages');
+          // print('It is on page $pageNum');
+          const textStyle = TextStyle(
+            color: Colors.black,
+            height: 2,
+          );
+          final mqData = MediaQuery.of(context);
+          final screenSize = mqData.size;
+          final uiUsed = mqData.viewPadding.top;
+          // print('Width: ${screenSize.width}');
+          // print('Screen height: ${screenSize.height}');
+          // print('Top: $uiUsed');
+          final appBarHeight = Scaffold.of(context).appBarMaxHeight;
+          // print('App bar: $appBarHeight');
+          if (state is EbookLoading) {
+            print('Opening...');
+            context.read<EreaderBloc>().add(
+                  LoadBook(
+                    ebookPath: ebookPath,
+                    workingHeight: screenSize.height - (appBarHeight ?? 0),
+                    workingWidth: screenSize.width,
+                    style: textStyle,
+                  ),
+                );
+            return const Text('Loading...');
+          } else if (state is EbookDisplay) {
+            if (pages.isEmpty) {
+              return const SafeArea(
+                child: Text("Nothin'!"),
+              );
+            } else {
+              final currentStyle = appBloc.state.currentStyle;
+              final padding = currentStyle.margins;
+              return SafeArea(
+                child: PageView.builder(itemBuilder: (context, index) {
+                  final page = pages[index];
+                  final pageContent = page.content;
+                  final plainText = pageContent.toPlainText();
+                  final contentLength = plainText.length;
+                  return Container(
+                    color: currentStyle.backgroundColor,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: padding[0].toDouble(),
+                        right: padding[1].toDouble(),
+                        bottom: padding[2].toDouble(),
+                        left: padding[3].toDouble(),
                       ),
-                    );
-                return Text('Loading...');
-              } else if (state is EbookDisplay) {
-                if (pages.length == 0) {
-                  return SafeArea(child: Text('Nothin\'!'));
-                } else {
-                  final currentStyle = appBloc.state.currentStyle;
-                  final padding = currentStyle.margins;
-                  return SafeArea(
-                    child: PageView.builder(itemBuilder: (context, index) {
-                      final page = pages[index];
-                      final pageContent = page.content;
-                      final plainText = pageContent.toPlainText();
-                      final contentLength = plainText.length;
-                      return Container(
-                        color: currentStyle.backgroundColor,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            top: padding[0].toDouble(),
-                            right: padding[1].toDouble(),
-                            bottom: padding[2].toDouble(),
-                            left: padding[3].toDouble(),
-                          ),
-                          child: SelectableText.rich(
-                            pageContent,
-                            style: state.style.toTextStyle(),
-                            onSelectionChanged: (selection, cause) {
-                              textSelected(
-                                selection: selection,
-                                plainText: plainText,
-                                contentLength: contentLength,
-                                appBarHeight: appBarHeight,
-                                screenSize: screenSize,
-                              );
-                            }, // End function when text is selected
-                            toolbarOptions: ToolbarOptions(
-                              copy: false,
-                              selectAll: false,
-                            ),
-                          ),
+                      child: SelectableText.rich(
+                        pageContent,
+                        style: state.style.toTextStyle(),
+                        onSelectionChanged: (selection, cause) {
+                          textSelected(
+                            selection: selection,
+                            plainText: plainText,
+                            contentLength: contentLength,
+                            appBarHeight: appBarHeight,
+                            screenSize: screenSize,
+                          );
+                        }, // End function when text is selected
+                        toolbarOptions: ToolbarOptions(
+                          copy: false,
+                          selectAll: false,
                         ),
-                      );
-                    }),
+                      ),
+                    ),
                   );
-                }
-              } else {
-                return Text('Error');
-              }
-            },
-          ),
-        );
-
-        // print(state.content);
-      },
+                }),
+              );
+            }
+          } else {
+            return Text('Error');
+          }
+        },
+      ),
     );
   }
 }

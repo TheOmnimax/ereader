@@ -37,17 +37,19 @@ OverlayEntry overlayPopup({
 
   return OverlayEntry(
     builder: (BuildContext context) {
-      return Positioned(
-        left: left,
-        top: top,
-        width: width,
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: child,
+      return Material(
+        child: Positioned(
+          left: left,
+          top: top,
+          width: width,
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: child,
+            ),
           ),
         ),
       );

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:ereader/file_explorer/ebook_metadata.dart';
+import 'package:flutter/material.dart';
 
 abstract class EreaderEvent extends Equatable {
   const EreaderEvent();
@@ -9,7 +9,22 @@ abstract class EreaderEvent extends Equatable {
 }
 
 class LoadBook extends EreaderEvent {
-  const LoadBook({required this.ebookPath});
+  const LoadBook({
+    required this.ebookPath,
+    required this.workingHeight,
+    required this.workingWidth,
+    required this.style,
+  });
 
   final String ebookPath;
+  final double workingHeight;
+  final double workingWidth;
+  final TextStyle style;
+}
+
+class WordSelected extends EreaderEvent {
+  const WordSelected({
+    required this.selectedWord,
+  });
+  final String selectedWord;
 }

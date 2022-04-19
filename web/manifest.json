@@ -1,6 +1,6 @@
 {
-    "name": "ereader",
-    "short_name": "ereader",
+    "name": "Thali",
+    "short_name": "Thali",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

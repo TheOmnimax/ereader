@@ -4,7 +4,7 @@ class PopupMenu extends StatelessWidget {
   const PopupMenu({
     required this.onSelected,
     required this.itemList,
-    this.color = Colors.black,
+    this.color = Colors.white,
   });
 
   final Function(String) onSelected;

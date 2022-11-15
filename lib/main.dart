@@ -26,13 +26,13 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AppBloc()..add(AppOpened()),
-      child: const MyApp(),
+      child: const EreaderApp(),
     );
   }
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class EreaderApp extends StatelessWidget {
+  const EreaderApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override

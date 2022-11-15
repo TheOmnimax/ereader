@@ -25,7 +25,7 @@ class DownloadEbooksBloc
   }
 
   Future<String> _getEbookList(String auth) async {
-    final uri = Uri.parse('https://ereader-341202.uc.r.appspot.com/list-all');
+    final uri = Uri.parse('${baseUrl}list-all');
 
     if (auth == '') {
     } else {}
@@ -85,8 +85,7 @@ class DownloadEbooksBloc
     ));
     final auth = await appBloc.authToken;
 
-    final uri =
-        Uri.parse('https://ereader-341202.uc.r.appspot.com/download-ebook');
+    final uri = Uri.parse('${baseUrl}download-ebook');
 
     final headers = {
       HttpHeaders.authorizationHeader: auth,

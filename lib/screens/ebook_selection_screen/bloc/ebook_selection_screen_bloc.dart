@@ -5,6 +5,7 @@ import 'package:ereader/utils/file_explorer/ebook_storage.dart';
 import 'package:ereader/utils/file_explorer/file_picker.dart';
 import 'package:ereader/utils/file_explorer/files.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
 
 import 'ebook_selection_screen_event.dart';
 import 'ebook_selection_screen_state.dart';
@@ -62,16 +63,21 @@ class EbookSelectionBloc
     var newBook = false;
     const filePicker = FilePickerImp();
     final newFile = await filePicker.file;
+    print('New file: $newFile');
 
     if (newFile != null) {
       const fileReadWrite = FileReadWrite(relativePath: 'ebooks');
-      newBook = await fileReadWrite.addFile(newFile);
-      if (newBook) {
-        final ebookMetadataList = await _getEbookMetadata();
-        emit(EbookSelectionMainState(ebookList: ebookMetadataList));
-      } else {
-        emit(state);
-      }
+
+      final filename = basename(newFile.path);
+      await fileReadWrite.addFileByName(filename);
+
+      final successCreate = await fileReadWrite.writeBytes(
+        filename: filename,
+        contents: newFile.readAsBytesSync(),
+      );
+
+      final ebookMetadataList = await _getEbookMetadata();
+      emit(EbookSelectionMainState(ebookList: ebookMetadataList));
     } else {
       emit(state);
     }

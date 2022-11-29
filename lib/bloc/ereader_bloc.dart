@@ -14,6 +14,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           const AppState(
             username: '',
             currentStyle: EreaderStyle(),
+            loginStatus: LoginResult.none,
           ),
         ) {
     on<AppOpened>(_appOpened);
@@ -75,7 +76,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     final currentUser = _auth.currentUser;
     final username = currentUser?.email ?? '';
-    emit(AppState(username: username, currentStyle: selectedStyle));
+    emit(
+      AppState(
+        username: username,
+        currentStyle: selectedStyle,
+        loginStatus: LoginResult.none,
+      ),
+    );
   }
 
   LoginResult? checkCredentials({

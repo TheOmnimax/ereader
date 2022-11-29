@@ -6,13 +6,13 @@ class AppState extends Equatable {
   const AppState({
     required this.username,
     required this.currentStyle,
-    this.loginStatus,
+    required this.loginStatus,
     this.loginDetails,
   });
 
   final String username;
   final EreaderStyle currentStyle;
-  final LoginResult? loginStatus;
+  final LoginResult loginStatus;
   final String? loginDetails;
 
   @override
@@ -32,7 +32,7 @@ class AppState extends Equatable {
     return AppState(
       username: username ?? this.username,
       currentStyle: newStyle ?? currentStyle,
-      loginStatus: loginStatus,
+      loginStatus: loginStatus ?? this.loginStatus,
       loginDetails: loginDetails,
     );
   }

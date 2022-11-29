@@ -1,4 +1,5 @@
 import 'package:ereader/bloc/bloc.dart';
+import 'package:ereader/constants/constants.dart';
 import 'package:ereader/screens/login_screen/bloc/login_screen_bloc.dart';
 import 'package:ereader/shared_widgets/data_entry.dart';
 import 'package:ereader/shared_widgets/shared_widgets.dart';
@@ -43,7 +44,14 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () {
-                        Navigator.popAndPushNamed(context, '/register');
+                        Navigator.popAndPushNamed(context, '/register')
+                            .then((_) {
+                          appBloc.add(
+                            LoginError(
+                              loginResult: LoginResult.none,
+                            ),
+                          );
+                        });
                       },
                       child: const Align(
                         alignment: Alignment.topRight,

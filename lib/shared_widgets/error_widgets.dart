@@ -68,9 +68,13 @@ class LoginStatusWidget extends StatelessWidget {
             'There were too many incorrect attempts to log in. Please try again later.',
           );
         }
+      case LoginResult.none:
+        {
+          return const Text('');
+        }
       case null:
         {
-          return const Text('Unknown error');
+          return const Text('');
         }
     }
   }

@@ -23,8 +23,6 @@ This app was built using Flutter. It is meant to work as an Android app. It coul
 
 ## Add ebook
 
-
-
 | <img src="docs/images/home_kebab.png" style="width:135px" /> |
 |:--:|
 | Use three-dot menu to add ebook |
@@ -60,8 +58,6 @@ Simply tap the three-dot button to the right of the ebook, tap *Download*, then 
 |:--:|
 | Select style |
 
-
-
 You can change the style of the books you read, including the font color, background color, and more.
 
 1. Tap the three-dot menu in the upper-right, then *Select style*.
@@ -83,13 +79,9 @@ To create a new style from scratch, from the *Select Style* menu, tap the three-
 
 ## Create and sign into account
 
-## Add new style
-
 | <img src="docs/images/login_drawer.png" style="width:135px" /> | <img src="docs/images/login.png" style="width:135px" /> | <img src="docs/images/signed_in.png" style="width:135px" /> |
 |:--:|:--:|:--:|
 | Login drawer | Login page | Signed in |
-
-## Add new style
 
 | <img src="docs/images/register.png" style="width:135px" /> | <img src="docs/images/register_error.png" style="width:135px" /> |
 |:--:|:--:|

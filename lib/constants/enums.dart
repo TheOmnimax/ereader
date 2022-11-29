@@ -23,7 +23,9 @@ enum Position {
   bottom,
   left,
 }
+
 enum LoginResult {
+  none,
   success,
   disabled,
   invalidEmail,

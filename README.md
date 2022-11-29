@@ -25,7 +25,7 @@ This app was built using Flutter. It is meant to work as an Android app. It coul
 
 
 
-| <img src="docs/images/home_kebab.png" width="25%" /> |
+| <img src="docs/images/home_kebab.png" style="width:25%" /> |
 |:--:|
 | Use three-dot menu to add ebook |
 
@@ -40,7 +40,7 @@ The new ebook should appear immediately, but if it does not, tap the refresh but
 
 ## Open ebook
 
-| <img src="docs/images/home.png" width="25%" /> | <img src="docs/images/reading_ebook.png" width="25%" /> | <img src="docs/images/turning_page.png" width="25%" /> |
+| <img src="docs/images/home.png" style="width:25%" /> | <img src="docs/images/reading_ebook.png" style="width:25%" /> | <img src="docs/images/turning_page.png" style="width:25%" /> |
 |:--:|:--:|:--:|
 | Home screen | Reading ebook | Turning page |
 
@@ -48,7 +48,7 @@ From the main menu, simply tap the book you would like to open, and it will open
 
 ## Delete ebook
 
-| <img src="docs/images/delete.png" width="25%" /> |
+| <img src="docs/images/delete.png" style="width:25%" /> |
 |:--:|
 | Delete ebook |
 
@@ -56,7 +56,7 @@ Simply tap the three-dot button to the right of the ebook, tap *Download*, then 
 
 ## Change style
 
-| <img src="docs/images/style_select.png" width="25%" /> |
+| <img src="docs/images/style_select.png" style="width:25%" /> |
 |:--:|
 | Select style |
 
@@ -71,7 +71,7 @@ To move, edit, or delete a style, tap the three-dot menu to the right of the sty
 
 ## Add new style
 
-| <img src="docs/images/style_options.png" width="25%" /> | <img src="docs/images/style_kebab.png" width="25%" /> | <img src="docs/images/edit_color.png" width="25%" /> | <img src="docs/images/edit_font_size.png" width="25%" /> |
+| <img src="docs/images/style_options.png" style="width:25%" /> | <img src="docs/images/style_kebab.png" style="width:25%" /> | <img src="docs/images/edit_color.png" style="width:25%" /> | <img src="docs/images/edit_font_size.png" style="width:25%" /> |
 |:--:|:--:|:--:|:--:|
 | Style options | Add style | Edit colors | Edit font size |
 
@@ -85,13 +85,13 @@ To create a new style from scratch, from the *Select Style* menu, tap the three-
 
 ## Add new style
 
-| <img src="docs/images/login_drawer.png" width="25%" /> | <img src="docs/images/login.png" width="25%" /> | <img src="docs/images/signed_in.png" width="25%" /> |
+| <img src="docs/images/login_drawer.png" style="width:25%" /> | <img src="docs/images/login.png" style="width:25%" /> | <img src="docs/images/signed_in.png" style="width:25%" /> |
 |:--:|:--:|:--:|
 | Login drawer | Login page | Signed in |
 
 ## Add new style
 
-| <img src="docs/images/register.png" width="25%" /> | <img src="docs/images/register_error.png" width="25%" /> |
+| <img src="docs/images/register.png" style="width:25%" /> | <img src="docs/images/register_error.png" style="width:25%" /> |
 |:--:|:--:|
 | Register | Register error |
 
@@ -101,7 +101,7 @@ From the main menu, tap the three-line menu in the upper-left, then *Log in*. In
 
 ## Download new ebook
 
-| <img src="docs/images/loading_downloads.png" width="25%" /> | <img src="docs/images/download_list.png" width="25%" /> | <img src="docs/images/downloading.png" width="25%" /> | <img src="docs/images/download_complete.png" width="25%" /> |
+| <img src="docs/images/loading_downloads.png" style="width:25%" /> | <img src="docs/images/download_list.png" style="width:25%" /> | <img src="docs/images/downloading.png" style="width:25%" /> | <img src="docs/images/download_complete.png" style="width:25%" /> |
 |:--:|:--:|:--:|:--:|
 | Loading | Download list | Downloading | Download complete |
 

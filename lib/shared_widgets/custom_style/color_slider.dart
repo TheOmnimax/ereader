@@ -26,18 +26,36 @@ class ColorSelection extends StatelessWidget {
     }
 
     void setRed(int red) {
-      red = colorRangeCheck(red);
-      onChange(Color.fromARGB(255, red, color.green, color.blue));
+      onChange(
+        Color.fromARGB(
+          255,
+          colorRangeCheck(red),
+          color.green,
+          color.blue,
+        ),
+      );
     }
 
     void setGreen(int green) {
-      green = colorRangeCheck(green);
-      onChange(Color.fromARGB(255, color.red, green, color.blue));
+      onChange(
+        Color.fromARGB(
+          255,
+          color.red,
+          colorRangeCheck(green),
+          color.blue,
+        ),
+      );
     }
 
     void setBlue(int blue) {
-      blue = colorRangeCheck(blue);
-      onChange(Color.fromARGB(255, color.red, color.green, blue));
+      onChange(
+        Color.fromARGB(
+          255,
+          color.red,
+          color.green,
+          colorRangeCheck(blue),
+        ),
+      );
     }
 
     int getWhite() {
@@ -45,15 +63,16 @@ class ColorSelection extends StatelessWidget {
     }
 
     void setWhite(int white) {
-      white = colorRangeCheck(white);
       final oldWhite = getWhite();
-      final diff = oldWhite - white;
-      onChange(Color.fromARGB(
-        255,
-        colorRangeCheck(color.red - diff),
-        colorRangeCheck(color.green - diff),
-        colorRangeCheck(color.blue - diff),
-      ));
+      final diff = oldWhite - colorRangeCheck(white);
+      onChange(
+        Color.fromARGB(
+          255,
+          colorRangeCheck(color.red - diff),
+          colorRangeCheck(color.green - diff),
+          colorRangeCheck(color.blue - diff),
+        ),
+      );
     }
 
     return Column(

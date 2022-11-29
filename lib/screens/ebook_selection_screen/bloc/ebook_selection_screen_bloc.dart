@@ -1,16 +1,14 @@
 import 'dart:io';
 
+import 'package:ereader/screens/ebook_selection_screen/bloc/ebook_selection_screen_event.dart';
+import 'package:ereader/screens/ebook_selection_screen/bloc/ebook_selection_screen_state.dart';
 import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 import 'package:ereader/utils/file_explorer/ebook_storage.dart';
 import 'package:ereader/utils/file_explorer/file_picker.dart';
 import 'package:ereader/utils/file_explorer/files.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
-
-import 'ebook_selection_screen_event.dart';
-import 'ebook_selection_screen_state.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ereader/bloc/bloc.dart';
 
 class EbookSelectionBloc
     extends Bloc<EbookSelectionEvent, EbookSelectionState> {
@@ -32,38 +30,40 @@ class EbookSelectionBloc
   }
 
   Future<void> _deleteEbook(
-      DeleteEbook event, Emitter<EbookSelectionState> emit) async {
+    DeleteEbook event,
+    Emitter<EbookSelectionState> emit,
+  ) async {
     final filePath = event.deletePath;
     await File(filePath).delete();
     final ebookMetadataList = await _getEbookMetadata();
-    emit(EbookSelectionMainState(
-      ebookList: ebookMetadataList,
-    ));
+    emit(
+      EbookSelectionMainState(
+        ebookList: ebookMetadataList,
+      ),
+    );
   }
 
   Future<void> _loadPage(
     LoadPage event,
     Emitter<EbookSelectionState> emit,
   ) async {
-    print('Loading page...');
-
     final user = _auth.currentUser;
 
     final ebookMetadataList = await _getEbookMetadata();
-    emit(EbookSelectionMainState(
-      ebookList: ebookMetadataList,
-      username: user?.email ?? '',
-    ));
+    emit(
+      EbookSelectionMainState(
+        ebookList: ebookMetadataList,
+        username: user?.email ?? '',
+      ),
+    );
   }
 
   Future<void> _getNewEbook(
     GetNewEbook event,
     Emitter<EbookSelectionState> emit,
   ) async {
-    var newBook = false;
     const filePicker = FilePickerImp();
     final newFile = await filePicker.file;
-    print('New file: $newFile');
 
     if (newFile != null) {
       const fileReadWrite = FileReadWrite(relativePath: 'ebooks');

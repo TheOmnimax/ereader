@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
 class EreaderStyle {
   const EreaderStyle({
@@ -34,35 +33,6 @@ class EreaderStyle {
         'margins': margins,
         'name': name,
       };
-
-  // String toString() {
-  //
-  // }
-
-  String stringData() {
-    // Deprecated
-    return '${backgroundColor.value},${fontColor.value},${fontSize},${fontFamily},${margins.join(' ')}';
-  }
-
-  static EreaderStyle fromStringData(String stringData) {
-    // Deprecated
-    print('Parsing new data');
-    var splitData = stringData.split(',');
-    var backgroundColor = Color(int.parse(splitData[0]));
-    print('Got background');
-    var fontColor = Color(int.parse(splitData[1]));
-    print('Got font color');
-    var fontSize = int.parse(splitData[2]);
-    var fontFamily = splitData[3];
-    var margins = splitData[4].split(' ').map(int.parse).toList();
-    print('Retrieved data');
-    return EreaderStyle(
-        backgroundColor: backgroundColor,
-        fontColor: fontColor,
-        fontSize: fontSize,
-        fontFamily: fontFamily,
-        margins: margins);
-  }
 
   TextStyle toTextStyle() {
     return TextStyle(

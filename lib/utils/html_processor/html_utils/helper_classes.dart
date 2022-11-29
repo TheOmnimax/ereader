@@ -19,7 +19,7 @@ class WordChunk {
     required TextSpan textSpan,
     String id = '',
   }) {
-    final List<String> wordList = (textSpan.text ?? '').split(' ');
+    final wordList = (textSpan.text ?? '').split(' ');
     final length = (textSpan.text ?? '').length;
 
     return WordChunk(
@@ -34,7 +34,7 @@ class WordChunk {
 class TextSpanTextDivision {
   TextSpanTextDivision({
     required this.currentText,
-    this.nextText = null,
+    this.nextText,
   });
 
   final String currentText;
@@ -49,9 +49,9 @@ class TextSpanDivider {
 
   final TextSpan workingSpan;
   final int pageEndIndex;
-  var atIndex = 0;
-  var over = false;
-  var atTop = false;
+  int atIndex = 0;
+  bool over = false;
+  bool atTop = false;
 
   TextSpanTextDivision _processText({
     required String spanText,
@@ -60,7 +60,7 @@ class TextSpanDivider {
       atIndex += spanText.length;
       return TextSpanTextDivision(currentText: spanText);
     } else {
-      final textWords = spanText.split(RegExp(r' +'));
+      final textWords = spanText.split(RegExp(' +'));
 
       final currentWords = <String>[];
       final nextWords = <String>[];
@@ -78,7 +78,7 @@ class TextSpanDivider {
       } // End FOR through each word in text property
       final currentText = currentWords.join(' ');
       atIndex += currentText.length;
-      if (nextWords.length > 0) {
+      if (nextWords.isNotEmpty) {
         return TextSpanTextDivision(
           currentText: currentText,
           nextText: nextWords.join(' '),
@@ -109,10 +109,12 @@ class TextSpanDivider {
             // Already over, so can stop checking
             workingText = null;
             nextText = spanText;
-            currentChildren.add(TextSpan(
-              text: spanText,
-              style: child.style,
-            ));
+            currentChildren.add(
+              TextSpan(
+                text: spanText,
+                style: child.style,
+              ),
+            );
           } else {
             final splitText = _processText(spanText: spanText);
             workingText = splitText.currentText;
@@ -144,37 +146,47 @@ class TextSpanDivider {
           atTop = false;
         }
 
-        if (spanChildren.length > 0) {
+        if (spanChildren.isNotEmpty) {
           if (over) {
-            nextChildren.add(TextSpan(
-              text: nextText,
-              children: child.children,
-              style: child.style,
-            ));
+            nextChildren.add(
+              TextSpan(
+                text: nextText,
+                children: child.children,
+                style: child.style,
+              ),
+            );
           } else {
             final childDivision =
                 _processChildren(textSpanChildren: spanChildren);
-            currentChildren.add(TextSpan(
-              text: workingText,
-              children: childDivision.currentChildren,
-              style: child.style,
-            ));
-            if (childDivision.nextChildren.length > 0) {
-              nextChildren.add(TextSpan(
-                children: childDivision.nextChildren,
+            currentChildren.add(
+              TextSpan(
+                text: workingText,
+                children: childDivision.currentChildren,
                 style: child.style,
-              ));
+              ),
+            );
+            if (childDivision.nextChildren.isNotEmpty) {
+              nextChildren.add(
+                TextSpan(
+                  children: childDivision.nextChildren,
+                  style: child.style,
+                ),
+              );
             }
           }
         } else if (workingText != null) {
-          currentChildren.add(TextSpan(
-            text: workingText,
-            style: child.style,
-          ));
-          nextChildren.add(TextSpan(
-            text: nextText,
-            style: child.style,
-          ));
+          currentChildren.add(
+            TextSpan(
+              text: workingText,
+              style: child.style,
+            ),
+          );
+          nextChildren.add(
+            TextSpan(
+              text: nextText,
+              style: child.style,
+            ),
+          );
         }
       } // End not over
     } // End FOR through each child originally given

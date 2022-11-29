@@ -1,8 +1,6 @@
-import 'package:flutter/gestures.dart';
-import 'package:html/dom.dart' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'helper_classes.dart';
+import 'package:html/dom.dart' as html;
 
 class ElementProcessor {
   ElementProcessor({
@@ -37,7 +35,7 @@ class ElementProcessor {
     TextStyle currentStyle = const TextStyle(),
     required Map<String, String> styleMap,
   }) {
-    for (var style in styleMap.keys) {
+    for (final style in styleMap.keys) {
       final styleValue = styleMap[style];
       switch (style) {
         case 'font-style':
@@ -93,10 +91,10 @@ class ElementProcessor {
   }
 
   Map<String, String> _mapStyle(String styleString) {
-    Map<String, String> styleMap = <String, String>{};
-    List<String> parts = styleString.split(new RegExp(r';[ \n]*'));
-    for (var part in parts) {
-      List<String> styleParts = part.split(new RegExp(r':[ \n]*'));
+    final styleMap = <String, String>{};
+    final parts = styleString.split(RegExp(r';[ \n]*'));
+    for (final part in parts) {
+      final styleParts = part.split(RegExp(r':[ \n]*'));
       styleMap[styleParts[0]] = styleParts[1];
     }
 
@@ -114,12 +112,10 @@ class ElementProcessor {
     TextStyle? nextStyle;
 
     final children = <TextSpan>[];
-    var lastTag = '';
-    final String identifier;
     for (final node in nodes) {
       nextStyle = null;
       switch (node.nodeType) {
-        case (1):
+        case 1:
           {
             // Element node
             final element = elements[onElement];
@@ -140,7 +136,7 @@ class ElementProcessor {
                 }
               case 'p':
                 {
-                  children.add(TextSpan(text: '    '));
+                  children.add(const TextSpan(text: '    '));
                   break;
                 }
               case 'table':
@@ -169,7 +165,7 @@ class ElementProcessor {
                 }
               case 'br':
                 {
-                  children.add(TextSpan(text: '\n'));
+                  children.add(const TextSpan(text: '\n'));
                   break;
                 }
               default:
@@ -179,12 +175,11 @@ class ElementProcessor {
             }
 
             final attributes = node.attributes;
-            for (var attribute in attributes.keys) {
+            for (final attribute in attributes.keys) {
               switch (attribute) {
                 case 'style':
                   {
-                    Map<String, String> styleMap =
-                        _mapStyle(attributes[attribute] ?? '');
+                    final styleMap = _mapStyle(attributes[attribute] ?? '');
                     if (spanStyle == null) {
                       nextStyle = _applyStyle(
                         styleMap: styleMap,
@@ -202,18 +197,20 @@ class ElementProcessor {
               }
             }
 
-            children.add(_nodeProcessor(
-              nodes: node.nodes,
-              elements: node.children,
-              parents: parents + [tagName],
-              elementTag: tagName,
-              spanStyle: nextStyle,
-            ));
+            children.add(
+              _nodeProcessor(
+                nodes: node.nodes,
+                elements: node.children,
+                parents: parents + [tagName],
+                elementTag: tagName,
+                spanStyle: nextStyle,
+              ),
+            );
 
             switch (tagName) {
               case 'td':
                 {
-                  children.add(TextSpan(text: '    '));
+                  children.add(const TextSpan(text: '    '));
                 }
             }
 
@@ -227,15 +224,13 @@ class ElementProcessor {
             }
             if (addLineBreak) {
               // Element needs to be followed by a linebreak, but there is not already a line break scheduled
-              children.add(TextSpan(text: '\n'));
+              children.add(const TextSpan(text: '\n'));
             }
-            lastTag = tagName;
             break;
           }
-        case (3):
+        case 3:
           {
             children.add(TextSpan(text: node.text));
-            lastTag = '';
             break;
           }
       } // End SWITCH through node type

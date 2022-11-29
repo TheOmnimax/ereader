@@ -28,11 +28,10 @@ class EbookInitial extends EreaderState {
 
   @override
   EreaderState copyWith({
-    // String? content,
     List<PageData>? pages,
     int? pageNum,
   }) {
-    return EbookInitial();
+    return const EbookInitial();
   }
 }
 
@@ -55,14 +54,14 @@ class EbookLoading extends EreaderState {
 class EbookDisplay extends EreaderState {
   const EbookDisplay({
     // required this.content,
-    required this.pages,
-    required this.pageNum,
+    required List<PageData> pages,
+    required int pageNum,
     required this.style,
-  });
+  }) : super(
+          pages: pages,
+          pageNum: pageNum,
+        );
 
-  // final String content;
-  final List<PageData> pages;
-  final int pageNum;
   final EreaderStyle style;
 
   @override
@@ -70,7 +69,6 @@ class EbookDisplay extends EreaderState {
 
   @override
   EbookDisplay copyWith({
-    // String? content,
     List<PageData>? pages,
     int? pageNum,
     EreaderStyle? style,

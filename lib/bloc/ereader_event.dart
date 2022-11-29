@@ -1,5 +1,5 @@
-import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/constants/constants.dart';
+import 'package:ereader/shared_data/ereader_style.dart';
 
 abstract class AppEvent {
   AppEvent();

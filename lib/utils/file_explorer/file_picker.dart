@@ -1,5 +1,6 @@
-import 'package:file_picker/file_picker.dart';
 import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 
 class FilePickerImp {
   const FilePickerImp();
@@ -8,10 +9,10 @@ class FilePickerImp {
     final result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
-      var file = File(result.files.single.path ?? '');
+      final file = File(result.files.single.path ?? '');
       return file;
     } else {
-// User canceled the picker
+      // User canceled the picker
       return null;
     }
   }

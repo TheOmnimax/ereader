@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:ereader/screens/select_style_screen/bloc/select_style_screen_event.dart';
 import 'package:ereader/screens/select_style_screen/bloc/select_style_screen_state.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/utils/file_explorer/files.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
   SelectStyleBloc() : super(const SelectStyleLoading()) {
@@ -62,25 +62,15 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
   // }
 
   Future<void> _loadPage(
-      LoadPage event, Emitter<SelectStyleScreenState> emit) async {
-    print('In the bloc...');
-
-    // final prefs = await SharedPreferences.getInstance();
-    // await prefs.setString('preferences', '[]');
-
+    LoadPage event,
+    Emitter<SelectStyleScreenState> emit,
+  ) async {
     final allStyles = await _styleList;
-
-    print('Styles:');
-    print(allStyles);
-
-    // var selectedStyle =
 
     // Get currently selected style
     final selectedStyleMap =
         await _fileReadWrite.getFileAsMap(_selectedStyleFile);
 
-    print('Selected style:');
-    print(selectedStyleMap);
     final EreaderStyle selectedStyle;
     if (selectedStyleMap.isEmpty) {
       selectedStyle = const EreaderStyle();
@@ -104,18 +94,16 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
   }
 
   Future<void> _styleMove(
-      StyleMove event, Emitter<SelectStyleScreenState> emit) async {
+    StyleMove event,
+    Emitter<SelectStyleScreenState> emit,
+  ) async {
     final allStyles = await _styleList;
-    print('Old length: ${allStyles.length}');
     final moveStyle = event.ereaderStyle;
 
     for (final style in allStyles) {
-      print('Name: ${style.name}');
       if (style.name == moveStyle.name) {
         final oldPosition = allStyles.indexOf(style);
-        print('Old position: $oldPosition');
         final newPosition = oldPosition + event.move;
-        print('New position: $newPosition');
         if ((newPosition >= 0) && (newPosition < allStyles.length)) {
           allStyles
             ..remove(style)
@@ -124,37 +112,32 @@ class SelectStyleBloc extends Bloc<SelectStyleEvent, SelectStyleScreenState> {
           await _saveStyleList(allStyles);
           final updatedStyles = await _styleList;
 
-          emit(SelectStyleMainState(
-            allStyles: updatedStyles,
-            selectedEreaderStyle: event.ereaderStyle,
-          ));
+          emit(
+            SelectStyleMainState(
+              allStyles: updatedStyles,
+              selectedEreaderStyle: event.ereaderStyle,
+            ),
+          );
         }
-        print('New length: ${allStyles.length}');
         return;
       }
     }
   }
 
   Future<void> _styleDelete(
-      StyleDelete event, Emitter<SelectStyleScreenState> emit) async {
+    StyleDelete event,
+    Emitter<SelectStyleScreenState> emit,
+  ) async {
     final allStyles = await _styleList;
-    print('Old length: ${allStyles.length}');
     final moveStyle = event.ereaderStyle;
 
-    print('Move style: ${moveStyle.name}');
-    print('All styles: ${allStyles}');
-
     for (final style in allStyles) {
-      print('Name: ${style.name}');
       if (style.name == moveStyle.name) {
-        final oldPosition = allStyles.indexOf(style);
-        print('Old position: $oldPosition');
         allStyles.remove(style);
 
         await _saveStyleList(allStyles);
 
         final updatedStyles = await _styleList;
-        print('New length: ${updatedStyles.length}');
 
         emit(state.copyWith(allStyles: updatedStyles));
 

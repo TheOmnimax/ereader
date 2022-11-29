@@ -1,14 +1,10 @@
-// ignore_for_file: public_member_api_docs
+import 'dart:async';
 import 'dart:io';
 
 import 'package:epubx/epubx.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart';
 import 'package:json_annotation/json_annotation.dart';
-// import 'package:flutter/material.dart';
-import 'dart:async';
-
-// part 'ebook_metadata.g.dart';
 
 // TODO: Update with author and publisher list
 class EbookMetadata {
@@ -38,7 +34,8 @@ class EbookMetadata {
       : title = data.title,
         authors = data.authors,
         coverImage = decodePng(
-                File('assets/media/default_cover.png').readAsBytesSync()) ??
+              File('assets/media/default_cover.png').readAsBytesSync(),
+            ) ??
             Image(600, 900),
         filePath = data.filePath;
 
@@ -55,16 +52,12 @@ class EbookMetadata {
 
     final filePath = json['filename'] as String;
     return EbookMetadata(
-        title: title,
-        authors: authors,
-        coverImage: coverImage,
-        filePath: filePath);
+      title: title,
+      authors: authors,
+      coverImage: coverImage,
+      filePath: filePath,
+    );
   }
-  // : title = json['title'] as String,
-  //   authors = json['authors'] as List<String>,
-  //   coverImage =
-  //       decodePng(File('test.jpg').readAsBytesSync()) ?? Image(600, 900),
-  //   filePath = json['filename'] as String;
 
   final String title;
   final List<String?> authors;

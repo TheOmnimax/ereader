@@ -22,12 +22,14 @@ class MultiNumberEntry extends StatelessWidget {
     for (var n = 0; n < numEntries; n++) {
       final onChanged = onChangedFunctions[n];
       final value = values[n];
-      numberEntryList.add(SingleNumberEntry(
-        onChanged: onChanged,
-        value: value,
-        unit: unit,
-        arrowChange: arrowChange,
-      ));
+      numberEntryList.add(
+        SingleNumberEntry(
+          onChanged: onChanged,
+          value: value,
+          unit: unit,
+          arrowChange: arrowChange,
+        ),
+      );
     }
     return numberEntryList;
   }
@@ -64,12 +66,16 @@ class SingleNumberEntry extends StatelessWidget {
       tc
         ..text = defaultValue.toString()
         ..selection = TextSelection(
-            baseOffset: 0, extentOffset: defaultValue.toString().length);
+          baseOffset: 0,
+          extentOffset: defaultValue.toString().length,
+        );
     } else {
       tc
         ..text = value.toString()
         ..selection = TextSelection(
-            baseOffset: tc.text.length, extentOffset: tc.text.length);
+          baseOffset: tc.text.length,
+          extentOffset: tc.text.length,
+        );
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

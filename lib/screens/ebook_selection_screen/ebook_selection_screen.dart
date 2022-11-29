@@ -1,13 +1,11 @@
 import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/constants/constants.dart';
-import 'package:ereader/screens/download_ebooks_screen/bloc/bloc.dart';
-import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 import 'package:ereader/screens/ebook_selection_screen/bloc/bloc.dart';
+import 'package:ereader/screens/ereader_screen/ereader_screen.dart';
 import 'package:ereader/shared_widgets/shared_widgets.dart';
+import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../ereader_screen/ereader_screen.dart';
 
 class EbookSelectionMain extends StatelessWidget {
   const EbookSelectionMain({Key? key}) : super(key: key);
@@ -20,9 +18,6 @@ class EbookSelectionMain extends StatelessWidget {
     );
   }
 }
-
-// TODO: Set to add event LoadPage() whenever screen on top is popped
-// TODO: Fix opener of book
 
 class SelectionPage extends StatelessWidget {
   const SelectionPage({Key? key}) : super(key: key);
@@ -62,9 +57,11 @@ class SelectionPage extends StatelessWidget {
       }
 
       for (final ebookMetadata in ebookMetadataList) {
-        ebookWidgetList.add(EbookListItem(
-          ebookMetadata: ebookMetadata,
-        ));
+        ebookWidgetList.add(
+          EbookListItem(
+            ebookMetadata: ebookMetadata,
+          ),
+        );
       }
 
       return ebookWidgetList;
@@ -72,99 +69,100 @@ class SelectionPage extends StatelessWidget {
 
     final appBloc = context.watch<AppBloc>();
     return BlocBuilder<EbookSelectionBloc, EbookSelectionState>(
-        builder: (context, state) {
-      print('Username: ${appBloc.state.username}');
-      Widget getSafeArea() {
-        if (state is EbookSelectionLoading) {
-          return Text('Loading');
-        } else {
-          return ListBuilder(
-            widgets: createEbookWidgetList(
-              state.ebookList,
-            ),
-          );
-        }
-      }
-
-      return Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            children: <Widget>[
-              LoginTile(
-                username: appBloc.state.username,
-                logout: () async {
-                  await showPopup(
-                    context: context,
-                    title: 'Log out',
-                    buttons: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Stay'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          // TODO: Is there a shorthand for this? I do it a lot.
-                          context.read<AppBloc>().add(Logout());
-                        },
-                        child: const Text('Log out'),
-                      ),
-                    ],
-                    body: Text(
-                      'Are you sure you would like to log out?',
-                    ),
-                  );
-                },
-                login: () {
-                  Navigator.pushNamed(context, '/login');
-                },
+      builder: (context, state) {
+        Widget getSafeArea() {
+          if (state is EbookSelectionLoading) {
+            return const Text('Loading');
+          } else {
+            return ListBuilder(
+              widgets: createEbookWidgetList(
+                state.ebookList,
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/download');
-                },
-                child: const Text('Download'),
-              )
-            ],
+            );
+          }
+        }
+
+        return Scaffold(
+          drawer: Drawer(
+            child: ListView(
+              children: <Widget>[
+                LoginTile(
+                  username: appBloc.state.username,
+                  logout: () async {
+                    await showPopup(
+                      context: context,
+                      title: 'Log out',
+                      buttons: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Stay'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            context.read<AppBloc>().add(Logout());
+                          },
+                          child: const Text('Log out'),
+                        ),
+                      ],
+                      body: const Text(
+                        'Are you sure you would like to log out?',
+                      ),
+                    );
+                  },
+                  login: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/download');
+                  },
+                  child: const Text('Download'),
+                )
+              ],
+            ),
           ),
-        ),
-        appBar: AppBar(
-          title: const Text('eReader'),
-          actions: <Widget>[
-            IconButton(
+          appBar: AppBar(
+            title: const Text('eReader'),
+            actions: <Widget>[
+              IconButton(
                 onPressed: () {
                   context.read<EbookSelectionBloc>().add(const LoadPage());
                 },
                 icon: const Icon(
                   Icons.sync,
-                )),
-            PopupMenuButton<String>(
-              onSelected: kebabFunction,
-              itemBuilder: (BuildContext context) {
-                return {'eReader style', 'Add eBook'}.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              },
-            ),
-          ],
-        ),
-        body: SafeArea(
-          child: getSafeArea(),
-        ),
-      );
-    });
+                ),
+              ),
+              PopupMenuButton<String>(
+                onSelected: kebabFunction,
+                itemBuilder: (BuildContext context) {
+                  return {'eReader style', 'Add eBook'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
+          ),
+          body: SafeArea(
+            child: getSafeArea(),
+          ),
+        );
+      },
+    );
   }
 }
 
 class EbookListItem extends StatelessWidget {
   const EbookListItem({
     required this.ebookMetadata,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final EbookMetadata ebookMetadata;
 
@@ -173,8 +171,8 @@ class EbookListItem extends StatelessWidget {
     return ListItem(
       mainButton: TextButton(
         style: TextButton.styleFrom(
+          foregroundColor: Colors.black,
           alignment: Alignment.centerLeft,
-          primary: Colors.black,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +199,9 @@ class EbookListItem extends StatelessWidget {
               await showPopup(
                 context: context,
                 title: 'Delete eBook',
-                body: Text('Are you sure you would like to delete this eBook?'),
+                body: const Text(
+                  'Are you sure you would like to delete this eBook?',
+                ),
                 buttons: <Widget>[
                   TextButton(
                     onPressed: () {
@@ -212,9 +212,11 @@ class EbookListItem extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      context.read<EbookSelectionBloc>().add(DeleteEbook(
-                            deletePath: ebookMetadata.filePath,
-                          ));
+                      context.read<EbookSelectionBloc>().add(
+                            DeleteEbook(
+                              deletePath: ebookMetadata.filePath,
+                            ),
+                          );
                     },
                     child: const Text('Delete'),
                   ),

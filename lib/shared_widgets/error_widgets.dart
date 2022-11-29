@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:ereader/constants/constants.dart';
+import 'package:flutter/material.dart';
 
 class LoginStatusWidget extends StatelessWidget {
   const LoginStatusWidget({
@@ -14,61 +14,63 @@ class LoginStatusWidget extends StatelessWidget {
     switch (loginResult) {
       case LoginResult.success:
         {
-          return Text('Success!');
+          return const Text('Success!');
         }
       case LoginResult.disabled:
         {
-          return Text('Sorry, but this user has been disabled');
+          return const Text('Sorry, but this user has been disabled');
         }
       case LoginResult.invalidEmail:
         {
-          return Text('Please enter a valid email address');
+          return const Text('Please enter a valid email address');
         }
       case LoginResult.wrongPassword:
         {
-          return Text('Incorrect password');
+          return const Text('Incorrect password');
         }
       case LoginResult.weakPassword:
         {
-          return Text('Password too weak');
+          return const Text('Password too weak');
         }
       case LoginResult.missingEmail:
         {
-          return Text('Please enter an email address');
+          return const Text('Please enter an email address');
         }
       case LoginResult.missingPassword:
         {
-          return Text('Please enter a password');
+          return const Text('Please enter a password');
         }
       case LoginResult.missingReenter:
         {
-          return Text('Please re-enter your password');
+          return const Text('Please re-enter your password');
         }
       case LoginResult.passwordMismatch:
         {
-          return Text('Passwords do not match. Please retype them.');
+          return const Text('Passwords do not match. Please retype them.');
         }
       case LoginResult.notFound:
         {
-          return Text('Username not found');
+          return const Text('Username not found');
         }
       case LoginResult.usedUsername:
         {
-          return Text(
-              'Username is already registered. Please either use a different email address, or reset your password.');
+          return const Text(
+            'Username is already registered. Please either use a different email address, or reset your password.',
+          );
         }
       case LoginResult.unknownError:
         {
-          return Text('Unknown error');
+          return const Text('Unknown error');
         }
       case LoginResult.brute:
         {
-          return Text(
-              'There were too many incorrect attempts to log in. Please try again later.');
+          return const Text(
+            'There were too many incorrect attempts to log in. Please try again later.',
+          );
         }
-      default:
+      case null:
         {
-          return Text('');
+          return const Text('Unknown error');
         }
     }
   }

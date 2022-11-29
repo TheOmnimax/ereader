@@ -1,5 +1,5 @@
-import 'package:ereader/constants/constants.dart';
 import 'package:equatable/equatable.dart';
+import 'package:ereader/constants/constants.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 
 class CustomStyleState extends Equatable {
@@ -24,15 +24,3 @@ class CustomStyleState extends Equatable {
     );
   }
 }
-
-// class StyleInitial extends CustomStyleState {
-//   const StyleInitial() : super(ereaderStyle: const EreaderStyle());
-// }
-//
-// class StateChanged extends CustomStyleState {
-//   const StateChanged({required EreaderStyle ereaderStyle, required Module selectedModule})
-//       : super(
-//           ereaderStyle: ereaderStyle,
-//           selectedModule: selectedModule,
-//         );
-// }

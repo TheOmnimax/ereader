@@ -1,9 +1,8 @@
 import 'package:ereader/constants/constants.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
+import 'package:ereader/shared_widgets/buttons.dart';
 import 'package:ereader/shared_widgets/custom_style/color_slider.dart';
 import 'package:ereader/shared_widgets/custom_style/number_entry.dart';
-
-import 'package:ereader/shared_widgets/buttons.dart';
 import 'package:flutter/material.dart';
 
 class StyleModules extends StatelessWidget {
@@ -59,9 +58,7 @@ class StyleModules extends StatelessWidget {
         }
       case Module.margins:
         {
-          print('Margins: ${ereaderStyle.margins}');
           void onTopChange(int value) {
-            print('Top change');
             onMarginsChange(
               value,
               ereaderStyle.margins[1],
@@ -109,19 +106,13 @@ class StyleModules extends StatelessWidget {
         }
       case Module.name:
         {
-          return Container(
-            child: TextFormField(
-              onChanged: onNameChange,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-              ),
-              initialValue: ereaderStyle.name,
+          return TextFormField(
+            onChanged: onNameChange,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
             ),
+            initialValue: ereaderStyle.name,
           );
-        }
-      default:
-        {
-          return Container();
         }
     }
   }
@@ -138,10 +129,10 @@ class MarginEntry extends StatefulWidget {
   final List<Function(int)> onChangedFunctions;
 
   @override
-  _MarginEntryState createState() => _MarginEntryState();
+  MarginEntryState createState() => MarginEntryState();
 }
 
-class _MarginEntryState extends State<MarginEntry> {
+class MarginEntryState extends State<MarginEntry> {
   Position position = Position.top;
   @override
   Widget build(BuildContext context) {
@@ -151,11 +142,9 @@ class _MarginEntryState extends State<MarginEntry> {
     void updateSelectedPos(Position newPos) {
       setState(() {
         position = newPos;
-        print('Selected: $position');
         switch (position) {
           case Position.top:
             {
-              // position = widget.margins as Position;
               selectedMarginValue = widget.margins[0];
               onChanged = widget.onChangedFunctions[0];
             }
@@ -178,17 +167,11 @@ class _MarginEntryState extends State<MarginEntry> {
               onChanged = widget.onChangedFunctions[3];
               break;
             }
-          default:
-            {
-              selectedMarginValue = 0;
-            }
         }
       });
     }
 
     updateSelectedPos(position);
-
-    print('New position: $position');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

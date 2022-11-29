@@ -1,8 +1,7 @@
 import 'package:epubx/epubx.dart';
+import 'package:ereader/utils/html_processor/html_processor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../html_processor.dart';
 
 class EbookData {
   const EbookData({
@@ -58,8 +57,8 @@ class ChapterData {
     required EpubChapter chapterData,
     required int start,
   }) {
-    String title = chapterData.Title ?? '';
-    String? anchor = chapterData.Anchor;
+    final title = chapterData.Title ?? '';
+    final anchor = chapterData.Anchor;
     return ChapterData._(
       title: title,
       start: start,
@@ -69,11 +68,12 @@ class ChapterData {
 }
 
 class PageGenerator {
-  PageGenerator(
-      {required this.epubBook,
-      required this.pageWidth,
-      required this.pageHeight,
-      required this.style});
+  PageGenerator({
+    required this.epubBook,
+    required this.pageWidth,
+    required this.pageHeight,
+    required this.style,
+  });
 
   final EpubBook epubBook;
   final List<PageData> pages = <PageData>[];
@@ -92,7 +92,6 @@ class PageGenerator {
         ),
       );
       final htmlContent = chapter.HtmlContent; // String?
-      // print('CHAPTER: ${chapter.Title}');
       if (htmlContent != null) {
         final newPages = HtmlDisplayTool.getPages(
           htmlContent: htmlContent,
@@ -104,8 +103,11 @@ class PageGenerator {
         //     'There are ${newPages.length} new pages in the chapter ${chapter.Title}');
         pages.addAll(newPages);
       } else {
-        pages.add(PageData(
-            content: TextSpan())); // Add blank page if chapter has no content
+        pages.add(
+          const PageData(
+            content: TextSpan(),
+          ),
+        ); // Add blank page if chapter has no content
       }
       final subChapters = chapter.SubChapters;
       if (subChapters != null) {
@@ -131,12 +133,14 @@ class PageGenerator {
           if (htmlContent != null) {
             // TODO: QUESTION: Could this be a function in a method, or is that not proper?
             // TODO: Make anonymous function
-            pages.addAll(HtmlDisplayTool.getPages(
-              htmlContent: htmlContent,
-              pageHeight: pageHeight,
-              pageWidth: pageWidth,
-              defaultStyle: style,
-            ));
+            pages.addAll(
+              HtmlDisplayTool.getPages(
+                htmlContent: htmlContent,
+                pageHeight: pageHeight,
+                pageWidth: pageWidth,
+                defaultStyle: style,
+              ),
+            );
           }
         }
       }

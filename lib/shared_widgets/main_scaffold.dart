@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class MainScaffold extends StatelessWidget {
-  const MainScaffold({required this.child, required this.popupMenuButton});
+  const MainScaffold({
+    required this.child,
+    required this.popupMenuButton,
+    Key? key,
+  }) : super(key: key);
 
   final Widget child;
   final PopupMenuButton popupMenuButton;

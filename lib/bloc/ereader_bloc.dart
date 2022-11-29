@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
+
 import 'package:ereader/bloc/bloc.dart';
 import 'package:ereader/constants/constants.dart';
-import 'package:ereader/utils/file_explorer/files.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
+import 'package:ereader/utils/file_explorer/files.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,9 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc()
       : super(
-          AppState(
+          const AppState(
             username: '',
-            currentStyle: const EreaderStyle(),
+            currentStyle: EreaderStyle(),
           ),
         ) {
     on<AppOpened>(_appOpened);
@@ -36,11 +36,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   Future _appOpened(AppOpened event, Emitter<AppState> emit) async {
-    print('App opened');
     final EreaderStyle selectedStyle;
     final createdStyleDir = await _styleRetriever.createDir();
     if (createdStyleDir) {
-      print('Adding selected style');
       await _styleRetriever.addFileByName(_selectedStyleFile);
       await _styleRetriever.addFileByName('savedStyles.json');
 
@@ -77,7 +75,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     final currentUser = _auth.currentUser;
     final username = currentUser?.email ?? '';
-    print('Username in bloc: $username');
     emit(AppState(username: username, currentStyle: selectedStyle));
   }
 
@@ -148,13 +145,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             'message': e.message,
           };
         }
-      case 'user-not-found':
-        {
-          return <String, dynamic>{
-            'loginResult': LoginResult.notFound,
-            // 'message': e.message,
-          };
-        }
       case 'too-many-requests':
         {
           return <String, dynamic>{
@@ -188,38 +178,50 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     try {
       await _auth.signInWithEmailAndPassword(
-          email: event.username, password: event.password);
+        email: event.username,
+        password: event.password,
+      );
     } on FirebaseAuthException catch (e) {
       final loginErrorInfo = analyzeLoginError(e);
       if (loginErrorInfo.containsKey('message')) {
-        emit(state.copyWith(
-          loginStatus: loginErrorInfo['loginResult'] as LoginResult,
-          loginDetails: loginErrorInfo['message'] as String,
-        ));
+        emit(
+          state.copyWith(
+            loginStatus: loginErrorInfo['loginResult'] as LoginResult,
+            loginDetails: loginErrorInfo['message'] as String,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          loginStatus: loginErrorInfo['loginResult'] as LoginResult,
-        ));
+        emit(
+          state.copyWith(
+            loginStatus: loginErrorInfo['loginResult'] as LoginResult,
+          ),
+        );
       }
       return;
     } catch (e) {
-      emit(state.copyWith(
-        loginStatus: LoginResult.unknownError,
-        loginDetails: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          loginStatus: LoginResult.unknownError,
+          loginDetails: e.toString(),
+        ),
+      );
       return;
     }
 
-    emit(state.copyWith(
-      username: event.username,
-    ));
+    emit(
+      state.copyWith(
+        username: event.username,
+      ),
+    );
   }
 
   Future _logout(Logout event, Emitter<AppState> emit) async {
     await _auth.signOut();
-    emit(state.copyWith(
-      username: '',
-    ));
+    emit(
+      state.copyWith(
+        username: '',
+      ),
+    );
   }
 
   Future _register(Register event, Emitter<AppState> emit) async {
@@ -237,36 +239,46 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     try {
       final userCredential = await _auth.createUserWithEmailAndPassword(
-          email: event.username, password: event.password1);
+        email: event.username,
+        password: event.password1,
+      );
       if (userCredential == null) {
         emit(state.copyWith(loginStatus: LoginResult.unknownError));
         return;
       }
     } on FirebaseAuthException catch (e) {
       final loginErrorInfo = analyzeLoginError(e);
-      emit(state.copyWith(
-        loginStatus: loginErrorInfo['loginResult'] as LoginResult,
-        loginDetails: loginErrorInfo['message'] as String,
-      ));
+      emit(
+        state.copyWith(
+          loginStatus: loginErrorInfo['loginResult'] as LoginResult,
+          loginDetails: loginErrorInfo['message'] as String,
+        ),
+      );
       return;
     } catch (e) {
-      emit(state.copyWith(
-        loginStatus: LoginResult.unknownError,
-        loginDetails: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          loginStatus: LoginResult.unknownError,
+          loginDetails: e.toString(),
+        ),
+      );
       return;
     }
 
-    emit(state.copyWith(
-      username: event.username,
-    ));
+    emit(
+      state.copyWith(
+        username: event.username,
+      ),
+    );
   }
 
   void _loginError(LoginError event, Emitter<AppState> emit) {
-    emit(state.copyWith(
-      loginStatus: event.loginResult,
-      loginDetails: event.loginDetails,
-    ));
+    emit(
+      state.copyWith(
+        loginStatus: event.loginResult,
+        loginDetails: event.loginDetails,
+      ),
+    );
   }
 
   Future _selectStyle(SelectStyle event, Emitter<AppState> emit) async {
@@ -275,8 +287,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       filename: _selectedStyleFile,
       contents: stringData,
     );
-    emit(state.copyWith(
-      newStyle: event.newStyle,
-    ));
+    emit(
+      state.copyWith(
+        newStyle: event.newStyle,
+      ),
+    );
   }
 }

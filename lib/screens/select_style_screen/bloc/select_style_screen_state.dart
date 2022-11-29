@@ -1,8 +1,5 @@
-import 'package:ereader/constants/constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:ereader/shared_data/shared_preferences.dart';
 
 abstract class SelectStyleScreenState extends Equatable {
   const SelectStyleScreenState({
@@ -38,13 +35,12 @@ class SelectStyleLoading extends SelectStyleScreenState {
 
 class SelectStyleMainState extends SelectStyleScreenState {
   const SelectStyleMainState({
-    this.selectedEreaderStyle = const EreaderStyle(),
-    this.allStyles = const <EreaderStyle>[],
-    // this.selectedStyle = '',
-  });
-
-  final EreaderStyle selectedEreaderStyle;
-  final List<EreaderStyle> allStyles;
+    EreaderStyle selectedEreaderStyle = const EreaderStyle(),
+    List<EreaderStyle> allStyles = const <EreaderStyle>[],
+  }) : super(
+          selectedEreaderStyle: selectedEreaderStyle,
+          allStyles: allStyles,
+        );
 
   @override
   List<Object?> get props => [selectedEreaderStyle, allStyles];
@@ -53,12 +49,10 @@ class SelectStyleMainState extends SelectStyleScreenState {
   SelectStyleMainState copyWith({
     List<EreaderStyle>? allStyles,
     EreaderStyle? selectedEreaderStyle,
-    // String? selectedStyle,
   }) {
     return SelectStyleMainState(
       allStyles: allStyles ?? [],
       selectedEreaderStyle: selectedEreaderStyle ?? this.selectedEreaderStyle,
-      // selectedStyle: selectedStyle ?? this.selectedStyle,
     );
   }
 }

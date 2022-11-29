@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 import 'package:ereader/constants/constants.dart';
+import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 
 abstract class DownloadEbooksState extends Equatable {
   const DownloadEbooksState({
@@ -78,28 +78,3 @@ class ListBooks extends DownloadEbooksState {
     );
   }
 }
-
-// TODO: Question: Is there an easier way to set up a state that is the same except for a few things?
-// class DownloadExists extends ListBooks {
-//   const DownloadExists({
-//     required List<EbookMetadata> ebookList,
-//     required this.filename,
-//     required this.codeUnits,
-//   }) : super(
-//           ebookList: ebookList,
-//           status: LoadingStatus.warning,
-//           info: 'eBook already exists!',
-//         );
-//
-//   final String filename;
-//   final List<int> codeUnits;
-//
-//   @override
-//   List<Object?> get props => [ebookList, status, info];
-// }
-
-// class Downloading extends DownloadEbooksState {
-//   const Downloading({
-//     required List<EbookMetadata> ebookList,
-//   }) : super(ebookList: ebookList);
-// }

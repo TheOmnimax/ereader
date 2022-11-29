@@ -27,7 +27,7 @@ class RoundedTextBox extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
           ),
           contentPadding:
-              EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           labelText: label,
         ),
         keyboardType: keyboard,

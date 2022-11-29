@@ -3,10 +3,9 @@ import 'dart:io';
 
 import 'package:epubx/epubx.dart';
 import 'package:ereader/bloc/ereader_bloc.dart';
+import 'package:ereader/screens/ereader_screen/bloc/bloc.dart';
 import 'package:ereader/utils/html_processor/ebook_utils/ebook_tool.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'bloc.dart';
 
 // Method based on:
 // https://github.com/sujanbhattaraiofficial/splitted-text/blob/main/lib/logic/splittedText.dart
@@ -31,33 +30,20 @@ class EreaderBloc extends Bloc<EreaderEvent, EreaderState> {
     final margins = style.margins;
     final vertPadding = margins[0] + margins[2];
     final horizontalPadding = margins[1] + margins[3];
-    print('Original width: ${event.workingWidth}');
-    print('Original height: ${event.workingHeight}');
     final ebookData = ebookProcessor.getEbookData(
       pageHeight: event.workingHeight - vertPadding.toDouble(),
       pageWidth: event.workingWidth - horizontalPadding.toDouble(),
       style: style.toTextStyle(),
     );
-    print('Got ebook data');
     final pages = ebookData.pageData;
 
-    // print('Loading asset...');
-    // final exampleContent =
-    //     await rootBundle.loadString('assets/test_files/act-1 - Copy.xhtml');
-    //
-    // final pages = HtmlDisplayTool.getPages(
-    //   htmlContent: exampleContent,
-    //   pageHeight: event.workingHeight,
-    //   pageWidth: event.workingWidth,
-    //   defaultStyle: event.style,
-    // );
-
-    emit(EbookDisplay(
-      // content: exampleContent,
-      pages: pages,
-      pageNum: 0,
-      style: style,
-    ));
+    emit(
+      EbookDisplay(
+        pages: pages,
+        pageNum: 0,
+        style: style,
+      ),
+    );
     return;
   }
 

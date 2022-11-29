@@ -1,12 +1,12 @@
 import 'dart:convert';
+
 import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_event.dart';
 import 'package:ereader/screens/custom_style_screen/bloc/custom_style_screen_state.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/shared_widgets/show_popup.dart';
+import 'package:ereader/utils/file_explorer/files.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ereader/utils/file_explorer/files.dart';
 
 class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
   CustomStyleBloc() : super(const CustomStyleState()) {
@@ -44,13 +44,16 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
   }
 
   Future<void> _savePreferences(
-      SavePreferences event, Emitter<CustomStyleState> emit) async {
+    SavePreferences event,
+    Emitter<CustomStyleState> emit,
+  ) async {
     final newName = event.ereaderStyle.name;
     final jsonData = event.ereaderStyle.toJson();
     final styleList = await _fileReadWrite.getFileAsList(_filename);
     var alreadyExists = false;
 
-    for (final style in styleList) {
+    for (final rawStyle in styleList) {
+      final style = rawStyle as Map<String, dynamic>;
       final styleName = style['name'] as String;
       if (newName == styleName) {
         alreadyExists = true;
@@ -62,7 +65,7 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
               child: const Text('Yes, update'),
               onPressed: () {
                 Navigator.of(event.context).pop();
-                var styleIndex = styleList.indexOf(style);
+                final styleIndex = styleList.indexOf(style);
                 styleList[styleIndex] = jsonData;
               },
             ),
@@ -74,7 +77,8 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
             ),
           ],
           body: const Text(
-              'There is already a style with this name. Are you sure you would like to replace the old style with this new the style?'),
+            'There is already a style with this name. Are you sure you would like to replace the old style with this new the style?',
+          ),
         );
         break;
       }
@@ -85,20 +89,10 @@ class CustomStyleBloc extends Bloc<CustomStyleEvent, CustomStyleState> {
     }
 
     final stringData = jsonEncode(styleList);
-    print('Writing:');
-    print(stringData);
     await _fileReadWrite.writeString(
       filename: _filename,
       contents: stringData,
     );
     emit(state.copyWith());
   }
-
-  // void _loadPreferences(LoadPreferences event, Emitter<CustomStyleState> emit) {
-  //   var stringData = event.preferencesString;
-  //   print('String data:');
-  //   print(stringData);
-  //   var newStyle = EreaderStyle.fromStringData(stringData);
-  //   emit(StyleAdjusted(ereaderStyle: newStyle));
-  // }
 }

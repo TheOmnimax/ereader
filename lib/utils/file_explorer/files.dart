@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 class FileReadWrite {
   const FileReadWrite({
@@ -45,7 +44,6 @@ class FileReadWrite {
 
   Future<List<FileSystemEntity>> getFilesInFolder() async {
     final dir = await _mainDir;
-    print('Retrieving files from ${dir.path}');
     final fileList = dir.list().toList();
     return fileList;
   }
@@ -80,10 +78,8 @@ class FileReadWrite {
       final fileData = file.readAsStringSync();
       return fileData;
     } on FileSystemException catch (e) {
-      print('Error');
       if (e.message == 'Cannot open file') {
         file.createSync();
-        print('Created file');
       } else {
         print(e);
       }
@@ -94,8 +90,10 @@ class FileReadWrite {
     }
   }
 
-  Future<Map<String, dynamic>> getFileAsMap(String filename,
-      {bool create = false}) async {
+  Future<Map<String, dynamic>> getFileAsMap(
+    String filename, {
+    bool create = false,
+  }) async {
     final stringData = await getFileAsString(filename, create: create);
     try {
       if (stringData == '') {

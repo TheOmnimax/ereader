@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:ereader/constants/constants.dart';
-import 'package:ereader/screens/login_screen/bloc/bloc.dart';
+part of 'login_screen_bloc.dart';
 
 class LoginState extends Equatable {
   const LoginState({

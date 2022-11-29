@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:ereader/constants/constants.dart';
+import 'package:flutter/material.dart';
 
 class StyleSelector extends StatelessWidget {
   const StyleSelector({
     required this.onTap,
     required this.selectedModule,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final Function(Module) onTap;
   final Module selectedModule;
@@ -78,7 +79,8 @@ class StyleButton extends StatelessWidget {
     required this.name,
     required this.onTap,
     this.selected = false,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final String name;
   final bool selected;

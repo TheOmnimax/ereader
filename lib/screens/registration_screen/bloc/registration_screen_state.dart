@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ereader/constants/constants.dart';
 
 class RegistrationState extends Equatable {

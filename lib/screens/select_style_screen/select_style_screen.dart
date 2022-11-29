@@ -1,14 +1,12 @@
 import 'package:ereader/bloc/bloc.dart';
+import 'package:ereader/constants/constants.dart';
+import 'package:ereader/screens/custom_style_screen/custom_style_screen.dart';
 import 'package:ereader/screens/select_style_screen/bloc/bloc.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
 import 'package:ereader/shared_widgets/custom_style/style_preview.dart';
-import 'package:ereader/shared_widgets/list_builder.dart';
 import 'package:ereader/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ereader/constants/constants.dart';
-import 'package:ereader/screens/custom_style_screen/custom_style_screen.dart';
-import 'package:ereader/bloc/bloc.dart';
 
 class SelectStyleMain extends StatelessWidget {
   const SelectStyleMain({Key? key}) : super(key: key);
@@ -43,8 +41,6 @@ class SelectStyleScreen extends StatelessWidget {
     }
 
     List<Widget> styleListBuilder(List<EreaderStyle> ereaderStyles) {
-      print('About to create list with:');
-      print(ereaderStyles);
       final widgetList = <Widget>[];
       for (final value in ereaderStyles) {
         final listItem = StyleListItem(
@@ -61,8 +57,6 @@ class SelectStyleScreen extends StatelessWidget {
         );
         widgetList.add(listItem);
       }
-      print('Widget list:');
-      print(widgetList);
       return widgetList;
     }
 
@@ -72,22 +66,15 @@ class SelectStyleScreen extends StatelessWidget {
         actions: <Widget>[
           PopupMenu(
             onSelected: popupItemSelected,
-            itemList: ['Add new style'],
+            itemList: const ['Add new style'],
           ),
         ],
       ),
       body: BlocBuilder<SelectStyleBloc, SelectStyleScreenState>(
         builder: (context, state) {
-          final currentState = state;
-
           if (state is SelectStyleLoading) {
-            return Text('Loading...');
+            return const Text('Loading...');
           } else if (state is SelectStyleMainState) {
-            final ereaderStyle = state.selectedEreaderStyle;
-            final allStyles = state.allStyles;
-            print('All styles:');
-            print(allStyles);
-
             return SafeArea(
               child: Column(
                 children: <Widget>[
@@ -101,7 +88,7 @@ class SelectStyleScreen extends StatelessWidget {
               ),
             );
           } else {
-            return Text('Error');
+            return const Text('Error');
           }
         },
       ),
@@ -114,7 +101,8 @@ class StyleListItem extends StatelessWidget {
     required this.onPressed,
     required this.ereaderStyle,
     this.popupItems = const <PopupMenuEntry<String>>[],
-  });
+    Key? key,
+  }) : super(key: key);
 
   final Function() onPressed;
   final EreaderStyle ereaderStyle;
@@ -126,8 +114,8 @@ class StyleListItem extends StatelessWidget {
       backgroundColor: ereaderStyle.backgroundColor,
       mainButton: TextButton(
         style: TextButton.styleFrom(
+          foregroundColor: ereaderStyle.fontColor,
           alignment: Alignment.centerLeft,
-          primary: ereaderStyle.fontColor,
         ),
         onPressed: onPressed,
         child: Text(
@@ -142,7 +130,6 @@ class StyleListItem extends StatelessWidget {
         switch (selectedItem) {
           case kMoveUp:
             {
-              print('Move up');
               context.read<SelectStyleBloc>().add(
                     StyleMove(
                       ereaderStyle: ereaderStyle,
@@ -153,7 +140,6 @@ class StyleListItem extends StatelessWidget {
             }
           case kMoveDown:
             {
-              print('Move down');
               context.read<SelectStyleBloc>().add(
                     StyleMove(
                       ereaderStyle: ereaderStyle,
@@ -164,8 +150,6 @@ class StyleListItem extends StatelessWidget {
             }
           case kEdit:
             {
-              print('Edit');
-
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(
@@ -182,7 +166,6 @@ class StyleListItem extends StatelessWidget {
             }
           case kDelete:
             {
-              print('Delete');
               context.read<SelectStyleBloc>().add(
                     StyleDelete(
                       ereaderStyle: ereaderStyle,

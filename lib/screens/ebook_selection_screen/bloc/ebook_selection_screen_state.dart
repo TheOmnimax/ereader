@@ -12,12 +12,23 @@ abstract class EbookSelectionState extends Equatable {
 
   @override
   List<Object?> get props => [];
+
+  EbookSelectionState copyWith({
+    List<EbookMetadata>? ebookList,
+    String username,
+  });
 }
 
 class EbookSelectionLoading extends EbookSelectionState {
   const EbookSelectionLoading();
 
-
+  @override
+  EbookSelectionLoading copyWith({
+    List<EbookMetadata>? ebookList,
+    String? username,
+  }) {
+    return const EbookSelectionLoading();
+  }
 }
 
 class EbookSelectionMainState extends EbookSelectionState {

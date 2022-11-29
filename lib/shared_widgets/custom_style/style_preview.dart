@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class StylePreview extends StatelessWidget {
   const StylePreview({
     required this.ereaderStyle,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final EreaderStyle ereaderStyle;
 

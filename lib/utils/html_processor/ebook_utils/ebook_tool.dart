@@ -1,9 +1,8 @@
 import 'dart:io';
 
 import 'package:epubx/epubx.dart';
+import 'package:ereader/utils/html_processor/ebook_utils/ebook_classes.dart';
 import 'package:flutter/cupertino.dart';
-import '../html_processor.dart';
-import 'ebook_classes.dart';
 
 class EbookProcessor {
   const EbookProcessor({
@@ -31,7 +30,7 @@ class EbookProcessor {
     String altTitle = '[unknown title]',
     String altAuthor = '[unknown author]',
   }) {
-    PageChapterData pageChapterData = getPages(
+    final pageChapterData = getPages(
       pageHeight: pageHeight,
       pageWidth: pageWidth,
       style: style,

@@ -40,9 +40,10 @@ class EreaderApp extends StatelessWidget {
     return MaterialApp(
       title: 'eReader',
       theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-        backgroundColor: themeColor,
-      )),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: themeColor,
+        ),
+      ),
       initialRoute: '/',
       routes: {
         '/': (context) => const EbookSelectionMain(),

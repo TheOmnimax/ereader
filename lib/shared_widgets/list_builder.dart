@@ -5,21 +5,21 @@ import 'package:flutter/material.dart';
 
 // Takes a list of widgets, and creates a scrollable widget
 class ListBuilder extends StatelessWidget {
-  const ListBuilder(
-      {required this.widgets, this.missingWarning = 'None found!'});
+  const ListBuilder({
+    required this.widgets,
+    this.missingWarning = 'None found!',
+    Key? key,
+  }) : super(key: key);
 
   final List<Widget> widgets;
   final String missingWarning;
 
   @override
   Widget build(BuildContext context) {
-    print('There are ${widgets.length} widgets');
-
-    if (widgets.length == 0) {
+    if (widgets.isEmpty) {
       return Text(missingWarning);
     }
     return ListView.separated(
-      scrollDirection: Axis.vertical,
       shrinkWrap: true,
       // padding: const EdgeInsets.all(8),
       itemBuilder: (BuildContext context, int index) {
@@ -42,7 +42,8 @@ class ListItem extends StatelessWidget {
     required this.itemList,
     this.backgroundColor = Colors.white,
     this.kebabColor = Colors.black,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final Widget mainButton;
   final Color backgroundColor;
@@ -84,8 +85,8 @@ class EbookButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
+        foregroundColor: Colors.black,
         alignment: Alignment.centerLeft,
-        primary: Colors.black,
       ),
       onPressed: onPressed,
       child: Column(
@@ -176,25 +177,11 @@ class EbookSorter {
     final ebookWidgetList = <Widget>[];
 
     if (sort == SortType.author) {
-      // TODO: Update this to work better now that this is a list
       ebookMetadataList
           .sort((a, b) => a.authorList().compareTo(b.authorList()));
     } else if (sort == SortType.title) {
       ebookMetadataList.sort((a, b) => a.title.compareTo(b.title));
     }
-
-    final List<EbookMetadata> returnList;
-    if (direction == Direction.up) {
-      returnList = ebookMetadataList.reversed.toList();
-    } else {
-      returnList = ebookMetadataList;
-    }
-
-    // for (final ebookMetadata in returnList) {
-    //   ebookWidgetList.add(EbookListItem(
-    //     ebookMetadata: ebookMetadata,
-    //   ));
-    // }
 
     return ebookWidgetList;
   }

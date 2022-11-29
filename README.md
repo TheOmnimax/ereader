@@ -23,6 +23,12 @@ This app was built using Flutter. It is meant to work as an Android app. It coul
 
 ## Add ebook
 
+
+
+| <img src="docs/images/home_kebab.png" width="25%" /> |
+|:--:|
+| Use three-dot menu to add ebook |
+
 You can download your own ebook EPUB file, and then open it using the app.
 
 1. Download an EPUB file to your device.
@@ -34,13 +40,27 @@ The new ebook should appear immediately, but if it does not, tap the refresh but
 
 ## Open ebook
 
+| <img src="docs/images/home.png" width="25%" /> | <img src="docs/images/reading_ebook.png" width="25%" /> | <img src="docs/images/turning_page.png" width="25%" /> |
+|:--:|:--:|:--:|
+| Home screen | Reading ebook | Turning page |
+
 From the main menu, simply tap the book you would like to open, and it will open. Swipe from right-to-left to turn the page.
 
 ## Delete ebook
 
+| <img src="docs/images/delete.png" width="25%" /> |
+|:--:|
+| Delete ebook |
+
 Simply tap the three-dot button to the right of the ebook, tap *Download*, then tap *Delete* at the popup.
 
 ## Change style
+
+| <img src="docs/images/style_select.png" width="25%" /> |
+|:--:|
+| Select style |
+
+
 
 You can change the style of the books you read, including the font color, background color, and more.
 
@@ -51,6 +71,10 @@ To move, edit, or delete a style, tap the three-dot menu to the right of the sty
 
 ## Add new style
 
+| <img src="docs/images/style_options.png" width="25%" /> | <img src="docs/images/style_kebab.png" width="25%" /> | <img src="docs/images/edit_color.png" width="25%" /> | <img src="docs/images/edit_font_size.png" width="25%" /> |
+|:--:|:--:|:--:|:--:|
+| Style options | Add style | Edit colors | Edit font size |
+
 Thali comes with two styles, but you can also add your own.
 
 It is often easier to start from an existing style. Simply tap the three-dot menu to the right of the style, then tap *Edit/Copy*, and the editor will open. To OVERWRITE an existing style, tap the *Name* module, and give it a different name. If you do not rename it, then it will overwrite the style with that name. Don't worry, it will warn you before you overwrite it!
@@ -59,11 +83,27 @@ To create a new style from scratch, from the *Select Style* menu, tap the three-
 
 ## Create and sign into account
 
+## Add new style
+
+| <img src="docs/images/login_drawer.png" width="25%" /> | <img src="docs/images/login.png" width="25%" /> | <img src="docs/images/signed_in.png" width="25%" /> |
+|:--:|:--:|:--:|
+| Login drawer | Login page | Signed in |
+
+## Add new style
+
+| <img src="docs/images/register.png" width="25%" /> | <img src="docs/images/register_error.png" width="25%" /> |
+|:--:|:--:|
+| Register | Register error |
+
 In order to download ebooks from the server, you need to have an account and sign in.
 
 From the main menu, tap the three-line menu in the upper-left, then *Log in*. In the upper-right, there will be a *Register* button you can use to register for a new account. If you already have an account, simply enter your credentials and tap *Log in*.
 
 ## Download new ebook
+
+| <img src="docs/images/loading_downloads.png" width="25%" /> | <img src="docs/images/download_list.png" width="25%" /> | <img src="docs/images/downloading.png" width="25%" /> | <img src="docs/images/download_complete.png" width="25%" /> |
+|:--:|:--:|:--:|:--:|
+| Loading | Download list | Downloading | Download complete |
 
 While you can provide your own ebooks, you can also download ebooks by connecting to our server.
 
@@ -76,4 +116,6 @@ While you can provide your own ebooks, you can also download ebooks by connectin
 
 ## Future updates
 
- * Allow for more ebook file types.
+* Allow for more ebook file types.
+* Enhance ebook display.
+* Add more fonts

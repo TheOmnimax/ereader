@@ -44,6 +44,7 @@ class EreaderApp extends StatelessWidget {
           backgroundColor: themeColor,
         ),
       ),
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => const EbookSelectionMain(),

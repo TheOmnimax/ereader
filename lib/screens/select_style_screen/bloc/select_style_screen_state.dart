@@ -1,8 +1,5 @@
-import 'package:ereader/constants/constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:ereader/shared_data/ereader_style.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:ereader/shared_data/shared_preferences.dart';
 
 abstract class SelectStyleScreenState extends Equatable {
   const SelectStyleScreenState({
@@ -11,9 +8,6 @@ abstract class SelectStyleScreenState extends Equatable {
   });
 
   final EreaderStyle selectedEreaderStyle;
-  // TODO: Find how to not use ereaderStyle in parent state, since not needed for all child states
-  // get currentState => String 'Other';
-  // TODO: Find how to set thsi up properly
   final List<EreaderStyle> allStyles;
 
   @override
@@ -21,7 +15,7 @@ abstract class SelectStyleScreenState extends Equatable {
 
   SelectStyleScreenState copyWith({
     List<EreaderStyle>? allStyles,
-    EreaderStyle? ereaderStyle,
+    EreaderStyle? selectedEreaderStyle,
     // String? selectedStyle,
   });
 }
@@ -32,7 +26,7 @@ class SelectStyleLoading extends SelectStyleScreenState {
   @override
   SelectStyleLoading copyWith({
     List<EreaderStyle>? allStyles,
-    EreaderStyle? ereaderStyle,
+    EreaderStyle? selectedEreaderStyle,
     // String? selectedStyle,
   }) {
     return const SelectStyleLoading();
@@ -41,27 +35,24 @@ class SelectStyleLoading extends SelectStyleScreenState {
 
 class SelectStyleMainState extends SelectStyleScreenState {
   const SelectStyleMainState({
-    this.selectedEreaderStyle = const EreaderStyle(),
-    this.allStyles = const <EreaderStyle>[],
-    // this.selectedStyle = '',
-  });
-
-  final EreaderStyle selectedEreaderStyle;
-  // final String selectedStyle;
-  final List<EreaderStyle> allStyles;
+    EreaderStyle selectedEreaderStyle = const EreaderStyle(),
+    List<EreaderStyle> allStyles = const <EreaderStyle>[],
+  }) : super(
+          selectedEreaderStyle: selectedEreaderStyle,
+          allStyles: allStyles,
+        );
 
   @override
-  List<Object?> get props => [selectedEreaderStyle];
+  List<Object?> get props => [selectedEreaderStyle, allStyles];
 
+  @override
   SelectStyleMainState copyWith({
     List<EreaderStyle>? allStyles,
-    EreaderStyle? ereaderStyle,
-    // String? selectedStyle,
+    EreaderStyle? selectedEreaderStyle,
   }) {
     return SelectStyleMainState(
       allStyles: allStyles ?? [],
-      selectedEreaderStyle: ereaderStyle ?? selectedEreaderStyle,
-      // selectedStyle: selectedStyle ?? this.selectedStyle,
+      selectedEreaderStyle: selectedEreaderStyle ?? this.selectedEreaderStyle,
     );
   }
 }

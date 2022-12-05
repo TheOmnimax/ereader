@@ -1,18 +1,21 @@
 import 'package:equatable/equatable.dart';
-import 'package:ereader/file_explorer/ebook_metadata.dart';
+import 'package:ereader/utils/file_explorer/ebook_metadata.dart';
 
 abstract class EbookSelectionState extends Equatable {
   const EbookSelectionState({
     this.ebookList = const <EbookMetadata>[],
+    this.username = '',
   });
 
   final List<EbookMetadata> ebookList;
+  final String username;
 
   @override
   List<Object?> get props => [];
 
   EbookSelectionState copyWith({
-    List<EbookMetadata>? newEbookList,
+    List<EbookMetadata>? ebookList,
+    String username,
   });
 }
 
@@ -21,7 +24,8 @@ class EbookSelectionLoading extends EbookSelectionState {
 
   @override
   EbookSelectionLoading copyWith({
-    List<EbookMetadata>? newEbookList,
+    List<EbookMetadata>? ebookList,
+    String? username,
   }) {
     return const EbookSelectionLoading();
   }
@@ -29,20 +33,21 @@ class EbookSelectionLoading extends EbookSelectionState {
 
 class EbookSelectionMainState extends EbookSelectionState {
   const EbookSelectionMainState({
-    this.ebookList = const <EbookMetadata>[],
-  });
-
-  // TODO: It is both asking me to override and not to override. Why?
-  final List<EbookMetadata> ebookList;
+    List<EbookMetadata> ebookList = const <EbookMetadata>[],
+    String username = '',
+  }) : super(ebookList: ebookList, username: username);
 
   @override
-  List<Object?> get props => [ebookList];
+  List<Object?> get props => [ebookList, username];
 
+  @override
   EbookSelectionMainState copyWith({
-    List<EbookMetadata>? newEbookList,
+    List<EbookMetadata>? ebookList,
+    String? username,
   }) {
     return EbookSelectionMainState(
-      ebookList: newEbookList ?? ebookList,
+      ebookList: ebookList ?? this.ebookList,
+      username: username ?? this.username,
     );
   }
 }

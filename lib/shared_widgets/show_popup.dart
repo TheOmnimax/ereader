@@ -20,3 +20,39 @@ Future<void> showPopup({
     },
   );
 }
+
+OverlayEntry overlayPopup({
+  required double screenWidth,
+  double top = 0,
+  double width = 200,
+  Widget child = const Text(
+    'No options available!',
+    style: TextStyle(
+      color: Colors.black,
+      fontSize: 12,
+    ),
+  ),
+}) {
+  final left = (screenWidth - width) / 2;
+
+  return OverlayEntry(
+    builder: (BuildContext context) {
+      return Material(
+        child: Positioned(
+          left: left,
+          top: top,
+          width: width,
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: child,
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}

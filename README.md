@@ -1,6 +1,8 @@
 # Thali eReader - Flutter app
 
-This is an eReader app. It is named for [Thalia](https://en.wikipedia.org/wiki/Thalia_(Muse)), the Greek Muse of comedy and idyllic poetry.
+This is an eReader app. It not only allows you to read ebooks, but it allows deep customization to make books as easy to read as possible, including customizing the font size, background color, font color, margins, and more.
+
+It is named for [Thalia](https://en.wikipedia.org/wiki/Thalia_(Muse)), the Greek Muse of comedy and idyllic poetry.
 
 This is a general overview of how to use it. **To learn how it interacts with the server, check out the [ebook-server](https://github.com/TheOmnimax/ebook-server) repository.** For the app used to upload new ebooks, check out the [Ebook uploader](https://github.com/TheOmnimax/ebook_uploader).
 
